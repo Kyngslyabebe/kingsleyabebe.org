@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import styles from './page.module.css';
 
+export const dynamic = 'force-dynamic'; // ADD THIS LINE
+
 export default function NotFound() {
   return (
     <div className={styles.container} style={{ 

@@ -1,14 +1,14 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 interface GoogleAnalyticsProps {
   gaId: string;
 }
 
-export function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
+function GoogleAnalyticsContent({ gaId }: GoogleAnalyticsProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -23,6 +23,10 @@ export function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
     });
   }, [pathname, searchParams, gaId]);
 
+  return null;
+}
+
+export function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
   if (!gaId) return null;
 
   return (
@@ -45,6 +49,9 @@ export function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
           `,
         }}
       />
+      <Suspense fallback={null}>
+        <GoogleAnalyticsContent gaId={gaId} />
+      </Suspense>
     </>
   );
 }

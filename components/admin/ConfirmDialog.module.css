@@ -1,0 +1,367 @@
+/* ===================================
+   CONFIRM DIALOG - STYLED POPUP
+   =================================== */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme='light'] .overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .dialog {
+  background: #1A2F42;
+  border: 1px solid rgba(74, 144, 226, 0.2);
+}
+
+[data-theme='light'] .dialog {
+  background: #FFFFFF;
+  border: 1px solid rgba(49, 130, 206, 0.2);
+}
+
+/* ===================================
+   CLOSE BUTTON
+   =================================== */
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .closeBtn {
+  background: rgba(74, 144, 226, 0.1);
+  color: #A0AEC0;
+}
+
+[data-theme='dark'] .closeBtn:hover {
+  background: rgba(74, 144, 226, 0.2);
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .closeBtn {
+  background: rgba(49, 130, 206, 0.1);
+  color: #718096;
+}
+
+[data-theme='light'] .closeBtn:hover {
+  background: rgba(49, 130, 206, 0.2);
+  color: #1A202C;
+}
+
+.closeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===================================
+   ICON
+   =================================== */
+
+.iconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+/* Danger variant */
+.iconDanger {
+  background: rgba(231, 76, 60, 0.1);
+  color: #E74C3C;
+}
+
+[data-theme='light'] .iconDanger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}
+
+/* Warning variant */
+.iconWarning {
+  background: rgba(246, 173, 85, 0.1);
+  color: #F6AD55;
+}
+
+[data-theme='light'] .iconWarning {
+  background: rgba(251, 191, 36, 0.1);
+  color: #FBBF24;
+}
+
+/* Info variant */
+.iconInfo {
+  background: rgba(74, 144, 226, 0.1);
+  color: #4A90E2;
+}
+
+[data-theme='light'] .iconInfo {
+  background: rgba(49, 130, 206, 0.1);
+  color: #3182CE;
+}
+
+/* Success variant */
+.iconSuccess {
+  background: rgba(72, 187, 120, 0.1);
+  color: #48BB78;
+}
+
+[data-theme='light'] .iconSuccess {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22C55E;
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.content {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: 'Outfit', sans-serif;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .title {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .title {
+  color: #1A202C;
+}
+
+.message {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .message {
+  color: #A0AEC0;
+}
+
+[data-theme='light'] .message {
+  color: #4A5568;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.cancelBtn,
+.confirmBtn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Cancel Button */
+.cancelBtn {
+  min-width: 90px;
+}
+
+[data-theme='dark'] .cancelBtn {
+  background: rgba(74, 144, 226, 0.1);
+  color: #A0AEC0;
+  border: 1px solid rgba(74, 144, 226, 0.2);
+}
+
+[data-theme='dark'] .cancelBtn:hover:not(:disabled) {
+  background: rgba(74, 144, 226, 0.15);
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .cancelBtn {
+  background: rgba(49, 130, 206, 0.1);
+  color: #718096;
+  border: 1px solid rgba(49, 130, 206, 0.2);
+}
+
+[data-theme='light'] .cancelBtn:hover:not(:disabled) {
+  background: rgba(49, 130, 206, 0.15);
+  color: #1A202C;
+}
+
+/* Confirm Button */
+.confirmBtn {
+  min-width: 110px;
+}
+
+/* Danger variant */
+.confirmBtnDanger {
+  background: #E74C3C;
+  color: #FFFFFF;
+}
+
+.confirmBtnDanger:hover:not(:disabled) {
+  background: #C0392B;
+  transform: translateY(-1px);
+}
+
+[data-theme='light'] .confirmBtnDanger {
+  background: #EF4444;
+}
+
+[data-theme='light'] .confirmBtnDanger:hover:not(:disabled) {
+  background: #DC2626;
+}
+
+/* Warning variant */
+.confirmBtnWarning {
+  background: #F6AD55;
+  color: #1A202C;
+}
+
+.confirmBtnWarning:hover:not(:disabled) {
+  background: #ED8936;
+  transform: translateY(-1px);
+}
+
+[data-theme='light'] .confirmBtnWarning {
+  background: #FBBF24;
+}
+
+[data-theme='light'] .confirmBtnWarning:hover:not(:disabled) {
+  background: #F59E0B;
+}
+
+/* Info variant */
+.confirmBtnInfo {
+  background: #4A90E2;
+  color: #FFFFFF;
+}
+
+.confirmBtnInfo:hover:not(:disabled) {
+  background: #2E5A88;
+  transform: translateY(-1px);
+}
+
+[data-theme='light'] .confirmBtnInfo {
+  background: #3182CE;
+}
+
+[data-theme='light'] .confirmBtnInfo:hover:not(:disabled) {
+  background: #2C5282;
+}
+
+/* Success variant */
+.confirmBtnSuccess {
+  background: #48BB78;
+  color: #FFFFFF;
+}
+
+.confirmBtnSuccess:hover:not(:disabled) {
+  background: #38A169;
+  transform: translateY(-1px);
+}
+
+[data-theme='light'] .confirmBtnSuccess {
+  background: #22C55E;
+}
+
+[data-theme='light'] .confirmBtnSuccess:hover:not(:disabled) {
+  background: #16A34A;
+}
+
+/* Disabled state */
+.cancelBtn:disabled,
+.confirmBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 480px) {
+  .dialog {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .iconWrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .iconWrapper svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .message {
+    font-size: 13px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .cancelBtn,
+  .confirmBtn {
+    width: 100%;
+    min-width: unset;
+  }
+}

@@ -1,0 +1,250 @@
+/* ===================================
+   LOADING SCREEN
+   =================================== */
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .loadingContainer {
+  background: linear-gradient(135deg, #0A1929 0%, #1A2F42 100%);
+}
+
+[data-theme='light'] .loadingContainer {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EDF2F7 100%);
+}
+
+.loadingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  z-index: 2;
+  padding: 20px;
+}
+
+/* ===================================
+   ANIMATED LOGO
+   =================================== */
+
+.logoWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  position: relative;
+  z-index: 10;
+}
+
+[data-theme='dark'] .logo {
+  background: linear-gradient(135deg, #FFFFFF 0%, #4A90E2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme='light'] .logo {
+  background: linear-gradient(135deg, #1A202C 0%, #3182CE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Spinning Ring */
+.spinnerRing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #4A90E2;
+  border-right-color: #4A90E2;
+  z-index: 1;
+  animation: spin 3s linear infinite; /* SLOWER - change this number */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0); /* ADD THIS - forces GPU acceleration */
+  transform-origin: center center; /* ADD THIS - ensures rotation from center */
+}
+
+[data-theme='light'] .spinnerRing {
+  border-top-color: #3182CE;
+  border-right-color: #3182CE;
+}
+
+/* Smooth spin keyframe */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================
+   LOADING TEXT
+   =================================== */
+
+.loadingText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loadingTitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+[data-theme='dark'] .loadingTitle {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .loadingTitle {
+  color: #1A202C;
+}
+
+/* Animated Dots */
+.dotsContainer {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+[data-theme='dark'] .dot {
+  background: #4A90E2;
+}
+
+[data-theme='light'] .dot {
+  background: #3182CE;
+}
+
+/* ===================================
+   PROGRESS BAR
+   =================================== */
+
+.progressBarContainer {
+  width: 300px;
+  height: 4px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .progressBarContainer {
+    width: 250px;
+  }
+}
+
+[data-theme='dark'] .progressBarContainer {
+  background: rgba(74, 144, 226, 0.2);
+}
+
+[data-theme='light'] .progressBarContainer {
+  background: rgba(49, 130, 206, 0.2);
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 3px;
+}
+
+[data-theme='dark'] .progressBar {
+  background: linear-gradient(90deg, #4A90E2, #61DAFB);
+}
+
+[data-theme='light'] .progressBar {
+  background: linear-gradient(90deg, #3182CE, #0987A0);
+}
+
+/* ===================================
+   BACKGROUND GRADIENT ANIMATION
+   =================================== */
+
+.gradientBg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+.gradientOrb1,
+.gradientOrb2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(100px);
+}
+
+.gradientOrb1 {
+  top: -250px;
+  right: -250px;
+}
+
+.gradientOrb2 {
+  bottom: -250px;
+  left: -250px;
+}
+
+[data-theme='dark'] .gradientOrb1 {
+  background: radial-gradient(circle, #4A90E2 0%, transparent 70%);
+}
+
+[data-theme='dark'] .gradientOrb2 {
+  background: radial-gradient(circle, #61DAFB 0%, transparent 70%);
+}
+
+[data-theme='light'] .gradientOrb1 {
+  background: radial-gradient(circle, #3182CE 0%, transparent 70%);
+}
+
+[data-theme='light'] .gradientOrb2 {
+  background: radial-gradient(circle, #0987A0 0%, transparent 70%);
+}
+
+@media (max-width: 768px) {
+  .gradientOrb1,
+  .gradientOrb2 {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .gradientOrb1 {
+    top: -150px;
+    right: -150px;
+  }
+  
+  .gradientOrb2 {
+    bottom: -150px;
+    left: -150px;
+  }
+}

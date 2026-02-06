@@ -1,0 +1,782 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase/client';
+import { useToast } from '@/components/admin/Toast';
+import { 
+  HiUser,
+  HiEnvelope,
+  HiBriefcase,
+  HiGlobeAlt,
+  HiWrenchScrewdriver,
+  HiCog6Tooth,
+  HiCheckCircle
+} from 'react-icons/hi2';
+import styles from './settings.module.css';
+
+type TabType = 'profile' | 'contact' | 'professional' | 'seo' | 'maintenance' | 'advanced';
+
+export default function SettingsPage() {
+  const { showToast } = useToast();
+  const [activeTab, setActiveTab] = useState<TabType>('profile');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  
+  // Profile
+  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
+  const [tagline, setTagline] = useState('');
+  const [bio, setBio] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [summary, setSummary] = useState('');
+  
+  // Contact
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [github, setGithub] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [website, setWebsite] = useState('');
+  
+  // Professional
+  const [yearsExperience, setYearsExperience] = useState('');
+  const [totalProjects, setTotalProjects] = useState('');
+  const [technologiesCount, setTechnologiesCount] = useState('');
+  const [clientsServed, setClientsServed] = useState('');
+  const [resumeUrl, setResumeUrl] = useState('');
+  const [availability, setAvailability] = useState('available');
+  const [hourlyRate, setHourlyRate] = useState('');
+  
+  // SEO
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [metaKeywords, setMetaKeywords] = useState('');
+  const [ogImage, setOgImage] = useState('');
+  const [favicon, setFavicon] = useState('');
+  
+  // Maintenance
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceMessage, setMaintenanceMessage] = useState('');
+  const [maintenanceEta, setMaintenanceEta] = useState('');
+  
+  // Advanced
+  const [showProjects, setShowProjects] = useState(true);
+  const [showSkills, setShowSkills] = useState(true);
+  const [showExperience, setShowExperience] = useState(true);
+  const [contactFormEnabled, setContactFormEnabled] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState('');
+  const [brandColor, setBrandColor] = useState('#4A90E2');
+  const [accentColor, setAccentColor] = useState('#667eea');
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  async function loadSettings() {
+    try {
+      const { data, error } = await supabase
+        .from('personal_info')
+        .select('*')
+        .single();
+
+      if (error) {
+        console.error('Error loading settings:', error);
+        // If no row exists, we'll use defaults
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        // Profile
+        setName(data.name || '');
+        setTitle(data.title || '');
+        setTagline(data.tagline || '');
+        setBio(data.bio || '');
+        setAvatar(data.avatar || '');
+        setSummary(data.summary || '');
+        
+        // Contact
+        setEmail(data.email || '');
+        setPhone(data.phone || '');
+        setLocation(data.location || '');
+        setGithub(data.github || '');
+        setLinkedin(data.linkedin || '');
+        setTwitter(data.twitter || '');
+        setWebsite(data.website || '');
+        
+        // Professional
+        setYearsExperience(data.years_experience || '');
+        setTotalProjects(data.total_projects || '');
+        setTechnologiesCount(data.technologies_count || '');
+        setClientsServed(data.clients_served || '');
+        setResumeUrl(data.resume_url || '');
+        setAvailability(data.availability || 'available');
+        setHourlyRate(data.hourly_rate || '');
+        
+        // SEO
+        setMetaTitle(data.meta_title || '');
+        setMetaDescription(data.meta_description || '');
+        setMetaKeywords(data.meta_keywords || '');
+        setOgImage(data.og_image || '');
+        setFavicon(data.favicon || '');
+        
+        // Maintenance
+        setMaintenanceMode(data.maintenance_mode || false);
+        setMaintenanceMessage(data.maintenance_message || '');
+        setMaintenanceEta(data.maintenance_eta || '');
+        
+        // Advanced
+        setShowProjects(data.show_projects !== false);
+        setShowSkills(data.show_skills !== false);
+        setShowExperience(data.show_experience !== false);
+        setContactFormEnabled(data.contact_form_enabled !== false);
+        setEmailNotifications(data.email_notifications !== false);
+        setGoogleAnalyticsId(data.google_analytics_id || '');
+        setBrandColor(data.brand_color || '#4A90E2');
+        setAccentColor(data.accent_color || '#667eea');
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      showToast('Error loading settings', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSave() {
+    setSaving(true);
+
+    try {
+      const settingsData = {
+        // Profile
+        name,
+        title,
+        tagline,
+        bio,
+        avatar,
+        summary,
+        
+        // Contact
+        email,
+        phone,
+        location,
+        github,
+        linkedin,
+        twitter,
+        website,
+        
+        // Professional
+        years_experience: yearsExperience,
+        total_projects: totalProjects,
+        technologies_count: technologiesCount,
+        clients_served: clientsServed,
+        resume_url: resumeUrl,
+        availability,
+        hourly_rate: hourlyRate,
+        
+        // SEO
+        meta_title: metaTitle,
+        meta_description: metaDescription,
+        meta_keywords: metaKeywords,
+        og_image: ogImage,
+        favicon,
+        
+        // Maintenance
+        maintenance_mode: maintenanceMode,
+        maintenance_message: maintenanceMessage,
+        maintenance_eta: maintenanceEta,
+        
+        // Advanced
+        show_projects: showProjects,
+        show_skills: showSkills,
+        show_experience: showExperience,
+        contact_form_enabled: contactFormEnabled,
+        email_notifications: emailNotifications,
+        google_analytics_id: googleAnalyticsId,
+        brand_color: brandColor,
+        accent_color: accentColor,
+        
+        updated_at: new Date().toISOString()
+      };
+
+      // Check if record exists
+      const { data: existing } = await supabase
+        .from('personal_info')
+        .select('id')
+        .single();
+
+      if (existing) {
+        // Update existing
+        const { error } = await supabase
+          .from('personal_info')
+          .update(settingsData)
+          .eq('id', existing.id);
+
+        if (error) throw error;
+      } else {
+        // Insert new
+        const { error } = await supabase
+          .from('personal_info')
+          .insert([settingsData]);
+
+        if (error) throw error;
+      }
+
+      showToast('Settings saved successfully!', 'success');
+    } catch (error: any) {
+      console.error('Error saving settings:', error);
+      showToast(error.message || 'Error saving settings', 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const tabs = [
+    { id: 'profile' as TabType, label: 'Profile', icon: HiUser },
+    { id: 'contact' as TabType, label: 'Contact', icon: HiEnvelope },
+    { id: 'professional' as TabType, label: 'Professional', icon: HiBriefcase },
+    { id: 'seo' as TabType, label: 'SEO', icon: HiGlobeAlt },
+    { id: 'maintenance' as TabType, label: 'Maintenance', icon: HiWrenchScrewdriver },
+    { id: 'advanced' as TabType, label: 'Advanced', icon: HiCog6Tooth },
+  ];
+
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.spinner} />
+        <p>Loading settings...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <div>
+          <h1 className={styles.pageTitle}>Settings</h1>
+          <p className={styles.pageSubtitle}>Manage your portfolio configuration</p>
+        </div>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className={styles.saveBtn}
+        >
+          <HiCheckCircle size={18} />
+          <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className={styles.tabs}>
+        {tabs.map(tab => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
+            >
+              <Icon size={18} />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tab Content */}
+      <div className={styles.tabContent}>
+        
+        {/* PROFILE TAB */}
+        {activeTab === 'profile' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Profile Information</h2>
+            <p className={styles.sectionDesc}>Basic information about you</p>
+
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
+                <label>Full Name *</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Kingsley Abebe"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Professional Title *</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Full-Stack Software Engineer"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Tagline</label>
+                <input
+                  type="text"
+                  value={tagline}
+                  onChange={(e) => setTagline(e.target.value)}
+                  placeholder="Building scalable web applications"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Avatar URL</label>
+                <input
+                  type="url"
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Bio</label>
+                <textarea
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="Tell visitors about yourself..."
+                  rows={4}
+                />
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Professional Summary</label>
+                <textarea
+                  value={summary}
+                  onChange={(e) => setSummary(e.target.value)}
+                  placeholder="Detailed professional summary for about section..."
+                  rows={6}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* CONTACT TAB */}
+        {activeTab === 'contact' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Contact Information</h2>
+            <p className={styles.sectionDesc}>How people can reach you</p>
+
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
+                <label>Email *</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Phone</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+1 (555) 123-4567"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Location</label>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="San Francisco, CA"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Website</label>
+                <input
+                  type="url"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  placeholder="https://yoursite.com"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>GitHub</label>
+                <input
+                  type="url"
+                  value={github}
+                  onChange={(e) => setGithub(e.target.value)}
+                  placeholder="https://github.com/username"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>LinkedIn</label>
+                <input
+                  type="url"
+                  value={linkedin}
+                  onChange={(e) => setLinkedin(e.target.value)}
+                  placeholder="https://linkedin.com/in/username"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Twitter</label>
+                <input
+                  type="url"
+                  value={twitter}
+                  onChange={(e) => setTwitter(e.target.value)}
+                  placeholder="https://twitter.com/username"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PROFESSIONAL TAB */}
+        {activeTab === 'professional' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Professional Details</h2>
+            <p className={styles.sectionDesc}>Stats and career information</p>
+
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
+                <label>Years of Experience</label>
+                <input
+                  type="number"
+                  value={yearsExperience}
+                  onChange={(e) => setYearsExperience(e.target.value)}
+                  placeholder="5"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Total Projects</label>
+                <input
+                  type="number"
+                  value={totalProjects}
+                  onChange={(e) => setTotalProjects(e.target.value)}
+                  placeholder="50"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Technologies Count</label>
+                <input
+                  type="number"
+                  value={technologiesCount}
+                  onChange={(e) => setTechnologiesCount(e.target.value)}
+                  placeholder="25"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Clients Served</label>
+                <input
+                  type="number"
+                  value={clientsServed}
+                  onChange={(e) => setClientsServed(e.target.value)}
+                  placeholder="30"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Availability Status</label>
+                <select
+                  value={availability}
+                  onChange={(e) => setAvailability(e.target.value)}
+                >
+                  <option value="available">Available for Work</option>
+                  <option value="busy">Currently Busy</option>
+                  <option value="not-looking">Not Looking</option>
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Hourly Rate (USD)</label>
+                <input
+                  type="number"
+                  value={hourlyRate}
+                  onChange={(e) => setHourlyRate(e.target.value)}
+                  placeholder="150"
+                />
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Resume URL</label>
+                <input
+                  type="url"
+                  value={resumeUrl}
+                  onChange={(e) => setResumeUrl(e.target.value)}
+                  placeholder="https://drive.google.com/..."
+                />
+                {resumeUrl && (
+                  <a 
+                    href={resumeUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={styles.previewLink}
+                  >
+                    Preview Resume →
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SEO TAB */}
+        {activeTab === 'seo' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>SEO & Meta Tags</h2>
+            <p className={styles.sectionDesc}>Optimize for search engines</p>
+
+            <div className={styles.formGrid}>
+              <div className={styles.formGroupFull}>
+                <label>Meta Title</label>
+                <input
+                  type="text"
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  placeholder="Kingsley Abebe - Full-Stack Software Engineer"
+                  maxLength={60}
+                />
+                <small>{metaTitle.length}/60 characters</small>
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Meta Description</label>
+                <textarea
+                  value={metaDescription}
+                  onChange={(e) => setMetaDescription(e.target.value)}
+                  placeholder="Professional portfolio showcasing web development projects..."
+                  rows={3}
+                  maxLength={160}
+                />
+                <small>{metaDescription.length}/160 characters</small>
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Keywords (comma separated)</label>
+                <input
+                  type="text"
+                  value={metaKeywords}
+                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  placeholder="web developer, react, typescript, full-stack"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>OG Image URL</label>
+                <input
+                  type="url"
+                  value={ogImage}
+                  onChange={(e) => setOgImage(e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Favicon URL</label>
+                <input
+                  type="url"
+                  value={favicon}
+                  onChange={(e) => setFavicon(e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MAINTENANCE TAB */}
+        {activeTab === 'maintenance' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Maintenance Mode</h2>
+            <p className={styles.sectionDesc}>Temporarily take your portfolio offline</p>
+
+            <div className={styles.maintenanceAlert}>
+              <div className={styles.alertIcon}>🚧</div>
+              <div>
+                <h3>Maintenance Mode Control</h3>
+                <p>When enabled, visitors will see a maintenance page. You can still access the admin dashboard.</p>
+              </div>
+            </div>
+
+            <div className={styles.formGrid}>
+              <div className={styles.formGroupFull}>
+                <label className={styles.switchLabel}>
+                  <input
+                    type="checkbox"
+                    checked={maintenanceMode}
+                    onChange={(e) => setMaintenanceMode(e.target.checked)}
+                    className={styles.switch}
+                  />
+                  <span>Enable Maintenance Mode</span>
+                </label>
+              </div>
+
+              {maintenanceMode && (
+                <>
+                  <div className={styles.formGroupFull}>
+                    <label>Maintenance Message</label>
+                    <textarea
+                      value={maintenanceMessage}
+                      onChange={(e) => setMaintenanceMessage(e.target.value)}
+                      placeholder="We're currently upgrading our systems. Please check back soon!"
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Estimated Return Time</label>
+                    <input
+                      type="text"
+                      value={maintenanceEta}
+                      onChange={(e) => setMaintenanceEta(e.target.value)}
+                      placeholder="2 hours"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ADVANCED TAB */}
+        {activeTab === 'advanced' && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Advanced Settings</h2>
+            <p className={styles.sectionDesc}>Visibility, tracking, and customization</p>
+
+            {/* Section Visibility */}
+            <div className={styles.subsection}>
+              <h3 className={styles.subsectionTitle}>Section Visibility</h3>
+              <div className={styles.checkboxGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showProjects}
+                    onChange={(e) => setShowProjects(e.target.checked)}
+                  />
+                  <span>Show Projects Section</span>
+                </label>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showSkills}
+                    onChange={(e) => setShowSkills(e.target.checked)}
+                  />
+                  <span>Show Skills Section</span>
+                </label>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showExperience}
+                    onChange={(e) => setShowExperience(e.target.checked)}
+                  />
+                  <span>Show Experience Section</span>
+                </label>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={contactFormEnabled}
+                    onChange={(e) => setContactFormEnabled(e.target.checked)}
+                  />
+                  <span>Enable Contact Form</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Notifications */}
+            <div className={styles.subsection}>
+              <h3 className={styles.subsectionTitle}>Email Notifications</h3>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={emailNotifications}
+                  onChange={(e) => setEmailNotifications(e.target.checked)}
+                />
+                <span>Receive email on new contact messages</span>
+              </label>
+            </div>
+
+            {/* Analytics */}
+            <div className={styles.subsection}>
+              <h3 className={styles.subsectionTitle}>Analytics & Tracking</h3>
+              <div className={styles.formGroup}>
+                <label>Google Analytics ID</label>
+                <input
+                  type="text"
+                  value={googleAnalyticsId}
+                  onChange={(e) => setGoogleAnalyticsId(e.target.value)}
+                  placeholder="G-XXXXXXXXXX"
+                />
+              </div>
+            </div>
+
+            {/* Theme Colors */}
+            <div className={styles.subsection}>
+              <h3 className={styles.subsectionTitle}>Brand Colors</h3>
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
+                  <label>Primary Brand Color</label>
+                  <div className={styles.colorInputWrapper}>
+                    <input
+                      type="color"
+                      value={brandColor}
+                      onChange={(e) => setBrandColor(e.target.value)}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={brandColor}
+                      onChange={(e) => setBrandColor(e.target.value)}
+                      placeholder="#4A90E2"
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Accent Color</label>
+                  <div className={styles.colorInputWrapper}>
+                    <input
+                      type="color"
+                      value={accentColor}
+                      onChange={(e) => setAccentColor(e.target.value)}
+                      className={styles.colorInput}
+                    />
+                    <input
+                      type="text"
+                      value={accentColor}
+                      onChange={(e) => setAccentColor(e.target.value)}
+                      placeholder="#667eea"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      {/* Floating Save Button */}
+      <div className={styles.floatingSave}>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className={styles.saveBtn}
+        >
+          <HiCheckCircle size={18} />
+          <span>{saving ? 'Saving...' : 'Save All Changes'}</span>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Professional Portfolio - Next.js
 
-## Getting Started
+Modern, responsive one-page portfolio with navy blue glossy theme.
 
-First, run the development server:
+## Features
+✅ Mobile bottom navigation
+✅ Project modal system
+✅ Contact form with validation
+✅ Resume download
+✅ Smooth scroll navigation
+✅ Responsive design
+✅ React Icons
 
+## Installation
+
+1. **Clone or create the project:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx create-next-app@latest portfolio-nextjs
+cd portfolio-nextjs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies:**
+```bash
+npm install react-icons
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Copy all files from this repository into your project**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Run development server:**
+```bash
+npm run dev
+```
 
-## Learn More
+5. **Open browser:**
+```
+http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Build for Production
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vercel (Recommended)
+1. Push to GitHub
+2. Connect to Vercel
+3. Deploy automatically
 
-## Deploy on Vercel
+### Other Platforms
+```bash
+npm run build
+# Upload the .next folder
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Customization
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Edit project data** in `app/page.jsx` (lines 10-80)
+2. **Change colors** by searching/replacing hex codes
+3. **Add your resume** in `public/resume.pdf`
+4. **Replace project images** in `public/images/`
+
+## Color Scheme
+- Primary Navy: `#0A1929`
+- Secondary Navy: `#1A2F42`
+- Glossy Blue: `#4A90E2`
+- Pure White: `#FFFFFF`
+- Glossy Black: `#0F0F0F`
+
+## Tech Stack
+- Next.js 14
+- React 18
+- React Icons 5
+- CSS-in-JS (inline styles)

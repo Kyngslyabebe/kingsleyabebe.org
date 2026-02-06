@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiXMark, HiExclamationTriangle, HiInformationCircle, HiCheckCircle } from 'react-icons/hi2';

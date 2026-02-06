@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 import HeroShowcase from '@/components/hero/HeroShowcase';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { useSettings } from '@/lib/hooks/useSettings';

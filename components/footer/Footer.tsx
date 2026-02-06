@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
 import { useSettings } from '@/lib/hooks/useSettings';
 import styles from './Footer.module.css';

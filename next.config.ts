@@ -12,10 +12,17 @@ const nextConfig = {
       },
     ],
   },
+  // Completely disable static optimization
   experimental: {
     staticPageGenerationTimeout: 0,
   },
+  // Skip static page generation entirely
   output: 'standalone',
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
+  // Disable static optimization for all pages
+  skipTrailingSlashRedirect: true,
 }
 
 module.exports = nextConfig

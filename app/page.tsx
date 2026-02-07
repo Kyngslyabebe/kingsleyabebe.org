@@ -826,7 +826,7 @@ export default function Portfolio() {
     transition={{ duration: 0.6 }}
   >
     <div className={styles.sectionContent}>
-      <h2 className={styles.sectionTitle}>Latest from the Blog</h2>
+      <h2 className={styles.sectionTitle}> Blog </h2>
       <FeaturedBlog />
     </div>
   </motion.section>

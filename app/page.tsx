@@ -6,13 +6,16 @@ import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { useSettings } from '@/lib/hooks/useSettings';
 import Footer from '@/components/footer/Footer';
 import LoadingScreen from '@/components/loadingscreen/LoadingScreen';
+import FeaturedBlog from '@/components/blog/FeaturedBlog';
+import ReadMoreText from '@/components/common/ReadMoreText';
+import Link from 'next/link';
 
 
 import { analytics } from '@/lib/analytics/events';
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
-import { HiHome, HiUser, HiRectangleGroup, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown } from 'react-icons/hi2';
+import { HiHome, HiUser, HiRectangleGroup, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin, FaEnvelope as FaEmail, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiReact, SiNextdotjs, SiTypescript, SiNodedotjs, SiPostgresql, SiMongodb, SiAmazonwebservices, SiDocker, SiStripe, SiTailwindcss } from 'react-icons/si';
 import { supabase } from '@/lib/supabase/client';
@@ -350,61 +353,66 @@ export default function Portfolio() {
  
 </section>
 
-      {/* About Section */}
-      <motion.section
-        id="about"
-        className={styles.section}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeInUp}
-        transition={{ duration: 0.6 }}
-      >
-        <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>About Me</h2>
-          <p className={styles.aboutText}>
-            {settings.summary || settings.bio}
-          </p>
-          
-          <motion.div
-            className={styles.statsGrid}
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {settings.years_experience && (
-              <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
-                <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                <h3 className={styles.statNumber}>
-                  <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
-                </h3>
-                <p className={styles.statLabel}>Years Experience</p>
-              </motion.div>
-            )}
+{/* About Section */}
+<motion.section
+  id="about"
+  className={styles.section}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: "-100px" }}
+  variants={fadeInUp}
+  transition={{ duration: 0.6 }}
+>
+  <div className={styles.sectionContent}>
+    <h2 className={styles.sectionTitle}>About Me</h2>
+    
+    <div className={styles.aboutTextWrapper}>
+  <ReadMoreText 
+    text={settings.summary || settings.bio || ''} 
+    desktopLines={15}  
+    mobileLines={12}
+  />
+</div>
+    
+    <motion.div
+      className={styles.statsGrid}
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+    >
+      {settings.years_experience && (
+        <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
+          <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+          <h3 className={styles.statNumber}>
+            <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
+          </h3>
+          <p className={styles.statLabel}>Years Experience</p>
+        </motion.div>
+      )}
 
-            {settings.total_projects && (
-              <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
-                <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                <h3 className={styles.statNumber}>
-                  <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
-                </h3>
-                <p className={styles.statLabel}>Projects Built</p>
-              </motion.div>
-            )}
+      {settings.total_projects && (
+        <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
+          <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+          <h3 className={styles.statNumber}>
+            <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
+          </h3>
+          <p className={styles.statLabel}>Projects Built</p>
+        </motion.div>
+      )}
 
-            {settings.technologies_count && (
-              <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
-                <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                <h3 className={styles.statNumber}>
-                  <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
-                </h3>
-                <p className={styles.statLabel}>Technologies</p>
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
-      </motion.section>
+      {settings.technologies_count && (
+        <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
+          <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+          <h3 className={styles.statNumber}>
+            <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
+          </h3>
+          <p className={styles.statLabel}>Technologies</p>
+        </motion.div>
+      )}
+    </motion.div>
+  </div>
+</motion.section>
 
       {/* Projects Section */}
       {settings.show_projects && projects.length > 0 && (
@@ -418,7 +426,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Featured Projects</h2>
+            <h2 className={styles.sectionTitle}>Projects</h2>
             <motion.div className={styles.projectsGrid} variants={staggerContainer}>
               {projects.map((project, index) => (
                 <motion.div
@@ -519,7 +527,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Work Experience</h2>
+            <h2 className={styles.sectionTitle}>Experience & Impact</h2>
             <motion.div className={styles.experienceContainer} variants={staggerContainer}>
               {experience.map((exp, index) => (
                 <motion.div
@@ -804,6 +812,25 @@ export default function Portfolio() {
           </motion.div>
         </motion.div>
       )}
+
+
+{/* Featured Blog Section */}
+{settings.show_projects && (
+  <motion.section
+    id="featured-blog"
+    className={styles.section}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+    variants={fadeInUp}
+    transition={{ duration: 0.6 }}
+  >
+    <div className={styles.sectionContent}>
+      <h2 className={styles.sectionTitle}>Latest from the Blog</h2>
+      <FeaturedBlog />
+    </div>
+  </motion.section>
+)}
 
       {/* Footer  */}
       <Footer />

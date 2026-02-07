@@ -1,0 +1,36 @@
+.floatingBack {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-color, #4A90E2);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.floatingBack:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.5);
+}
+
+.floatingBack:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .floatingBack {
+    bottom: 80px; /* Above mobile nav */
+    right: 20px;
+    width: 48px;
+    height: 48px;
+  }
+}

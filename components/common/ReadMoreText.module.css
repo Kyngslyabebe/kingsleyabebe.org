@@ -1,0 +1,95 @@
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.content {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.content.collapsed {
+  position: relative;
+}
+
+.content.expanded {
+  max-height: none !important;
+}
+
+.fadeOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--background) 85%
+  );
+  pointer-events: none;
+}
+
+.toggleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 12px 28px;
+  background: transparent;
+  border: 2px solid var(--brand-color, #4A90E2);
+  border-radius: 30px;
+  color: var(--brand-color, #4A90E2);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggleButton:hover {
+  background: var(--brand-color, #4A90E2);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3);
+}
+
+.toggleButton:active {
+  transform: translateY(0);
+}
+
+.toggleButton svg {
+  transition: transform 0.3s ease;
+}
+
+.toggleButton:hover svg {
+  transform: translateY(2px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .content {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .fadeOverlay {
+    height: 70px;
+  }
+
+  .toggleButton {
+    padding: 10px 24px;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+}

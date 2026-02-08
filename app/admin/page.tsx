@@ -8,9 +8,11 @@ import {
   HiCodeBracket, 
   HiEnvelope, 
   HiBriefcase,
-  HiPlus,
+  HiNewspaper,
   HiPhoto,
-  HiArrowTrendingUp
+  HiArrowTrendingUp,
+  HiEye,
+  HiChartBar
 } from 'react-icons/hi2';
 import styles from './dashboard.module.css';
 
@@ -18,13 +20,20 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [stats, setStats] = useState({
     projects: 0,
+    projectsVisible: 0,
     skills: 0,
+    skillsVisible: 0,
     messages: 0,
+    messagesNew: 0,
     experience: 0,
+    experienceVisible: 0,
+    blogs: 0,
+    blogsPublished: 0,
+    showcase: 0,
   });
   const [loading, setLoading] = useState(true);
   const [recentMessages, setRecentMessages] = useState<any[]>([]);
-  const [error, setError] = useState('');
+  const [recentBlogs, setRecentBlogs] = useState<any[]>([]);
 
   useEffect(() => {
     loadData();
@@ -32,81 +41,91 @@ export default function AdminDashboard() {
 
   async function loadData() {
     setLoading(true);
-    setError('');
     
     try {
-      console.log('Fetching data from Supabase...');
-
-      // Fetch projects count
-      const { count: projectsCount, error: projectsError } = await supabase
+      // Fetch projects
+      const { data: projectsData, error: projectsError } = await supabase
         .from('projects')
-        .select('*', { count: 'exact', head: true });
+        .select('visible');
+      
+      if (projectsError) console.error('Projects error:', projectsError);
+      const projectsVisible = projectsData?.filter(p => p.visible).length || 0;
 
-      if (projectsError) {
-        console.error('Projects error:', projectsError);
-        throw projectsError;
-      }
-
-      // Fetch skills count
-      const { count: skillsCount, error: skillsError } = await supabase
+      // Fetch skills
+      const { data: skillsData, error: skillsError } = await supabase
         .from('skills')
-        .select('*', { count: 'exact', head: true });
+        .select('visible');
+      
+      if (skillsError) console.error('Skills error:', skillsError);
+      const skillsVisible = skillsData?.filter(s => s.visible).length || 0;
 
-      if (skillsError) {
-        console.error('Skills error:', skillsError);
-        throw skillsError;
-      }
-
-      // Fetch messages count
-      const { count: messagesCount, error: messagesError } = await supabase
+      // Fetch messages
+      const { data: messagesData, error: messagesError } = await supabase
         .from('contact_messages')
-        .select('*', { count: 'exact', head: true });
+        .select('status');
+      
+      if (messagesError) console.error('Messages error:', messagesError);
+      const messagesNew = messagesData?.filter(m => m.status === 'new').length || 0;
 
-      if (messagesError) {
-        console.error('Messages error:', messagesError);
-        throw messagesError;
-      }
-
-      // Fetch experience count
-      const { count: experienceCount, error: experienceError } = await supabase
+      // Fetch experience
+      const { data: experienceData, error: experienceError } = await supabase
         .from('experience')
+        .select('visible');
+      
+      if (experienceError) console.error('Experience error:', experienceError);
+      const experienceVisible = experienceData?.filter(e => e.visible).length || 0;
+
+      // Fetch blogs
+      const { data: blogsData, error: blogsError } = await supabase
+        .from('blogs')
+        .select('published');
+      
+      if (blogsError) console.error('Blogs error:', blogsError);
+      const blogsPublished = blogsData?.filter(b => b.published).length || 0;
+
+      // Fetch showcase - FIXED TABLE NAME
+      const { count: showcaseCount, error: showcaseError } = await supabase
+        .from('hero_showcase')
         .select('*', { count: 'exact', head: true });
-
-      if (experienceError) {
-        console.error('Experience error:', experienceError);
-        throw experienceError;
-      }
-
-      console.log('Counts:', {
-        projects: projectsCount,
-        skills: skillsCount,
-        messages: messagesCount,
-        experience: experienceCount
-      });
+      
+      if (showcaseError) console.error('Showcase error:', showcaseError);
 
       setStats({
-        projects: projectsCount || 0,
-        skills: skillsCount || 0,
-        messages: messagesCount || 0,
-        experience: experienceCount || 0,
+        projects: projectsData?.length || 0,
+        projectsVisible,
+        skills: skillsData?.length || 0,
+        skillsVisible,
+        messages: messagesData?.length || 0,
+        messagesNew,
+        experience: experienceData?.length || 0,
+        experienceVisible,
+        blogs: blogsData?.length || 0,
+        blogsPublished,
+        showcase: showcaseCount || 0,
       });
 
       // Fetch recent messages
-      const { data: messagesData, error: recentMessagesError } = await supabase
+      const { data: recentMessagesData, error: recentMsgError } = await supabase
         .from('contact_messages')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(3);
+      
+      if (recentMsgError) console.error('Recent messages error:', recentMsgError);
+      setRecentMessages(recentMessagesData || []);
 
-      if (recentMessagesError) {
-        console.error('Recent messages error:', recentMessagesError);
-      } else {
-        setRecentMessages(messagesData || []);
-      }
+      // Fetch recent blogs
+      const { data: recentBlogsData, error: recentBlogsError } = await supabase
+        .from('blogs')
+        .select('id, title, published, created_at, views')
+        .order('created_at', { ascending: false })
+        .limit(3);
+      
+      if (recentBlogsError) console.error('Recent blogs error:', recentBlogsError);
+      setRecentBlogs(recentBlogsData || []);
 
     } catch (error: any) {
-      console.error('Error loading data:', error);
-      setError(error.message || 'Failed to load data');
+      console.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -117,6 +136,7 @@ export default function AdminDashboard() {
       icon: HiRectangleGroup, 
       label: 'Projects', 
       value: stats.projects, 
+      secondary: `${stats.projectsVisible} visible`,
       color: '#4A90E2',
       link: '/admin/projects'
     },
@@ -124,32 +144,52 @@ export default function AdminDashboard() {
       icon: HiCodeBracket, 
       label: 'Skills', 
       value: stats.skills, 
+      secondary: `${stats.skillsVisible} visible`,
       color: '#48BB78',
       link: '/admin/skills'
     },
     { 
-      icon: HiEnvelope, 
-      label: 'Messages', 
-      value: stats.messages, 
-      color: '#F6AD55',
-      link: '/admin/messages'
+      icon: HiNewspaper, 
+      label: 'Blogs', 
+      value: stats.blogs, 
+      secondary: `${stats.blogsPublished} published`,
+      color: '#9F7AEA',
+      link: '/admin/blogs'
     },
     { 
       icon: HiBriefcase, 
       label: 'Experience', 
       value: stats.experience, 
-      color: '#9F7AEA',
+      secondary: `${stats.experienceVisible} visible`,
+      color: '#F6AD55',
       link: '/admin/experience'
+    },
+    { 
+      icon: HiEnvelope, 
+      label: 'Messages', 
+      value: stats.messages, 
+      secondary: `${stats.messagesNew} new`,
+      color: '#E74C3C',
+      link: '/admin/messages'
+    },
+    { 
+      icon: HiPhoto, 
+      label: 'Showcase', 
+      value: stats.showcase, 
+      secondary: 'images',
+      color: '#3498DB',
+      link: '/admin/showcase'
     },
   ];
 
- const quickActions = [
-  { icon: HiRectangleGroup, label: ' + Project', link: '/admin/projects' },
-  { icon: HiCodeBracket, label: ' + Skill', link: '/admin/skills' },
-  { icon: HiBriefcase, label: ' + Experience', link: '/admin/experience' },
-  { icon: HiPhoto, label: ' + Showcase', link: '/admin/showcase' },
-  { icon: HiArrowTrendingUp, label: 'View Analytics', link: 'https://analytics.google.com', external: true },
-];
+  const quickActions = [
+    { icon: HiRectangleGroup, label: 'New Project', link: '/admin/projects', color: '#4A90E2' },
+    { icon: HiNewspaper, label: 'New Blog', link: '/admin/blogs/create', color: '#9F7AEA' },
+    { icon: HiCodeBracket, label: 'New Skill', link: '/admin/skills', color: '#48BB78' },
+    { icon: HiBriefcase, label: 'New Experience', link: '/admin/experience', color: '#F6AD55' },
+    { icon: HiPhoto, label: 'Add Image', link: '/admin/showcase', color: '#3498DB' },
+    { icon: HiArrowTrendingUp, label: 'Analytics', link: 'https://analytics.google.com', external: true, color: '#E74C3C' },
+  ];
 
   if (loading) {
     return (
@@ -160,42 +200,21 @@ export default function AdminDashboard() {
     );
   }
 
-  if (error) {
-    return (
-      <div className={styles.errorState}>
-        <p style={{ color: '#E74C3C', marginBottom: '16px' }}>Error: {error}</p>
-        <button 
-          onClick={loadData}
-          style={{
-            background: '#4A90E2',
-            color: '#fff',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '6px',
-            cursor: 'pointer'
-          }}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.dashboard}>
-      {/* Debug Info - Remove this later */}
-      <div style={{ 
-        background: 'rgba(74, 144, 226, 0.1)', 
-        padding: '10px', 
-        borderRadius: '8px',
-        marginBottom: '16px',
-        fontSize: '12px',
-        color: '#A0AEC0'
-      }}>
-        <strong>Debug:</strong> Projects: {stats.projects}, Skills: {stats.skills}, Messages: {stats.messages}, Experience: {stats.experience}
+      {/* Welcome Header */}
+      <div className={styles.welcomeHeader}>
+        <div>
+          <h1 className={styles.welcomeTitle}>Dashboard</h1>
+          <p className={styles.welcomeSubtitle}>Welcome back! Here's what's happening</p>
+        </div>
+        <button onClick={loadData} className={styles.refreshBtn}>
+          <HiChartBar size={18} />
+          <span>Refresh</span>
+        </button>
       </div>
 
-      {/* Compact Stats */}
+      {/* Stats Grid */}
       <div className={styles.statsGrid}>
         {statCards.map((stat) => {
           const Icon = stat.icon;
@@ -204,13 +223,15 @@ export default function AdminDashboard() {
               key={stat.label}
               onClick={() => router.push(stat.link)}
               className={styles.statCard}
+              style={{ '--stat-color': stat.color } as React.CSSProperties}
             >
-              <div className={styles.statIcon} style={{ background: stat.color }}>
-                <Icon size={16} />
+              <div className={styles.statIcon}>
+                <Icon size={24} />
               </div>
               <div className={styles.statInfo}>
                 <span className={styles.statValue}>{stat.value}</span>
                 <span className={styles.statLabel}>{stat.label}</span>
+                <span className={styles.statSecondary}>{stat.secondary}</span>
               </div>
             </button>
           );
@@ -224,75 +245,111 @@ export default function AdminDashboard() {
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
-             <button
-  key={action.label}
-  onClick={() => {
-    if (action.external) {
-      window.open(action.link, '_blank');
-    } else {
-      router.push(action.link);
-    }
-  }}
-  className={styles.actionBtn}
->
-  <Icon size={18} />
-  <span>{action.label}</span>
-</button>
+              <button
+                key={action.label}
+                onClick={() => {
+                  if (action.external) {
+                    window.open(action.link, '_blank');
+                  } else {
+                    router.push(action.link);
+                  }
+                }}
+                className={styles.actionBtn}
+                style={{ '--action-color': action.color } as React.CSSProperties}
+              >
+                <Icon size={20} />
+                <span>{action.label}</span>
+              </button>
             );
           })}
         </div>
       </div>
 
-      {/* Recent Messages */}
-      {recentMessages.length > 0 && (
-        <div className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Recent Messages</h2>
-            <button 
-              onClick={() => router.push('/admin/messages')}
-              className={styles.viewAllBtn}
-            >
-              View All
-            </button>
-          </div>
-          <div className={styles.messagesList}>
-            {recentMessages.map((message) => (
-              <div key={message.id} className={styles.messageCard}>
-                <div className={styles.messageHeader}>
-                  <span className={styles.messageName}>{message.name}</span>
+      {/* Recent Content Grid */}
+      <div className={styles.recentGrid}>
+        {/* Recent Messages */}
+        {recentMessages.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Recent Messages</h2>
+              <button 
+                onClick={() => router.push('/admin/messages')}
+                className={styles.viewAllBtn}
+              >
+                View All
+              </button>
+            </div>
+            <div className={styles.messagesList}>
+              {recentMessages.map((message) => (
+                <div key={message.id} className={styles.messageCard}>
+                  <div className={styles.messageHeader}>
+                    <span className={styles.messageName}>{message.name}</span>
+                    <span className={`${styles.messageBadge} ${styles[`badge${message.status.charAt(0).toUpperCase() + message.status.slice(1)}`]}`}>
+                      {message.status}
+                    </span>
+                  </div>
+                  <p className={styles.messageEmail}>{message.email}</p>
+                  <p className={styles.messagePreview}>
+                    {message.message.length > 80 
+                      ? `${message.message.substring(0, 80)}...` 
+                      : message.message}
+                  </p>
                   <span className={styles.messageDate}>
-                    {new Date(message.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {new Date(message.created_at).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
                   </span>
                 </div>
-                <p className={styles.messageEmail}>{message.email}</p>
-                <p className={styles.messagePreview}>
-                  {message.message.length > 60 
-                    ? `${message.message.substring(0, 60)}...` 
-                    : message.message}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Refresh Button */}
-      <div style={{ marginTop: '20px', textAlign: 'center' }}>
-        <button
-          onClick={loadData}
-          style={{
-            background: 'rgba(74, 144, 226, 0.1)',
-            color: '#4A90E2',
-            border: '1px solid rgba(74, 144, 226, 0.2)',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 600
-          }}
-        >
-          Refresh Data
-        </button>
+        {/* Recent Blogs */}
+        {recentBlogs.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Recent Blogs</h2>
+              <button 
+                onClick={() => router.push('/admin/blogs')}
+                className={styles.viewAllBtn}
+              >
+                View All
+              </button>
+            </div>
+            <div className={styles.blogsList}>
+              {recentBlogs.map((blog) => (
+                <div 
+                  key={blog.id} 
+                  className={styles.blogCard}
+                  onClick={() => router.push(`/admin/blogs/${blog.id}`)}
+                >
+                  <div className={styles.blogHeader}>
+                    <h3 className={styles.blogTitle}>{blog.title}</h3>
+                    <span className={`${styles.blogBadge} ${blog.published ? styles.badgePublished : styles.badgeDraft}`}>
+                      {blog.published ? 'Published' : 'Draft'}
+                    </span>
+                  </div>
+                  <div className={styles.blogMeta}>
+                    <span className={styles.blogViews}>
+                      <HiEye size={14} />
+                      {blog.views || 0} views
+                    </span>
+                    <span className={styles.blogDate}>
+                      {new Date(blog.created_at).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

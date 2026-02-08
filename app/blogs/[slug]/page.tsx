@@ -172,10 +172,7 @@ export default function BlogPostPage() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
       >
-        <Link href="/blogs" onClick={() => analytics.navClick('back-to-blog')}>
-          <HiArrowLeft size={20} />
-          <span>Back to Blog</span>
-        </Link>
+  
       </motion.div>
 
       {/* Article Header */}

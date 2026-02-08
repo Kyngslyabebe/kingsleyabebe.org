@@ -81,41 +81,43 @@ export default function Portfolio() {
     loadPortfolioData();
   }, [settings]);
 
-  async function loadPortfolioData() {
-    try {
-      // Load projects if visible
-      if (settings.show_projects) {
-        const { data: projectsData } = await supabase
-          .from('projects')
-          .select('*')
-          .eq('visible', true)
-          .order('created_at', { ascending: false });
-        setProjects(projectsData || []);
-      }
-
-      // Load skills if visible
-      if (settings.show_skills) {
-        const { data: skillsData } = await supabase
-          .from('skills')
-          .select('*')
-          .order('level', { ascending: false });
-        setSkills(skillsData || []);
-      }
-
-      // Load experience if visible
-      if (settings.show_experience) {
-        const { data: experienceData } = await supabase
-          .from('experience')
-          .select('*')
-          .order('display_order', { ascending: false });
-        setExperience(experienceData || []);
-      }
-    } catch (error) {
-      console.error('Error loading portfolio data:', error);
-    } finally {
-      setLoading(false);
+ async function loadPortfolioData() {
+  try {
+    // Load projects if visible
+    if (settings.show_projects) {
+      const { data: projectsData } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('visible', true)
+        .order('created_at', { ascending: false });
+      setProjects(projectsData || []);
     }
+
+    // Load skills if visible
+    if (settings.show_skills) {
+      const { data: skillsData } = await supabase
+        .from('skills')
+        .select('*')
+        .eq('visible', true)  
+        .order('level', { ascending: false });
+      setSkills(skillsData || []);
+    }
+
+    // Load experience if visible
+    if (settings.show_experience) {
+      const { data: experienceData } = await supabase
+        .from('experience')
+        .select('*')
+        .eq('visible', true)  
+        .order('display_order', { ascending: false });
+      setExperience(experienceData || []);
+    }
+  } catch (error) {
+    console.error('Error loading portfolio data:', error);
+  } finally {
+    setLoading(false);
   }
+}
 
   useEffect(() => {
     const handleScroll = () => {

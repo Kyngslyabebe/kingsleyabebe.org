@@ -11,7 +11,9 @@ import {
   HiTrash, 
   HiXMark,
   HiCodeBracket,
-  HiMagnifyingGlass
+  HiMagnifyingGlass,
+  HiEye,
+  HiEyeSlash
 } from 'react-icons/hi2';
 import styles from './skills.module.css';
 
@@ -21,6 +23,7 @@ interface Skill {
   level: number;
   color: string;
   category: string;
+  visible: boolean;
 }
 
 export default function SkillsPage() {
@@ -31,6 +34,7 @@ export default function SkillsPage() {
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterVisible, setFilterVisible] = useState<'all' | 'visible' | 'hidden'>('all');
   const [formData, setFormData] = useState({
     name: '',
     level: 50,
@@ -57,6 +61,26 @@ export default function SkillsPage() {
       showToast('Error loading skills', 'error');
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function toggleVisibility(id: string, currentVisible: boolean) {
+    try {
+      const { error } = await supabase
+        .from('skills')
+        .update({ visible: !currentVisible })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      showToast(
+        currentVisible ? 'Skill hidden from portfolio' : 'Skill visible on portfolio', 
+        'success'
+      );
+      loadSkills();
+    } catch (error: any) {
+      console.error('Error toggling visibility:', error);
+      showToast(error.message || 'Error updating visibility', 'error');
     }
   }
 
@@ -101,7 +125,8 @@ export default function SkillsPage() {
         name: formData.name,
         level: formData.level,
         color: formData.color,
-        category: formData.category
+        category: formData.category,
+        visible: true // New skills are visible by default
       };
 
       if (editingSkill) {
@@ -151,10 +176,20 @@ export default function SkillsPage() {
     }
   }
 
-  const filteredSkills = skills.filter(skill =>
-    skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    skill.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredSkills = skills.filter(skill => {
+    const matchesSearch = skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      skill.category.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilter = 
+      filterVisible === 'all' ? true :
+      filterVisible === 'visible' ? skill.visible :
+      !skill.visible;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const visibleCount = skills.filter(s => s.visible).length;
+  const hiddenCount = skills.filter(s => !s.visible).length;
 
   if (loading) {
     return (
@@ -170,7 +205,9 @@ export default function SkillsPage() {
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.pageTitle}>Skills</h1>
-          <p className={styles.pageSubtitle}>Manage your technical skills</p>
+          <p className={styles.pageSubtitle}>
+            {skills.length} total • {visibleCount} visible • {hiddenCount} hidden
+          </p>
         </div>
         <button onClick={() => openModal()} className={styles.addBtn}>
           <HiPlus size={18} />
@@ -178,15 +215,38 @@ export default function SkillsPage() {
         </button>
       </div>
 
-      <div className={styles.searchBar}>
-        <HiMagnifyingGlass size={20} />
-        <input
-          type="text"
-          placeholder="Search skills..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={styles.searchInput}
-        />
+      <div className={styles.controls}>
+        <div className={styles.searchBar}>
+          <HiMagnifyingGlass size={20} />
+          <input
+            type="text"
+            placeholder="Search skills..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+
+        <div className={styles.filters}>
+          <button 
+            onClick={() => setFilterVisible('all')}
+            className={`${styles.filterBtn} ${filterVisible === 'all' ? styles.filterBtnActive : ''}`}
+          >
+            All ({skills.length})
+          </button>
+          <button 
+            onClick={() => setFilterVisible('visible')}
+            className={`${styles.filterBtn} ${filterVisible === 'visible' ? styles.filterBtnActive : ''}`}
+          >
+            Visible ({visibleCount})
+          </button>
+          <button 
+            onClick={() => setFilterVisible('hidden')}
+            className={`${styles.filterBtn} ${filterVisible === 'hidden' ? styles.filterBtnActive : ''}`}
+          >
+            Hidden ({hiddenCount})
+          </button>
+        </div>
       </div>
 
       {filteredSkills.length === 0 ? (
@@ -202,14 +262,29 @@ export default function SkillsPage() {
       ) : (
         <div className={styles.grid}>
           {filteredSkills.map((skill) => (
-            <div key={skill.id} className={styles.card}>
+            <div 
+              key={skill.id} 
+              className={`${styles.card} ${!skill.visible ? styles.cardHidden : ''}`}
+            >
               <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
                   <div>
                     <span className={styles.category}>{skill.category}</span>
-                    <h3 className={styles.cardTitle}>{skill.name}</h3>
+                    <h3 className={styles.cardTitle}>
+                      {skill.name}
+                      {!skill.visible && (
+                        <span className={styles.hiddenBadge}>Hidden</span>
+                      )}
+                    </h3>
                   </div>
                   <div className={styles.cardActions}>
+                    <button 
+                      onClick={() => toggleVisibility(skill.id, skill.visible)}
+                      className={`${styles.actionBtn} ${skill.visible ? styles.visibleBtn : styles.hiddenBtn}`}
+                      title={skill.visible ? 'Hide from portfolio' : 'Show on portfolio'}
+                    >
+                      {skill.visible ? <HiEye size={16} /> : <HiEyeSlash size={16} />}
+                    </button>
                     <button 
                       onClick={() => openModal(skill)}
                       className={styles.editBtn}

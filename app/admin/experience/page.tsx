@@ -10,7 +10,9 @@ import {
   HiTrash, 
   HiXMark,
   HiBriefcase,
-  HiMagnifyingGlass
+  HiMagnifyingGlass,
+  HiEye,
+  HiEyeSlash
 } from 'react-icons/hi2';
 import styles from './experience.module.css';
 
@@ -22,6 +24,7 @@ interface Experience {
   year: string;
   description: string;
   highlights: string[];
+  visible: boolean;
 }
 
 export default function ExperiencePage() {
@@ -32,6 +35,7 @@ export default function ExperiencePage() {
   const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterVisible, setFilterVisible] = useState<'all' | 'visible' | 'hidden'>('all');
   const [formData, setFormData] = useState({
     title: '',
     company: '',
@@ -60,6 +64,26 @@ export default function ExperiencePage() {
       showToast('Error loading experience', 'error');
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function toggleVisibility(id: string, currentVisible: boolean) {
+    try {
+      const { error } = await supabase
+        .from('experience')
+        .update({ visible: !currentVisible })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      showToast(
+        currentVisible ? 'Experience hidden from portfolio' : 'Experience visible on portfolio', 
+        'success'
+      );
+      loadExperiences();
+    } catch (error: any) {
+      console.error('Error toggling visibility:', error);
+      showToast(error.message || 'Error updating visibility', 'error');
     }
   }
 
@@ -110,7 +134,8 @@ export default function ExperiencePage() {
         location: formData.location,
         year: formData.year,
         description: formData.description,
-        highlights: formData.highlights.split('\n').map(h => h.trim()).filter(Boolean)
+        highlights: formData.highlights.split('\n').map(h => h.trim()).filter(Boolean),
+        visible: true // New experiences are visible by default
       };
 
       if (editingExperience) {
@@ -160,11 +185,21 @@ export default function ExperiencePage() {
     }
   }
 
-  const filteredExperiences = experiences.filter(exp =>
-    exp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    exp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    exp.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredExperiences = experiences.filter(exp => {
+    const matchesSearch = exp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exp.location.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilter = 
+      filterVisible === 'all' ? true :
+      filterVisible === 'visible' ? exp.visible :
+      !exp.visible;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const visibleCount = experiences.filter(e => e.visible).length;
+  const hiddenCount = experiences.filter(e => !e.visible).length;
 
   if (loading) {
     return (
@@ -180,7 +215,9 @@ export default function ExperiencePage() {
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.pageTitle}>Experience</h1>
-          <p className={styles.pageSubtitle}>Manage your work experience</p>
+          <p className={styles.pageSubtitle}>
+            {experiences.length} total • {visibleCount} visible • {hiddenCount} hidden
+          </p>
         </div>
         <button onClick={() => openModal()} className={styles.addBtn}>
           <HiPlus size={18} />
@@ -188,15 +225,38 @@ export default function ExperiencePage() {
         </button>
       </div>
 
-      <div className={styles.searchBar}>
-        <HiMagnifyingGlass size={20} />
-        <input
-          type="text"
-          placeholder="Search experience..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={styles.searchInput}
-        />
+      <div className={styles.controls}>
+        <div className={styles.searchBar}>
+          <HiMagnifyingGlass size={20} />
+          <input
+            type="text"
+            placeholder="Search experience..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+
+        <div className={styles.filters}>
+          <button 
+            onClick={() => setFilterVisible('all')}
+            className={`${styles.filterBtn} ${filterVisible === 'all' ? styles.filterBtnActive : ''}`}
+          >
+            All ({experiences.length})
+          </button>
+          <button 
+            onClick={() => setFilterVisible('visible')}
+            className={`${styles.filterBtn} ${filterVisible === 'visible' ? styles.filterBtnActive : ''}`}
+          >
+            Visible ({visibleCount})
+          </button>
+          <button 
+            onClick={() => setFilterVisible('hidden')}
+            className={`${styles.filterBtn} ${filterVisible === 'hidden' ? styles.filterBtnActive : ''}`}
+          >
+            Hidden ({hiddenCount})
+          </button>
+        </div>
       </div>
 
       {filteredExperiences.length === 0 ? (
@@ -212,11 +272,19 @@ export default function ExperiencePage() {
       ) : (
         <div className={styles.timeline}>
           {filteredExperiences.map((exp) => (
-            <div key={exp.id} className={styles.card}>
+            <div 
+              key={exp.id} 
+              className={`${styles.card} ${!exp.visible ? styles.cardHidden : ''}`}
+            >
               <div className={styles.cardContent}>
                 <div className={styles.cardHeader}>
                   <div>
-                    <h3 className={styles.cardTitle}>{exp.title}</h3>
+                    <h3 className={styles.cardTitle}>
+                      {exp.title}
+                      {!exp.visible && (
+                        <span className={styles.hiddenBadge}>Hidden</span>
+                      )}
+                    </h3>
                     <p className={styles.company}>{exp.company}</p>
                     {exp.location && (
                       <p className={styles.location}>{exp.location}</p>
@@ -224,6 +292,13 @@ export default function ExperiencePage() {
                     <span className={styles.year}>{exp.year}</span>
                   </div>
                   <div className={styles.cardActions}>
+                    <button 
+                      onClick={() => toggleVisibility(exp.id, exp.visible)}
+                      className={`${styles.actionBtn} ${exp.visible ? styles.visibleBtn : styles.hiddenBtn}`}
+                      title={exp.visible ? 'Hide from portfolio' : 'Show on portfolio'}
+                    >
+                      {exp.visible ? <HiEye size={16} /> : <HiEyeSlash size={16} />}
+                    </button>
                     <button 
                       onClick={() => openModal(exp)}
                       className={styles.editBtn}

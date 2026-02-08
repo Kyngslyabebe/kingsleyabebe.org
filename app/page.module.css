@@ -1777,4 +1777,142 @@
 }
 
 
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
 
+.avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .avatar {
+  border-color: rgba(74, 144, 226, 0.3);
+}
+
+[data-theme='light'] .avatar {
+  border-color: rgba(49, 130, 206, 0.3);
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .avatar {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+
+/* Navigation Avatar */
+.navAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+[data-theme='dark'] .navAvatar {
+  border-color: rgba(74, 144, 226, 0.3);
+}
+
+[data-theme='light'] .navAvatar {
+  border-color: rgba(49, 130, 206, 0.3);
+}
+
+.navAvatar:hover {
+  transform: scale(1.1);
+  border-color: #4A90E2;
+}
+
+[data-theme='light'] .navAvatar:hover {
+  border-color: #3182CE;
+}
+
+/* Update existing .navLogo if needed */
+.navLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Keep existing navLogo styles for when avatar is not present */
+[data-theme='dark'] .navLogo {
+  background: rgba(74, 144, 226, 0.15);
+  color: #4A90E2;
+}
+
+[data-theme='light'] .navLogo {
+  background: rgba(49, 130, 206, 0.15);
+  color: #3182CE;
+}
+
+
+/* Mobile Logo Avatar */
+.mobileLogo {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .mobileLogo {
+  background: rgba(74, 144, 226, 0.15);
+  color: #4A90E2;
+}
+
+[data-theme='light'] .mobileLogo {
+  background: rgba(49, 130, 206, 0.15);
+  color: #3182CE;
+}
+
+/* Mobile logo avatar image */
+.mobileLogo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid;
+}
+
+[data-theme='dark'] .mobileLogo img {
+  border-color: rgba(74, 144, 226, 0.3);
+}
+
+[data-theme='light'] .mobileLogo img {
+  border-color: rgba(49, 130, 206, 0.3);
+}
+
+@media (max-width: 768px) {
+  .mobileLogo {
+    display: flex;
+  }
+}

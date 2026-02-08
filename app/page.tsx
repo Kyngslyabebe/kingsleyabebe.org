@@ -240,8 +240,13 @@ export default function Portfolio() {
      
 
 {/* Mobile Logo - Shows only on mobile */}
+
 <div className={styles.mobileLogo}>
-  {settings.name.split(' ').map(n => n[0]).join('')}
+  {settings.avatar ? (
+    <img src={settings.avatar} alt={settings.name} />
+  ) : (
+    settings.name.split(' ').map(n => n[0]).join('')
+  )}
 </div>
 
 <motion.div 
@@ -256,10 +261,14 @@ export default function Portfolio() {
       
 
       {/* Desktop Navigation */}
-      <nav className={`${styles.desktopNav} ${scrolled ? styles.desktopNavScrolled : ''}`}>
-        <div className={styles.navLogo}>
-          {settings.name.split(' ').map(n => n[0]).join('')}
-        </div>
+   <nav className={`${styles.desktopNav} ${scrolled ? styles.desktopNavScrolled : ''}`}>
+  <div className={styles.navLogo}>
+    {settings.avatar ? (
+      <img src={settings.avatar} alt={settings.name} className={styles.navAvatar} />
+    ) : (
+      settings.name.split(' ').map(n => n[0]).join('')
+    )}
+  </div>
         <div className={styles.navLinks}>
           {navSections.map((section) => (
             <button
@@ -368,6 +377,18 @@ export default function Portfolio() {
   <div className={styles.sectionContent}>
     <h2 className={styles.sectionTitle}>About Me</h2>
     
+    {/* Add Avatar Display */}
+    {settings.avatar && (
+      <div className={styles.avatarWrapper}>
+        <img 
+          src={settings.avatar} 
+          alt={settings.name}
+          className={styles.avatar}
+        />
+      </div>
+    )}
+    
+   
     <div className={styles.aboutTextWrapper}>
   <ReadMoreText 
     text={settings.summary || settings.bio || ''} 

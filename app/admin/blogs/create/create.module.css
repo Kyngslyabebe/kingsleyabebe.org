@@ -649,3 +649,32 @@
     padding: 14px;
   }
 }
+
+
+/* Divider for OR text */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+[data-theme='dark'] .divider {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='light'] .divider {
+  color: rgba(0, 0, 0, 0.5);
+}

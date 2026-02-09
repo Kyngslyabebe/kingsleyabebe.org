@@ -508,34 +508,50 @@ export default function EditBlogPage() {
               </div>
             </div>
 
-            <div className={styles.card}>
-              <h3 className={styles.cardTitle}>Featured Image</h3>
+          <div className={styles.card}>
+  <h3 className={styles.cardTitle}>Featured Image</h3>
 
-              {featuredImage ? (
-                <div className={styles.imagePreview}>
-                  <img src={featuredImage} alt="Featured" />
-                  <button
-                    type="button"
-                    onClick={() => setFeaturedImage('')}
-                    className={styles.removeImage}
-                  >
-                    <HiXMark size={20} />
-                  </button>
-                </div>
-              ) : (
-                <label className={styles.uploadBtn}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className={styles.fileInput}
-                    disabled={uploading}
-                  />
-                  <HiPhoto size={24} />
-                  <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
-                </label>
-              )}
-            </div>
+  {featuredImage ? (
+    <div className={styles.imagePreview}>
+      <img src={featuredImage} alt="Featured" />
+      <button
+        type="button"
+        onClick={() => setFeaturedImage('')}
+        className={styles.removeImage}
+      >
+        <HiXMark size={20} />
+      </button>
+    </div>
+  ) : (
+    <>
+      <label className={styles.uploadBtn}>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className={styles.fileInput}
+          disabled={uploading}
+        />
+        <HiPhoto size={24} />
+        <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
+      </label>
+
+      <div className={styles.divider}>
+        <span>OR</span>
+      </div>
+
+      <div className={styles.formGroup}>
+        <input
+          type="url"
+          value={featuredImage}
+          onChange={(e) => setFeaturedImage(e.target.value)}
+          placeholder="Paste image URL (https://...)"
+          className={styles.input}
+        />
+      </div>
+    </>
+  )}
+</div>
 
             <div className={styles.card}>
               <h3 className={styles.cardTitle}>Categories</h3>

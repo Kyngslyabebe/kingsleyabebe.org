@@ -1,22 +1,34 @@
 import { Metadata } from 'next';
-import { supabase } from '@/lib/supabase/client';
 import BlogPostClient from './BlogPostClient';
 
 interface Props {
-  params: Promise<{ slug: string }>; // ← Changed to Promise
+  params: Promise<{ slug: string }>;
 }
+
+export const dynamic = 'force-dynamic';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params; // ← Added await
+  const { slug } = await params;
   
   try {
-    const { data: blog } = await supabase
-      .from('blogs')
-      .select('*')
-      .eq('slug', slug)
-      .eq('published', true)
-      .single();
+    // Fetch blog data using REST API
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/blogs?slug=eq.${slug}&published=eq.true&select=*`,
+      {
+        headers: {
+          'apikey': supabaseKey || '',
+          'Content-Type': 'application/json',
+        },
+        next: { revalidate: 0 }
+      }
+    );
+
+    const data = await response.json();
+    const blog = data[0];
 
     if (!blog) {
       return {
@@ -26,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const siteUrl = 'https://kingsleyabebe.org';
     const imageUrl = blog.featured_image || `${siteUrl}/og-default.jpg`;
+    const pageUrl = `${siteUrl}/blogs/${blog.slug}`; // ← Fixed: /blogs/ not /blog/
 
     return {
       title: blog.seo_title || blog.title,
@@ -35,8 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title: blog.seo_title || blog.title,
         description: blog.seo_description || blog.excerpt,
-        url: `${siteUrl}/blog/${blog.slug}`,
-        siteName: 'Kingsley Abebe - Full-Stack Developer',
+        url: pageUrl,
+        siteName: 'Kingsley Abebe',
         images: [
           {
             url: imageUrl,
@@ -47,9 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ],
         locale: 'en_US',
         type: 'article',
-        publishedTime: blog.published_at,
-        authors: [blog.author || 'Kingsley Abebe'],
-        tags: blog.tags || [],
+        publishedTime: blog.published_at || blog.created_at,
       },
       twitter: {
         card: 'summary_large_image',
@@ -60,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [imageUrl],
       },
       alternates: {
-        canonical: `${siteUrl}/blog/${blog.slug}`,
+        canonical: pageUrl,
       },
     };
   } catch (error) {
@@ -71,8 +82,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Server component - just passes slug to client component
+// Server component
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params; // ← Added await
+  const { slug } = await params;
   return <BlogPostClient slug={slug} />;
 }

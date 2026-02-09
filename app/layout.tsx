@@ -21,6 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const faviconUrl = data?.favicon || '/favicon.ico';
 
     return {
+      metadataBase: new URL('https://kingsleyabebe.org'), // ← ADDED THIS
       title: data?.meta_title || 'Kingsley Abebe - Full Stack Developer',
       description: data?.meta_description || 'Professional portfolio showcasing web development projects and skills',
       keywords: data?.meta_keywords || 'Full Stack Developer, React, Node.js, Web Development, Portfolio',
@@ -36,6 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
         description: data?.meta_description || 'Professional portfolio showcasing web development projects and skills',
         type: 'website',
         url: 'https://kingsleyabebe.org',
+        siteName: 'Kingsley Abebe', // ← ADDED THIS
         images: data?.og_image ? [{ 
           url: data.og_image,
           width: 1200,
@@ -47,6 +49,8 @@ export async function generateMetadata(): Promise<Metadata> {
         card: 'summary_large_image',
         title: data?.meta_title || 'Kingsley Abebe - Full Stack Developer',
         description: data?.meta_description || 'Professional portfolio showcasing web development projects and skills',
+        creator: '@InfinitBooking', // ← ADDED THIS
+        site: '@InfinitBooking', // ← ADDED THIS
         images: data?.og_image ? [data.og_image] : [],
       },
     };
@@ -54,6 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error('Failed to fetch metadata:', error);
     // Fallback metadata if database fetch fails
     return {
+      metadataBase: new URL('https://kingsleyabebe.org'), // ← ADDED THIS
       title: 'Kingsley Abebe - Full Stack Developer',
       description: 'Professional portfolio showcasing web development projects and skills',
       keywords: 'Full Stack Developer, React, Node.js, Web Development, Portfolio',
@@ -68,6 +73,12 @@ export async function generateMetadata(): Promise<Metadata> {
         title: 'Kingsley Abebe - Full Stack Developer',
         description: 'Professional portfolio showcasing web development projects and skills',
         type: 'website',
+        siteName: 'Kingsley Abebe', // ← ADDED THIS
+      },
+      twitter: {
+        card: 'summary_large_image',
+        creator: '@InfinitBooking', // ← ADDED THIS
+        site: '@InfinitBooking', // ← ADDED THIS
       },
     };
   }

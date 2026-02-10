@@ -71,6 +71,18 @@ export default function SettingsPage() {
   const [brandColor, setBrandColor] = useState('#4A90E2');
   const [accentColor, setAccentColor] = useState('#667eea');
 
+  // Personal Details Visibility Toggles
+const [showYearsExperience, setShowYearsExperience] = useState(true);
+const [showTotalProjects, setShowTotalProjects] = useState(true);
+const [showTechnologiesCount, setShowTechnologiesCount] = useState(true);
+const [showClientsServed, setShowClientsServed] = useState(true);
+const [showAvailability, setShowAvailability] = useState(true);
+const [showHourlyRate, setShowHourlyRate] = useState(true);
+
+// blog post visibility toggles (for future use
+const [showBlog, setShowBlog] = useState(true);
+
+
   useEffect(() => {
     loadSettings();
   }, []);
@@ -137,7 +149,21 @@ export default function SettingsPage() {
         setGoogleAnalyticsId(data.google_analytics_id || '');
         setBrandColor(data.brand_color || '#4A90E2');
         setAccentColor(data.accent_color || '#667eea');
+
+       
+setShowYearsExperience(data.show_years_experience !== false);
+setShowTotalProjects(data.show_total_projects !== false);
+setShowTechnologiesCount(data.show_technologies_count !== false);
+setShowClientsServed(data.show_clients_served !== false);
+setShowAvailability(data.show_availability !== false);
+setShowHourlyRate(data.show_hourly_rate !== false);
+
+
+// blog post visibility toggles (for future use
+setShowBlog(data.show_blog ?? true);
       }
+
+
     } catch (error) {
       console.error('Error loading settings:', error);
       showToast('Error loading settings', 'error');
@@ -198,6 +224,19 @@ export default function SettingsPage() {
         google_analytics_id: googleAnalyticsId,
         brand_color: brandColor,
         accent_color: accentColor,
+
+
+         show_years_experience: showYearsExperience,
+  show_total_projects: showTotalProjects,
+  show_technologies_count: showTechnologiesCount,
+  show_clients_served: showClientsServed,
+  show_availability: showAvailability,
+  show_hourly_rate: showHourlyRate,
+
+  //blog
+  show_blog: showBlog,
+  
+ 
         
         updated_at: new Date().toISOString()
       };
@@ -439,98 +478,179 @@ export default function SettingsPage() {
           </div>
         )}
 
-        {/* PROFESSIONAL TAB */}
-        {activeTab === 'professional' && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Professional Details</h2>
-            <p className={styles.sectionDesc}>Stats and career information</p>
+{/* PROFESSIONAL TAB */}
+{activeTab === 'professional' && (
+  <div className={styles.section}>
+    <h2 className={styles.sectionTitle}>Professional Details</h2>
+    <p className={styles.sectionDesc}>Stats and career information - toggle visibility for each field</p>
 
-            <div className={styles.formGrid}>
-              <div className={styles.formGroup}>
-                <label>Years of Experience</label>
-                <input
-                  type="number"
-                  value={yearsExperience}
-                  onChange={(e) => setYearsExperience(e.target.value)}
-                  placeholder="5"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Total Projects</label>
-                <input
-                  type="number"
-                  value={totalProjects}
-                  onChange={(e) => setTotalProjects(e.target.value)}
-                  placeholder="50"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Technologies Count</label>
-                <input
-                  type="number"
-                  value={technologiesCount}
-                  onChange={(e) => setTechnologiesCount(e.target.value)}
-                  placeholder="25"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Clients Served</label>
-                <input
-                  type="number"
-                  value={clientsServed}
-                  onChange={(e) => setClientsServed(e.target.value)}
-                  placeholder="30"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Availability Status</label>
-                <select
-                  value={availability}
-                  onChange={(e) => setAvailability(e.target.value)}
-                >
-                  <option value="available">Available for Work</option>
-                  <option value="busy">Currently Busy</option>
-                  <option value="not-looking">Not Looking</option>
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Hourly Rate (USD)</label>
-                <input
-                  type="number"
-                  value={hourlyRate}
-                  onChange={(e) => setHourlyRate(e.target.value)}
-                  placeholder="150"
-                />
-              </div>
-
-              <div className={styles.formGroupFull}>
-                <label>Resume URL</label>
-                <input
-                  type="url"
-                  value={resumeUrl}
-                  onChange={(e) => setResumeUrl(e.target.value)}
-                  placeholder="https://drive.google.com/..."
-                />
-                {resumeUrl && (
-                  <a 
-                    href={resumeUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={styles.previewLink}
-                  >
-                    Preview Resume →
-                  </a>
-                )}
-              </div>
-            </div>
+    <div className={styles.statsContainer}>
+      {/* Years of Experience */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showYearsExperience}
+            onChange={(e) => setShowYearsExperience(e.target.checked)}
+          />
+          <span>Show Years of Experience</span>
+        </label>
+        {showYearsExperience && (
+          <div className={styles.statInput}>
+            <input
+              type="number"
+              value={yearsExperience}
+              onChange={(e) => setYearsExperience(e.target.value)}
+              placeholder="5"
+            />
           </div>
         )}
+      </div>
 
+      {/* Total Projects */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showTotalProjects}
+            onChange={(e) => setShowTotalProjects(e.target.checked)}
+          />
+          <span>Show Total Projects</span>
+        </label>
+        {showTotalProjects && (
+          <div className={styles.statInput}>
+            <input
+              type="number"
+              value={totalProjects}
+              onChange={(e) => setTotalProjects(e.target.value)}
+              placeholder="50"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Technologies Count */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showTechnologiesCount}
+            onChange={(e) => setShowTechnologiesCount(e.target.checked)}
+          />
+          <span>Show Technologies Count</span>
+        </label>
+        {showTechnologiesCount && (
+          <div className={styles.statInput}>
+            <input
+              type="number"
+              value={technologiesCount}
+              onChange={(e) => setTechnologiesCount(e.target.value)}
+              placeholder="25"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Clients Served */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showClientsServed}
+            onChange={(e) => setShowClientsServed(e.target.checked)}
+          />
+          <span>Show Clients Served</span>
+        </label>
+        {showClientsServed && (
+          <div className={styles.statInput}>
+            <input
+              type="number"
+              value={clientsServed}
+              onChange={(e) => setClientsServed(e.target.value)}
+              placeholder="30"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Availability Status */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showAvailability}
+            onChange={(e) => setShowAvailability(e.target.checked)}
+          />
+          <span>Show Availability Status</span>
+        </label>
+        {showAvailability && (
+          <div className={styles.statInput}>
+            <select
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value)}
+            >
+              <option value="available">Available for Work</option>
+              <option value="busy">Currently Busy</option>
+              <option value="not-looking">Not Looking</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* Hourly Rate */}
+      <div className={styles.statCard}>
+        <label className={styles.statToggle}>
+          <input
+            type="checkbox"
+            checked={showHourlyRate}
+            onChange={(e) => setShowHourlyRate(e.target.checked)}
+          />
+          <span>Show Hourly Rate (USD)</span>
+        </label>
+        {showHourlyRate && (
+          <div className={styles.statInput}>
+            <input
+              type="number"
+              value={hourlyRate}
+              onChange={(e) => setHourlyRate(e.target.value)}
+              placeholder="150"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Resume URL - Always Visible */}
+      <div className={styles.resumeField}>
+        <label>Resume URL</label>
+        <input
+          type="url"
+          value={resumeUrl}
+          onChange={(e) => setResumeUrl(e.target.value)}
+          placeholder="https://drive.google.com/..."
+          style={{
+            width: '100%',
+            padding: '10px 12px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            background: 'rgba(26, 47, 66, 0.6)',
+            border: '1px solid rgba(74, 144, 226, 0.2)',
+            color: '#FFFFFF'
+          }}
+        />
+        {resumeUrl && (
+          <a 
+            href={resumeUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={styles.previewLink}
+          >
+            Preview Resume →
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
         {/* SEO TAB */}
         {activeTab === 'seo' && (
           <div className={styles.section}>
@@ -649,121 +769,140 @@ export default function SettingsPage() {
           </div>
         )}
 
-        {/* ADVANCED TAB */}
-        {activeTab === 'advanced' && (
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Advanced Settings</h2>
-            <p className={styles.sectionDesc}>Visibility, tracking, and customization</p>
+ {/* ADVANCED TAB */}
+{activeTab === 'advanced' && (
+  <div className={styles.section}>
+    <h2 className={styles.sectionTitle}>Advanced Settings</h2>
+    <p className={styles.sectionDesc}>Visibility, tracking, and customization</p>
 
-            {/* Section Visibility */}
-            <div className={styles.subsection}>
-              <h3 className={styles.subsectionTitle}>Section Visibility</h3>
-              <div className={styles.checkboxGroup}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={showProjects}
-                    onChange={(e) => setShowProjects(e.target.checked)}
-                  />
-                  <span>Show Projects Section</span>
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={showSkills}
-                    onChange={(e) => setShowSkills(e.target.checked)}
-                  />
-                  <span>Show Skills Section</span>
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={showExperience}
-                    onChange={(e) => setShowExperience(e.target.checked)}
-                  />
-                  <span>Show Experience Section</span>
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={contactFormEnabled}
-                    onChange={(e) => setContactFormEnabled(e.target.checked)}
-                  />
-                  <span>Enable Contact Form</span>
-                </label>
-              </div>
-            </div>
+    {/* Section Visibility */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Section Visibility</h3>
+      <div className={styles.checkboxGroup}>
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showProjects}
+            onChange={(e) => setShowProjects(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Projects Section</span>
+        </label>
+        
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showSkills}
+            onChange={(e) => setShowSkills(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Skills Section</span>
+        </label>
+        
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showExperience}
+            onChange={(e) => setShowExperience(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Experience Section</span>
+        </label>
+        
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showBlog}
+            onChange={(e) => setShowBlog(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Blog Section</span>
+        </label>
+        
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={contactFormEnabled}
+            onChange={(e) => setContactFormEnabled(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Enable Contact Form</span>
+        </label>
+      </div>
+    </div>
 
-            {/* Notifications */}
-            <div className={styles.subsection}>
-              <h3 className={styles.subsectionTitle}>Email Notifications</h3>
-              <label className={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  checked={emailNotifications}
-                  onChange={(e) => setEmailNotifications(e.target.checked)}
-                />
-                <span>Receive email on new contact messages</span>
-              </label>
-            </div>
+    {/* Notifications */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Email Notifications</h3>
+      <label className={styles.switchLabel}>
+        <input
+          type="checkbox"
+          checked={emailNotifications}
+          onChange={(e) => setEmailNotifications(e.target.checked)}
+          className={styles.switch}
+        />
+        <span>Receive email on new contact messages</span>
+      </label>
+    </div>
 
-            {/* Analytics */}
-            <div className={styles.subsection}>
-              <h3 className={styles.subsectionTitle}>Analytics & Tracking</h3>
-              <div className={styles.formGroup}>
-                <label>Google Analytics ID</label>
-                <input
-                  type="text"
-                  value={googleAnalyticsId}
-                  onChange={(e) => setGoogleAnalyticsId(e.target.value)}
-                  placeholder="G-XXXXXXXXXX"
-                />
-              </div>
-            </div>
+    {/* Analytics */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Analytics & Tracking</h3>
+      <div className={styles.formGroup}>
+        <label>Google Analytics ID</label>
+        <input
+          type="text"
+          value={googleAnalyticsId}
+          onChange={(e) => setGoogleAnalyticsId(e.target.value)}
+          placeholder="G-XXXXXXXXXX"
+        />
+        <small>Track visitor behavior and site performance</small>
+      </div>
+    </div>
 
-            {/* Theme Colors */}
-            <div className={styles.subsection}>
-              <h3 className={styles.subsectionTitle}>Brand Colors</h3>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label>Primary Brand Color</label>
-                  <div className={styles.colorInputWrapper}>
-                    <input
-                      type="color"
-                      value={brandColor}
-                      onChange={(e) => setBrandColor(e.target.value)}
-                      className={styles.colorInput}
-                    />
-                    <input
-                      type="text"
-                      value={brandColor}
-                      onChange={(e) => setBrandColor(e.target.value)}
-                      placeholder="#4A90E2"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Accent Color</label>
-                  <div className={styles.colorInputWrapper}>
-                    <input
-                      type="color"
-                      value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
-                      className={styles.colorInput}
-                    />
-                    <input
-                      type="text"
-                      value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
-                      placeholder="#667eea"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+    {/* Theme Colors */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Brand Colors</h3>
+      <div className={styles.formGrid}>
+        <div className={styles.formGroup}>
+          <label>Primary Brand Color</label>
+          <div className={styles.colorInputWrapper}>
+            <input
+              type="color"
+              value={brandColor}
+              onChange={(e) => setBrandColor(e.target.value)}
+              className={styles.colorInput}
+            />
+            <input
+              type="text"
+              value={brandColor}
+              onChange={(e) => setBrandColor(e.target.value)}
+              placeholder="#4A90E2"
+            />
           </div>
-        )}
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Accent Color</label>
+          <div className={styles.colorInputWrapper}>
+            <input
+              type="color"
+              value={accentColor}
+              onChange={(e) => setAccentColor(e.target.value)}
+              className={styles.colorInput}
+            />
+            <input
+              type="text"
+              value={accentColor}
+              onChange={(e) => setAccentColor(e.target.value)}
+              placeholder="#667eea"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
       </div>
 

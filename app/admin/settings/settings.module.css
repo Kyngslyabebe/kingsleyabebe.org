@@ -139,3 +139,254 @@
   .floatingSave { bottom: 16px; right: 16px; left: 16px; }
   .floatingSave .saveBtn { width: 100%; justify-content: center; }
 }
+
+
+
+/* Toggle Label with Checkbox */
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .toggleLabel {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .toggleLabel {
+  color: #1A202C;
+}
+
+.toggleLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #4A90E2;
+}
+
+[data-theme='light'] .toggleLabel input[type="checkbox"] {
+  accent-color: #3182CE;
+}
+
+/* Professional Details Specific Styling */
+.formGroupFull {
+  grid-column: 1 / -1;
+  margin-bottom: 20px;
+}
+
+.formGroupFull .toggleLabel {
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .formGroupFull .toggleLabel {
+  background: rgba(26, 47, 66, 0.3);
+  border: 1px solid rgba(74, 144, 226, 0.15);
+}
+
+[data-theme='light'] .formGroupFull .toggleLabel {
+  background: rgba(237, 242, 247, 0.5);
+  border: 1px solid rgba(49, 130, 206, 0.15);
+}
+
+.formGroupFull .toggleLabel:hover {
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .formGroupFull .toggleLabel:hover {
+  background: rgba(26, 47, 66, 0.5);
+  border-color: rgba(74, 144, 226, 0.3);
+}
+
+[data-theme='light'] .formGroupFull .toggleLabel:hover {
+  background: rgba(237, 242, 247, 0.8);
+  border-color: rgba(49, 130, 206, 0.3);
+}
+
+/* Conditional Input Field */
+.formGroupFull .input {
+  margin-top: 12px;
+  margin-left: 28px;
+  width: calc(100% - 28px);
+}
+
+.formGroupFull select.input {
+  margin-left: 28px;
+  width: calc(100% - 28px);
+}
+
+
+/* ===================================
+   PROFESSIONAL DETAILS STYLING
+   =================================== */
+
+/* Stats Container */
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Individual Stat Card */
+.statCard {
+  padding: 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .statCard {
+  background: rgba(26, 47, 66, 0.3);
+  border: 1px solid rgba(74, 144, 226, 0.15);
+}
+
+[data-theme='light'] .statCard {
+  background: rgba(237, 242, 247, 0.5);
+  border: 1px solid rgba(49, 130, 206, 0.15);
+}
+
+.statCard:hover {
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .statCard:hover {
+  background: rgba(26, 47, 66, 0.4);
+  border-color: rgba(74, 144, 226, 0.25);
+}
+
+[data-theme='light'] .statCard:hover {
+  background: rgba(237, 242, 247, 0.7);
+  border-color: rgba(49, 130, 206, 0.25);
+}
+
+/* Checkbox Toggle Row */
+.statToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.statToggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+[data-theme='dark'] .statToggle input[type="checkbox"] {
+  accent-color: #4A90E2;
+}
+
+[data-theme='light'] .statToggle input[type="checkbox"] {
+  accent-color: #3182CE;
+}
+
+.statToggle span {
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .statToggle span {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .statToggle span {
+  color: #1A202C;
+}
+
+/* Input Field Below Checkbox */
+.statInput {
+  margin-top: 12px;
+  margin-left: 0;
+  width: 100%;
+}
+
+.statInput input,
+.statInput select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .statInput input,
+[data-theme='dark'] .statInput select {
+  background: rgba(26, 47, 66, 0.6);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .statInput input,
+[data-theme='light'] .statInput select {
+  background: #FFFFFF;
+  border: 1px solid rgba(49, 130, 206, 0.2);
+  color: #1A202C;
+}
+
+.statInput input:focus,
+.statInput select:focus {
+  outline: none;
+}
+
+[data-theme='dark'] .statInput input:focus,
+[data-theme='dark'] .statInput select:focus {
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+[data-theme='light'] .statInput input:focus,
+[data-theme='light'] .statInput select:focus {
+  border-color: #3182CE;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+/* Resume URL (Always Visible) */
+.resumeField {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid;
+}
+
+[data-theme='dark'] .resumeField {
+  border-color: rgba(74, 144, 226, 0.15);
+}
+
+[data-theme='light'] .resumeField {
+  border-color: rgba(49, 130, 206, 0.15);
+}
+
+.resumeField label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+[data-theme='dark'] .resumeField label {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .resumeField label {
+  color: #1A202C;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .statsContainer {
+    gap: 12px;
+  }
+  
+  .statCard {
+    padding: 12px;
+  }
+}

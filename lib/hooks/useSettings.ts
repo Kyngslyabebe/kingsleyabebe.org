@@ -44,6 +44,7 @@ export interface PortfolioSettings {
   show_projects: boolean;
   show_skills: boolean;
   show_experience: boolean;
+  show_blog: boolean;
   contact_form_enabled: boolean;
   email_notifications: boolean;
   google_analytics_id: string;

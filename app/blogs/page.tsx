@@ -133,6 +133,15 @@ export default function BlogsPage() {
     analytics.navClick(`blog-${slug}`);
   }
 
+  // If no published blogs, return completely blank page
+  if (!loading && blogs.length === 0) {
+    return (
+      <div className={styles.container} style={{ minHeight: '100vh' }}>
+        {/* Completely blank - no content */}
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className={styles.loading}>

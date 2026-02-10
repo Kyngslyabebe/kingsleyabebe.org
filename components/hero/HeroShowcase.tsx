@@ -63,7 +63,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Piece of my work in style</h3>
+          <h3 className={styles.showcaseTitle}>Building InfinitBooking</h3>
         </div>
         <div className={styles.loadingWrapper}>
           <div className={styles.loadingSpinner} />
@@ -76,7 +76,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Piece of my work in style</h3>
+          <h3 className={styles.showcaseTitle}>Building InfinitBooking</h3>
         </div>
         <div className={styles.emptyState}>
           <p className={styles.emptyText}>No active showcase items</p>
@@ -92,7 +92,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Piece of my work in style</h3>
+          <h3 className={styles.showcaseTitle}>Building InfinitBooking</h3>
         </div>
         <div className={styles.showcaseContent}>
           <div className={styles.deviceContainer}>
@@ -128,7 +128,7 @@ export default function HeroShowcase() {
   return (
     <div className={styles.showcaseContainer}>
       <div className={styles.showcaseHeader}>
-        <h3 className={styles.showcaseTitle}>Piece of my work in style</h3>
+        <h3 className={styles.showcaseTitle}>Building InfinitBooking</h3>
       </div>
       <div className={styles.showcaseContent}>
         <Swiper

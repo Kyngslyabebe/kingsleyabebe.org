@@ -73,23 +73,13 @@ export default function FeaturedBlog() {
     });
   }
 
+  // Don't render anything while loading or if no featured post exists
   if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.spinner} />
-      </div>
-    );
+    return null;
   }
 
   if (!featuredPost) {
-    return (
-      <div className={styles.emptyState}>
-        <p>No featured articles yet. Check back soon!</p>
-        <Link href="/blogs" className={styles.browseBtn}>
-          Browse All Articles
-        </Link>
-      </div>
-    );
+    return null;
   }
 
   return (

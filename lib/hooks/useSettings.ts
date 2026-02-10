@@ -28,6 +28,14 @@ export interface PortfolioSettings {
   availability: string;
   hourly_rate: string;
   
+  // Professional Visibility Toggles
+  show_years_experience: boolean;
+  show_total_projects: boolean;
+  show_technologies_count: boolean;
+  show_clients_served: boolean;
+  show_availability: boolean;
+  show_hourly_rate: boolean;
+  
   // SEO
   meta_title: string;
   meta_description: string;
@@ -73,6 +81,15 @@ const defaultSettings: PortfolioSettings = {
   resume_url: '',
   availability: 'available',
   hourly_rate: '',
+  
+  // Professional Visibility Toggles - Defaults
+  show_years_experience: true,
+  show_total_projects: true,
+  show_technologies_count: true,
+  show_clients_served: true,
+  show_availability: true,
+  show_hourly_rate: true,
+  
   meta_title: 'Kingsley Abebe - Full-Stack Software Engineer',
   meta_description: 'Professional portfolio showcasing web development projects',
   meta_keywords: '',
@@ -84,6 +101,7 @@ const defaultSettings: PortfolioSettings = {
   show_projects: true,
   show_skills: true,
   show_experience: true,
+  show_blog: true,
   contact_form_enabled: true,
   email_notifications: true,
   google_analytics_id: '',

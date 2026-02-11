@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
 
 export interface PortfolioSettings {
-  // Profile
   name: string;
   title: string;
   tagline: string;
   bio: string;
   avatar: string;
   summary: string;
-  
-  // Contact
   email: string;
   phone: string;
   location: string;
@@ -18,8 +15,6 @@ export interface PortfolioSettings {
   linkedin: string;
   twitter: string;
   website: string;
-  
-  // Professional
   years_experience: string;
   total_projects: string;
   technologies_count: string;
@@ -27,28 +22,20 @@ export interface PortfolioSettings {
   resume_url: string;
   availability: string;
   hourly_rate: string;
-  
-  // Professional Visibility Toggles
   show_years_experience: boolean;
   show_total_projects: boolean;
   show_technologies_count: boolean;
   show_clients_served: boolean;
   show_availability: boolean;
   show_hourly_rate: boolean;
-  
-  // SEO
   meta_title: string;
   meta_description: string;
   meta_keywords: string;
   og_image: string;
   favicon: string;
-  
-  // Maintenance
   maintenance_mode: boolean;
   maintenance_message: string;
   maintenance_eta: string;
-  
-  // Advanced
   show_projects: boolean;
   show_skills: boolean;
   show_experience: boolean;
@@ -81,15 +68,12 @@ const defaultSettings: PortfolioSettings = {
   resume_url: '',
   availability: 'available',
   hourly_rate: '',
-  
-  // Professional Visibility Toggles - Defaults
   show_years_experience: true,
   show_total_projects: true,
   show_technologies_count: true,
   show_clients_served: true,
   show_availability: true,
   show_hourly_rate: true,
-  
   meta_title: 'Kingsley Abebe - Full-Stack Software Engineer',
   meta_description: 'Professional portfolio showcasing web development projects',
   meta_keywords: '',
@@ -109,8 +93,29 @@ const defaultSettings: PortfolioSettings = {
   accent_color: '#667eea'
 };
 
+const CACHE_KEY = 'portfolio_settings_cache';
+const CACHE_DURATION = 1000 * 60 * 5; // 5 minutes
+
 export function useSettings() {
-  const [settings, setSettings] = useState<PortfolioSettings>(defaultSettings);
+  const [settings, setSettings] = useState<PortfolioSettings>(() => {
+    // Try to load from cache on initial render
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          // Check if cache is still valid
+          if (Date.now() - timestamp < CACHE_DURATION) {
+            return data;
+          }
+        }
+      } catch (e) {
+        console.error('Cache read error:', e);
+      }
+    }
+    return defaultSettings;
+  });
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -127,14 +132,25 @@ export function useSettings() {
 
       if (error) {
         console.error('Error loading settings:', error);
-        // Use defaults if no settings found
         setSettings(defaultSettings);
       } else if (data) {
-        // Merge with defaults to handle missing fields
-        setSettings({
+        const newSettings = {
           ...defaultSettings,
           ...data
-        });
+        };
+        setSettings(newSettings);
+        
+        // Cache the settings with timestamp
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+              data: newSettings,
+              timestamp: Date.now()
+            }));
+          } catch (e) {
+            console.error('Cache write error:', e);
+          }
+        }
       }
     } catch (err) {
       console.error('Error:', err);

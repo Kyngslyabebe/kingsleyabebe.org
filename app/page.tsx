@@ -1,6 +1,6 @@
 'use client';
 export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
+
 import HeroShowcase from '@/components/hero/HeroShowcase';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { useSettings } from '@/lib/hooks/useSettings';
@@ -75,40 +75,43 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
-    loadPortfolioData();
-  }, [settings]);
+    if (!settingsLoading) {
+      loadPortfolioData();
+    }
+  }, [settingsLoading, settings]);
 
   async function loadPortfolioData() {
     try {
-      // Load projects if visible
-      if (settings.show_projects) {
-        const { data: projectsData } = await supabase
-          .from('projects')
-          .select('*')
-          .eq('visible', true)
-          .order('created_at', { ascending: false });
-        setProjects(projectsData || []);
-      }
+      // Load all data in parallel for better performance
+      const [projectsResult, skillsResult, experienceResult] = await Promise.all([
+        settings.show_projects
+          ? supabase
+              .from('projects')
+              .select('*')
+              .eq('visible', true)
+              .order('created_at', { ascending: false })
+          : Promise.resolve({ data: null, error: null }),
+        
+        settings.show_skills
+          ? supabase
+              .from('skills')
+              .select('*')
+              .eq('visible', true)
+              .order('level', { ascending: false })
+          : Promise.resolve({ data: null, error: null }),
+        
+        settings.show_experience
+          ? supabase
+              .from('experience')
+              .select('*')
+              .eq('visible', true)
+              .order('display_order', { ascending: false })
+          : Promise.resolve({ data: null, error: null })
+      ]);
 
-      // Load skills if visible
-      if (settings.show_skills) {
-        const { data: skillsData } = await supabase
-          .from('skills')
-          .select('*')
-          .eq('visible', true)  
-          .order('level', { ascending: false });
-        setSkills(skillsData || []);
-      }
-
-      // Load experience if visible
-      if (settings.show_experience) {
-        const { data: experienceData } = await supabase
-          .from('experience')
-          .select('*')
-          .eq('visible', true)  
-          .order('display_order', { ascending: false });
-        setExperience(experienceData || []);
-      }
+      setProjects(projectsResult.data || []);
+      setSkills(skillsResult.data || []);
+      setExperience(experienceResult.data || []);
     } catch (error) {
       console.error('Error loading portfolio data:', error);
     } finally {
@@ -167,7 +170,6 @@ export default function Portfolio() {
     setIsSubmitting(true);
     setFormStatus('Sending...');
 
-    // Track form submission attempt
     analytics.contactFormSubmit(formData.name);
 
     try {
@@ -234,7 +236,6 @@ export default function Portfolio() {
     <div className={styles.container}>
       <ThemeToggle />
 
-      {/* Mobile Logo - Shows only on mobile */}
       <div className={styles.mobileLogo}>
         {settings.avatar ? (
           <img src={settings.avatar} alt={settings.name} />
@@ -248,7 +249,6 @@ export default function Portfolio() {
         style={{ scaleX: scrollYProgress }}
       />
 
-      {/* Desktop Navigation */}
       <nav className={`${styles.desktopNav} ${scrolled ? styles.desktopNavScrolled : ''}`}>
         <div className={styles.navLogo}>
           {settings.avatar ? (
@@ -270,10 +270,8 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section id="home" className={styles.hero}>
         <div className={styles.heroGrid}>
-          {/* LEFT: Info Section */}
           <motion.div 
             className={styles.heroInfo}
             initial={{ opacity: 0, x: -30 }}
@@ -318,29 +316,27 @@ export default function Portfolio() {
               {settings.bio || settings.summary}
             </motion.p>
 
-         {/* Desktop CTA - Hidden on Mobile - Only show if there's at least one button */}
-{((settings.show_projects && projects.length > 0) || settings.resume_url) && (
-  <motion.div
-    className={`${styles.heroCTA} ${styles.ctaDesktop}`}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.8 }}
-  >
-    {settings.show_projects && projects.length > 0 && (
-      <button onClick={() => scrollToSection('projects')} className={styles.ctaPrimary}>
-        View Projects
-      </button>
-    )}
-    {settings.resume_url && (
-      <button onClick={downloadResume} className={styles.ctaSecondary}>
-        Download Resume
-      </button>
-    )}
-  </motion.div>
-)}
+            {((settings.show_projects && projects.length > 0) || settings.resume_url) && (
+              <motion.div
+                className={`${styles.heroCTA} ${styles.ctaDesktop}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                {settings.show_projects && projects.length > 0 && (
+                  <button onClick={() => scrollToSection('projects')} className={styles.ctaPrimary}>
+                    View Projects
+                  </button>
+                )}
+                {settings.resume_url && (
+                  <button onClick={downloadResume} className={styles.ctaSecondary}>
+                    Download Resume
+                  </button>
+                )}
+              </motion.div>
+            )}
           </motion.div>
 
-          {/* RIGHT: Showcase Carousel */}
           <motion.div
             className={styles.heroShowcase}
             initial={{ opacity: 0, x: 30 }}
@@ -352,7 +348,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* About Section */}
       <motion.section
         id="about"
         className={styles.section}
@@ -365,7 +360,6 @@ export default function Portfolio() {
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>About Me</h2>
           
-          {/* Avatar Display */}
           {settings.avatar && (
             <div className={styles.avatarWrapper}>
               <img 
@@ -376,7 +370,6 @@ export default function Portfolio() {
             </div>
           )}
           
-          {/* About Text */}
           <div className={styles.aboutTextWrapper}>
             <ReadMoreText 
               text={settings.summary || settings.bio || ''} 
@@ -387,98 +380,94 @@ export default function Portfolio() {
         </div>
       </motion.section>
 
-      {/* Stats Section - Separate from About */}
-{(
-  (settings.show_years_experience && settings.years_experience) ||
-  (settings.show_total_projects && settings.total_projects) ||
-  (settings.show_technologies_count && settings.technologies_count) ||
-  (settings.show_clients_served && settings.clients_served) ||
-  (settings.show_availability && settings.availability) ||
-  (settings.show_hourly_rate && settings.hourly_rate)
-) && (
-  <motion.section
-    className={styles.section}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-  >
-    <div className={styles.sectionContent}>
-      <motion.div
-        className={styles.statsGrid}
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        {settings.show_years_experience && settings.years_experience && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
-            <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber}>
-              <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
-            </h3>
-            <p className={styles.statLabel}>Years Experience</p>
-          </motion.div>
-        )}
+      {(
+        (settings.show_years_experience && settings.years_experience) ||
+        (settings.show_total_projects && settings.total_projects) ||
+        (settings.show_technologies_count && settings.technologies_count) ||
+        (settings.show_clients_served && settings.clients_served) ||
+        (settings.show_availability && settings.availability) ||
+        (settings.show_hourly_rate && settings.hourly_rate)
+      ) && (
+        <motion.section
+          className={styles.section}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <div className={styles.sectionContent}>
+            <motion.div
+              className={styles.statsGrid}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {settings.show_years_experience && settings.years_experience && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
+                  <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber}>
+                    <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
+                  </h3>
+                  <p className={styles.statLabel}>Years Experience</p>
+                </motion.div>
+              )}
 
-        {settings.show_total_projects && settings.total_projects && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
-            <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber}>
-              <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
-            </h3>
-            <p className={styles.statLabel}>Projects Built</p>
-          </motion.div>
-        )}
+              {settings.show_total_projects && settings.total_projects && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
+                  <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber}>
+                    <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
+                  </h3>
+                  <p className={styles.statLabel}>Projects Built</p>
+                </motion.div>
+              )}
 
-        {settings.show_technologies_count && settings.technologies_count && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
-            <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber}>
-              <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
-            </h3>
-            <p className={styles.statLabel}>Technologies</p>
-          </motion.div>
-        )}
+              {settings.show_technologies_count && settings.technologies_count && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
+                  <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber}>
+                    <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
+                  </h3>
+                  <p className={styles.statLabel}>Technologies</p>
+                </motion.div>
+              )}
 
-        {settings.show_clients_served && settings.clients_served && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
-            <HiUserGroup size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber}>
-              <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
-            </h3>
-            <p className={styles.statLabel}>Happy Clients</p>
-          </motion.div>
-        )}
+              {settings.show_clients_served && settings.clients_served && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
+                  <HiUserGroup size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber}>
+                    <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
+                  </h3>
+                  <p className={styles.statLabel}>Happy Clients</p>
+                </motion.div>
+              )}
 
-        {/* ADD THIS: Availability Status */}
-        {settings.show_availability && settings.availability && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
-            <HiBriefcase size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber} style={{ fontSize: '1.5rem' }}>
-              {settings.availability === 'available' && ' Available'}
-              {settings.availability === 'busy' && ' Busy'}
-              {settings.availability === 'not-looking' && ' Not Available'}
-            </h3>
-            <p className={styles.statLabel}>Current Status</p>
-          </motion.div>
-        )}
+              {settings.show_availability && settings.availability && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
+                  <HiBriefcase size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber} style={{ fontSize: '1.5rem' }}>
+                    {settings.availability === 'available' && '✓ Available'}
+                    {settings.availability === 'busy' && '⏳ Busy'}
+                    {settings.availability === 'not-looking' && '✗ Not Available'}
+                  </h3>
+                  <p className={styles.statLabel}>Current Status</p>
+                </motion.div>
+              )}
 
-        {/* ADD THIS: Hourly Rate */}
-        {settings.show_hourly_rate && settings.hourly_rate && (
-          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
-            <HiCurrencyDollar size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-            <h3 className={styles.statNumber}>
-              ${settings.hourly_rate}
-            </h3>
-            <p className={styles.statLabel}>Hourly Rate</p>
-          </motion.div>
-        )}
-      </motion.div>
-    </div>
-  </motion.section>
-)}
+              {settings.show_hourly_rate && settings.hourly_rate && (
+                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
+                  <HiCurrencyDollar size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <h3 className={styles.statNumber}>
+                    ${settings.hourly_rate}
+                  </h3>
+                  <p className={styles.statLabel}>Hourly Rate</p>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        </motion.section>
+      )}
 
-      {/* Projects Section */}
       {settings.show_projects && projects.length > 0 && (
         <motion.section
           id="projects"
@@ -532,7 +521,6 @@ export default function Portfolio() {
         </motion.section>
       )}
 
-      {/* Skills Section */}
       {settings.show_skills && skills.length > 0 && (
         <motion.section
           id="skills"
@@ -579,7 +567,6 @@ export default function Portfolio() {
         </motion.section>
       )}
 
-      {/* Experience Section */}
       {settings.show_experience && experience.length > 0 && (
         <motion.section
           id="experience"
@@ -646,7 +633,6 @@ export default function Portfolio() {
         </motion.section>
       )}
 
-      {/* Contact Section */}
       <motion.section
         id="contact"
         className={styles.section}
@@ -767,7 +753,6 @@ export default function Portfolio() {
         </div>
       </motion.section>
 
-      {/* Mobile Bottom Navigation */}
       <nav className={styles.mobileNav}>
         {[
           { id: 'home', icon: HiHome },
@@ -786,7 +771,6 @@ export default function Portfolio() {
         ))}
       </nav>
 
-      {/* Project Modal */}
       {selectedProject && (
         <motion.div
           className={styles.modalOverlay}
@@ -877,31 +861,28 @@ export default function Portfolio() {
         </motion.div>
       )}
 
-   {/* Featured Blog Section - Only show if enabled AND there are published blogs */}
-{settings.show_blog && (
-  <motion.section
-    id="featured-blog"
-    className={styles.section}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-100px" }}
-    variants={fadeInUp}
-    transition={{ duration: 0.6 }}
-  >
-    <div className={styles.sectionContent}>
-      <h2 className={styles.sectionTitle}>Blog</h2>
-      <FeaturedBlog />
-    </div>
-  </motion.section>
-)}
+      {settings.show_blog && (
+        <motion.section
+          id="featured-blog"
+          className={styles.section}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+        >
+          <div className={styles.sectionContent}>
+            <h2 className={styles.sectionTitle}>Blog</h2>
+            <FeaturedBlog />
+          </div>
+        </motion.section>
+      )}
 
-      {/* Footer */}
       <Footer />
     </div>
   );
 }
 
-// Counter Component
 function Counter({ from, to }: { from: number; to: number }) {
   const [count, setCount] = useState(from);
   const [hasAnimated, setHasAnimated] = useState(false);

@@ -299,7 +299,7 @@ setShowBlog(data.show_blog ?? true);
           <p className={styles.pageSubtitle}>Manage your portfolio configuration</p>
         </div>
 
-         {/*  
+         {/* Tabs */}
         <button 
           onClick={handleSave} 
           disabled={saving}
@@ -308,10 +308,6 @@ setShowBlog(data.show_blog ?? true);
           <HiCheckCircle size={18} />
           <span>{saving ? 'Saving...' : 'Save Changes'}</span>
         </button>
-
-        */}
-
-
       </div>
 
       {/* Tabs */}

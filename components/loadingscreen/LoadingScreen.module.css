@@ -64,7 +64,7 @@
   background-clip: text;
 }
 
-/* Spinning Ring */
+/* Spinning Ring - REMOVED CSS ANIMATION */
 .spinnerRing {
   position: absolute;
   width: 100%;
@@ -74,11 +74,6 @@
   border-top-color: #4A90E2;
   border-right-color: #4A90E2;
   z-index: 1;
-  animation: spin 3s linear infinite; /* SLOWER - change this number */
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0); /* ADD THIS - forces GPU acceleration */
-  transform-origin: center center; /* ADD THIS - ensures rotation from center */
 }
 
 [data-theme='light'] .spinnerRing {
@@ -86,15 +81,7 @@
   border-right-color: #3182CE;
 }
 
-/* Smooth spin keyframe */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* REMOVE THE @keyframes spin COMPLETELY */
 
 /* ===================================
    LOADING TEXT
@@ -185,7 +172,7 @@
 }
 
 /* ===================================
-   BACKGROUND GRADIENT ANIMATION
+   BACKGROUND GRADIENT - SIMPLIFIED
    =================================== */
 
 .gradientBg {
@@ -193,58 +180,15 @@
   inset: 0;
   overflow: hidden;
   z-index: 1;
-  opacity: 0.3;
+  opacity: 0.15;
 }
 
-.gradientOrb1,
-.gradientOrb2 {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(100px);
+[data-theme='dark'] .gradientBg {
+  background: radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(97, 218, 251, 0.3) 0%, transparent 50%);
 }
 
-.gradientOrb1 {
-  top: -250px;
-  right: -250px;
-}
-
-.gradientOrb2 {
-  bottom: -250px;
-  left: -250px;
-}
-
-[data-theme='dark'] .gradientOrb1 {
-  background: radial-gradient(circle, #4A90E2 0%, transparent 70%);
-}
-
-[data-theme='dark'] .gradientOrb2 {
-  background: radial-gradient(circle, #61DAFB 0%, transparent 70%);
-}
-
-[data-theme='light'] .gradientOrb1 {
-  background: radial-gradient(circle, #3182CE 0%, transparent 70%);
-}
-
-[data-theme='light'] .gradientOrb2 {
-  background: radial-gradient(circle, #0987A0 0%, transparent 70%);
-}
-
-@media (max-width: 768px) {
-  .gradientOrb1,
-  .gradientOrb2 {
-    width: 300px;
-    height: 300px;
-  }
-  
-  .gradientOrb1 {
-    top: -150px;
-    right: -150px;
-  }
-  
-  .gradientOrb2 {
-    bottom: -150px;
-    left: -150px;
-  }
+[data-theme='light'] .gradientBg {
+  background: radial-gradient(circle at 20% 20%, rgba(49, 130, 206, 0.2) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(9, 135, 160, 0.2) 0%, transparent 50%);
 }

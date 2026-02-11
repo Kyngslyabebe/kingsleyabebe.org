@@ -13,7 +13,7 @@ import { analytics } from '@/lib/analytics/events';
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
-import { HiHome, HiUser, HiRectangleGroup, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup } from 'react-icons/hi2';
+import { HiHome, HiUser, HiRectangleGroup, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin, FaEnvelope as FaEmail, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiReact, SiNextdotjs, SiTypescript, SiNodedotjs, SiPostgresql, SiMongodb, SiAmazonwebservices, SiDocker, SiStripe, SiTailwindcss } from 'react-icons/si';
 import { supabase } from '@/lib/supabase/client';
@@ -388,69 +388,95 @@ export default function Portfolio() {
       </motion.section>
 
       {/* Stats Section - Separate from About */}
-      {(
-        (settings.show_years_experience && settings.years_experience) ||
-        (settings.show_total_projects && settings.total_projects) ||
-        (settings.show_technologies_count && settings.technologies_count) ||
-        (settings.show_clients_served && settings.clients_served)
-      ) && (
-        <motion.section
-          className={styles.section}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <div className={styles.sectionContent}>
-            <motion.div
-              className={styles.statsGrid}
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              {settings.show_years_experience && settings.years_experience && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
-                  <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Years Experience</p>
-                </motion.div>
-              )}
+{(
+  (settings.show_years_experience && settings.years_experience) ||
+  (settings.show_total_projects && settings.total_projects) ||
+  (settings.show_technologies_count && settings.technologies_count) ||
+  (settings.show_clients_served && settings.clients_served) ||
+  (settings.show_availability && settings.availability) ||
+  (settings.show_hourly_rate && settings.hourly_rate)
+) && (
+  <motion.section
+    className={styles.section}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+  >
+    <div className={styles.sectionContent}>
+      <motion.div
+        className={styles.statsGrid}
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {settings.show_years_experience && settings.years_experience && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
+            <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber}>
+              <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
+            </h3>
+            <p className={styles.statLabel}>Years Experience</p>
+          </motion.div>
+        )}
 
-              {settings.show_total_projects && settings.total_projects && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
-                  <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Projects Built</p>
-                </motion.div>
-              )}
+        {settings.show_total_projects && settings.total_projects && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
+            <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber}>
+              <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
+            </h3>
+            <p className={styles.statLabel}>Projects Built</p>
+          </motion.div>
+        )}
 
-              {settings.show_technologies_count && settings.technologies_count && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
-                  <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Technologies</p>
-                </motion.div>
-              )}
+        {settings.show_technologies_count && settings.technologies_count && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
+            <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber}>
+              <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
+            </h3>
+            <p className={styles.statLabel}>Technologies</p>
+          </motion.div>
+        )}
 
-              {settings.show_clients_served && settings.clients_served && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
-                  <HiUserGroup size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Happy Clients</p>
-                </motion.div>
-              )}
-            </motion.div>
-          </div>
-        </motion.section>
-      )}
+        {settings.show_clients_served && settings.clients_served && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
+            <HiUserGroup size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber}>
+              <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
+            </h3>
+            <p className={styles.statLabel}>Happy Clients</p>
+          </motion.div>
+        )}
+
+        {/* ADD THIS: Availability Status */}
+        {settings.show_availability && settings.availability && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
+            <HiBriefcase size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber} style={{ fontSize: '1.5rem' }}>
+              {settings.availability === 'available' && ' Available'}
+              {settings.availability === 'busy' && ' Busy'}
+              {settings.availability === 'not-looking' && ' Not Available'}
+            </h3>
+            <p className={styles.statLabel}>Current Status</p>
+          </motion.div>
+        )}
+
+        {/* ADD THIS: Hourly Rate */}
+        {settings.show_hourly_rate && settings.hourly_rate && (
+          <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
+            <HiCurrencyDollar size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+            <h3 className={styles.statNumber}>
+              ${settings.hourly_rate}
+            </h3>
+            <p className={styles.statLabel}>Hourly Rate</p>
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
+  </motion.section>
+)}
 
       {/* Projects Section */}
       {settings.show_projects && projects.length > 0 && (

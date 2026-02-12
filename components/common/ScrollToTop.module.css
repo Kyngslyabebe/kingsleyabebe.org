@@ -1,0 +1,83 @@
+.scrollButton {
+  position: fixed;
+  bottom: 32px;
+  right: 32px; /* Make sure it's RIGHT not LEFT */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2, #667eea);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.4);
+  z-index: 998; /* Below mobile nav which is 999 */
+  overflow: visible;
+}
+
+.scrollButton:hover {
+  box-shadow: 0 12px 32px rgba(74, 144, 226, 0.5);
+}
+
+.scrollButton:active {
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3);
+}
+
+.iconWrapper {
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated ring effect */
+.ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #4A90E2;
+  pointer-events: none;
+}
+
+/* Light mode adjustments */
+[data-theme="light"] .scrollButton {
+  background: linear-gradient(135deg, #4A90E2, #667eea);
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
+}
+
+[data-theme="light"] .scrollButton:hover {
+  box-shadow: 0 12px 32px rgba(74, 144, 226, 0.4);
+}
+
+/* Mobile adjustments - IMPORTANT */
+@media (max-width: 768px) {
+  .scrollButton {
+    bottom: 100px; /* Above mobile nav (mobile nav is usually at bottom 0) */
+    right: 20px; /* Ensure it's on the RIGHT */
+    width: 50px;
+    height: 50px;
+  }
+
+  .iconWrapper svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .scrollButton {
+    bottom: 28px;
+    right: 28px;
+  }
+}
+
+/* Ensure it doesn't conflict with anything */
+.scrollButton {
+  /* Remove any inherited positioning */
+  left: auto !important;
+  transform: none;
+}

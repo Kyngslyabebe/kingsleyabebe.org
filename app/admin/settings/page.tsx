@@ -82,6 +82,8 @@ const [showHourlyRate, setShowHourlyRate] = useState(true);
 // blog post visibility toggles (for future use
 const [showBlog, setShowBlog] = useState(true);
 
+const [showServices, setShowServices] = useState(false);
+
 
   useEffect(() => {
     loadSettings();
@@ -161,6 +163,8 @@ setShowHourlyRate(data.show_hourly_rate !== false);
 
 // blog post visibility toggles (for future use
 setShowBlog(data.show_blog ?? true);
+
+setShowServices(data.show_services ?? false);
       }
 
 
@@ -235,6 +239,8 @@ setShowBlog(data.show_blog ?? true);
 
   //blog
   show_blog: showBlog,
+
+  show_services: showServices,
   
  
         
@@ -771,7 +777,7 @@ setShowBlog(data.show_blog ?? true);
           </div>
         )}
 
- {/* ADVANCED TAB */}
+{/* ADVANCED TAB */}
 {activeTab === 'advanced' && (
   <div className={styles.section}>
     <h2 className={styles.sectionTitle}>Advanced Settings</h2>
@@ -809,6 +815,16 @@ setShowBlog(data.show_blog ?? true);
             className={styles.switch}
           />
           <span>Show Experience Section</span>
+        </label>
+
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showServices}
+            onChange={(e) => setShowServices(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Services Section</span>
         </label>
         
         <label className={styles.switchLabel}>

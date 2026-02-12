@@ -57,6 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: HiRectangleGroup, label: 'Projects', href: '/admin/projects' },
     { icon: HiCodeBracket, label: 'Skills', href: '/admin/skills' },
     { icon: HiBriefcase, label: 'Experience', href: '/admin/experience' },
+     { icon: HiBriefcase, label: 'Services', href: '/admin/services' },
     { icon: HiNewspaper, label: 'Blogs', href: '/admin/blogs' },
     { icon: HiPhoto, label: 'Showcase', href: '/admin/showcase' },
     { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },

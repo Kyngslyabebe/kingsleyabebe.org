@@ -39,12 +39,15 @@ export interface PortfolioSettings {
   show_projects: boolean;
   show_skills: boolean;
   show_experience: boolean;
+  show_services: boolean; // ADD THIS
   show_blog: boolean;
   contact_form_enabled: boolean;
   email_notifications: boolean;
   google_analytics_id: string;
   brand_color: string;
   accent_color: string;
+  services_title: string; // ADD THIS
+  services_subtitle: string; // ADD THIS
 }
 
 const defaultSettings: PortfolioSettings = {
@@ -85,12 +88,15 @@ const defaultSettings: PortfolioSettings = {
   show_projects: true,
   show_skills: true,
   show_experience: true,
+  show_services: false, // ADD THIS
   show_blog: true,
   contact_form_enabled: true,
   email_notifications: true,
   google_analytics_id: '',
   brand_color: '#4A90E2',
-  accent_color: '#667eea'
+  accent_color: '#667eea',
+  services_title: 'Build Your Next Project', // ADD THIS
+  services_subtitle: 'Professional web development for startups and businesses' // ADD THIS
 };
 
 const CACHE_KEY = 'portfolio_settings_cache';
@@ -98,13 +104,11 @@ const CACHE_DURATION = 1000 * 60 * 5; // 5 minutes
 
 export function useSettings() {
   const [settings, setSettings] = useState<PortfolioSettings>(() => {
-    // Try to load from cache on initial render
     if (typeof window !== 'undefined') {
       try {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
-          // Check if cache is still valid
           if (Date.now() - timestamp < CACHE_DURATION) {
             return data;
           }
@@ -140,7 +144,6 @@ export function useSettings() {
         };
         setSettings(newSettings);
         
-        // Cache the settings with timestamp
         if (typeof window !== 'undefined') {
           try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({

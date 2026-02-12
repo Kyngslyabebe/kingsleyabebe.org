@@ -8,12 +8,14 @@ import Footer from '@/components/footer/Footer';
 import LoadingScreen from '@/components/loadingscreen/LoadingScreen';
 import FeaturedBlog from '@/components/blog/FeaturedBlog';
 import ReadMoreText from '@/components/common/ReadMoreText';
+import Services from '@/components/services/Services';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import Link from 'next/link';
 import { analytics } from '@/lib/analytics/events';
 
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
-import { HiHome, HiUser, HiRectangleGroup, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar } from 'react-icons/hi2';
+import { HiHome, HiUser, HiRectangleGroup, HiClock, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin, FaEnvelope as FaEmail, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiReact, SiNextdotjs, SiTypescript, SiNodedotjs, SiPostgresql, SiMongodb, SiAmazonwebservices, SiDocker, SiStripe, SiTailwindcss } from 'react-icons/si';
 import { supabase } from '@/lib/supabase/client';
@@ -230,6 +232,7 @@ export default function Portfolio() {
   if (settings.show_projects) navSections.push('projects');
   if (settings.show_skills) navSections.push('skills');
   if (settings.show_experience) navSections.push('experience');
+  if (settings.show_services) navSections.push('services'); 
   navSections.push('contact');
 
   return (
@@ -521,6 +524,9 @@ export default function Portfolio() {
         </motion.section>
       )}
 
+
+  
+
       {settings.show_skills && skills.length > 0 && (
         <motion.section
           id="skills"
@@ -632,6 +638,32 @@ export default function Portfolio() {
           </div>
         </motion.section>
       )}
+
+
+          {/* Services Section */}
+{settings.show_services && (
+  <motion.section
+    id="services"
+    className={styles.section}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+    variants={fadeInUp}
+    transition={{ duration: 0.6 }}
+  >
+    <div className={styles.sectionContent}>
+      <h2 className={styles.sectionTitle}>
+        {settings.services_title || 'Build Your Next Project'}
+      </h2>
+      {settings.services_subtitle && (
+        <p className={styles.sectionSubtitle}>
+          {settings.services_subtitle}
+        </p>
+      )}
+      <Services />
+    </div>
+  </motion.section>
+)}
 
       <motion.section
         id="contact"
@@ -753,23 +785,31 @@ export default function Portfolio() {
         </div>
       </motion.section>
 
-      <nav className={styles.mobileNav}>
-        {[
-          { id: 'home', icon: HiHome },
-          { id: 'about', icon: HiUser },
-          ...(settings.show_projects ? [{ id: 'projects', icon: HiRectangleGroup }] : []),
-          ...(settings.show_skills ? [{ id: 'skills', icon: HiCodeBracket }] : []),
-          { id: 'contact', icon: HiEnvelope }
-        ].map(({ id, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => scrollToSection(id)}
-            className={`${styles.mobileNavItem} ${activeSection === id ? styles.mobileNavItemActive : ''}`}
-          >
-            <Icon size={22} />
-          </button>
-        ))}
-      </nav>
+   <nav className={styles.mobileNav}>
+  {navSections.slice(0, 5).map((section) => {
+    const icons: any = {
+      home: HiHome,
+      about: HiUser,
+      projects: HiRectangleGroup,
+      services: HiBriefcase,
+      skills: HiCodeBracket,
+      experience: HiClock,
+      contact: HiEnvelope
+    };
+    
+    const Icon = icons[section] || HiHome;
+    
+    return (
+      <button
+        key={section}
+        onClick={() => scrollToSection(section)}
+        className={`${styles.mobileNavItem} ${activeSection === section ? styles.mobileNavItemActive : ''}`}
+      >
+        <Icon size={22} />
+      </button>
+    );
+  })}
+</nav>
 
       {selectedProject && (
         <motion.div
@@ -879,6 +919,8 @@ export default function Portfolio() {
       )}
 
       <Footer />
+
+        <ScrollToTop />
     </div>
   );
 }

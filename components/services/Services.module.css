@@ -32,7 +32,7 @@
 .cardContainer {
   perspective: 1000px;
   cursor: pointer;
-  height: 420px;
+  height: 380px;
 }
 
 .card {
@@ -337,7 +337,7 @@
 
 @media (max-width: 768px) {
   .cardContainer {
-    height: 460px;
+    height: 400px;
   }
 
   .cardTitle {

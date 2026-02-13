@@ -143,7 +143,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
 <div className={styles.cardFront}>
   <div className={styles.iconWrapper}>
     <IconComponent 
-      size={48} 
+      size={36} 
       className={styles.icon}
       style={{ color: service.accent_color }}
     />

@@ -14,7 +14,7 @@ export default function ScrollToTop() {
       const windowHeight = window.innerHeight;
       
       // Show button after scrolling down half a screen height
-      if (scrolled > windowHeight * 2.0) {
+      if (scrolled > windowHeight * 3.0) {
         setIsVisible(true);
       } else {
         setIsVisible(false);

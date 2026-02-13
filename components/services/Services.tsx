@@ -138,12 +138,13 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           borderColor: service.accent_color,
         }}
       >
-        {/* FRONT */}
-   
+
+
+{/* FRONT */}
 <div className={styles.cardFront}>
   <div className={styles.iconWrapper}>
     <IconComponent 
-      size={36} 
+      size={48} 
       className={styles.icon}
       style={{ color: service.accent_color }}
     />
@@ -152,7 +153,12 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
   <h3 className={styles.cardTitle}>{service.title}</h3>
   <p className={styles.cardTagline}>{service.tagline}</p>
   
-  {/* PREVIEW DELIVERABLES */}
+  {/* ADD DESCRIPTION ON FRONT */}
+  {service.description && (
+    <p className={styles.frontDescription}>{service.description}</p>
+  )}
+  
+  {/* Preview deliverables */}
   <ul className={styles.previewDeliverables}>
     {service.deliverables.slice(0, 3).map((item, i) => (
       <li key={i} className={styles.previewItem}>

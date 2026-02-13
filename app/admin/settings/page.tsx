@@ -70,6 +70,9 @@ export default function SettingsPage() {
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState('');
   const [brandColor, setBrandColor] = useState('#4A90E2');
   const [accentColor, setAccentColor] = useState('#667eea');
+  const [showServices, setShowServices] = useState(false);
+const [servicesTitle, setServicesTitle] = useState('Build Your Next Project');
+const [servicesSubtitle, setServicesSubtitle] = useState('Professional web development for startups and businesses');
 
   // Personal Details Visibility Toggles
 const [showYearsExperience, setShowYearsExperience] = useState(true);
@@ -82,7 +85,7 @@ const [showHourlyRate, setShowHourlyRate] = useState(true);
 // blog post visibility toggles (for future use
 const [showBlog, setShowBlog] = useState(true);
 
-const [showServices, setShowServices] = useState(false);
+
 
 
   useEffect(() => {
@@ -164,7 +167,10 @@ setShowHourlyRate(data.show_hourly_rate !== false);
 // blog post visibility toggles (for future use
 setShowBlog(data.show_blog ?? true);
 
+
 setShowServices(data.show_services ?? false);
+setServicesTitle(data.services_title || 'Build Your Next Project');
+setServicesSubtitle(data.services_subtitle || 'Professional web development for startups and businesses');
       }
 
 
@@ -241,6 +247,8 @@ setShowServices(data.show_services ?? false);
   show_blog: showBlog,
 
   show_services: showServices,
+services_title: servicesTitle,
+services_subtitle: servicesSubtitle,
   
  
         
@@ -826,6 +834,36 @@ setShowServices(data.show_services ?? false);
           />
           <span>Show Services Section</span>
         </label>
+
+         {/* ADD THIS - Services Configuration */}
+        {showServices && (
+          <div className={styles.nestedConfig}>
+            <div className={styles.formGroup}>
+              <label>Services Section Title</label>
+              <input
+                type="text"
+                value={servicesTitle}
+                onChange={(e) => setServicesTitle(e.target.value)}
+                placeholder="Build Your Next Project"
+                maxLength={100}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Services Section Subtitle</label>
+              <input
+                type="text"
+                value={servicesSubtitle}
+                onChange={(e) => setServicesSubtitle(e.target.value)}
+                placeholder="Professional web development for startups and businesses"
+                maxLength={200}
+              />
+            </div>
+          </div>
+        )}
+
+
+
         
         <label className={styles.switchLabel}>
           <input

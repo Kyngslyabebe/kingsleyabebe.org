@@ -390,3 +390,24 @@
     padding: 12px;
   }
 }
+
+.nestedConfig {
+  margin-left: 40px;
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid #4A90E2;
+}
+
+.nestedConfig .formGroup {
+  margin-bottom: 16px;
+}
+
+.nestedConfig .formGroup:last-child {
+  margin-bottom: 0;
+}
+
+[data-theme="light"] .nestedConfig {
+  background: rgba(0, 0, 0, 0.03);
+}

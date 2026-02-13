@@ -2,8 +2,8 @@
   position: fixed;
   bottom: 32px;
   right: 32px; /* Make sure it's RIGHT not LEFT */
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: linear-gradient(135deg, #4A90E2, #667eea);
   border: none;
@@ -57,8 +57,8 @@
   .scrollButton {
     bottom: 100px; /* Above mobile nav (mobile nav is usually at bottom 0) */
     right: 20px; /* Ensure it's on the RIGHT */
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 
   .iconWrapper svg {

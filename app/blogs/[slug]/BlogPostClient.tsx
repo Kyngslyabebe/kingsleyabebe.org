@@ -17,6 +17,8 @@ import {
 import { FaTwitter, FaLinkedin, FaFacebook } from 'react-icons/fa';
 import { analytics } from '@/lib/analytics/events';
 import FloatingBackButton from '@/components/blog/FloatingBackButton';
+import LikeButton from '@/components/blog/LikeButton';
+import Comments from '@/components/blog/Comments';
 import styles from './post.module.css';
 
 interface BlogPost {
@@ -326,7 +328,13 @@ export default function BlogPostClient({ slug }: Props) {
         </motion.section>
       )}
 
-      <FloatingBackButton backTo="/" />
+      {/* Like and Comments */}
+<div style={{ marginTop: '60px' }}>
+  <LikeButton blogId={post.id} initialLikes={post.likes_count || 0} />
+  <Comments blogId={post.id} />
+</div>
+
+    <FloatingBackButton backTo="/blogs" />
     </div>
   );
 }

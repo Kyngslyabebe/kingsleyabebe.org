@@ -14,7 +14,9 @@ import {
   HiSun,
   HiMoon,
   HiPhoto,
-  HiNewspaper
+  HiClock,
+  HiNewspaper,
+  HiChatBubbleLeft  // ADD THIS
 } from 'react-icons/hi2';
 import { supabase } from '@/lib/supabase/client';
 import { useTheme } from '@/components/theme/ThemeProvider';
@@ -56,9 +58,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: HiHome, label: 'Dashboard', href: '/admin' },
     { icon: HiRectangleGroup, label: 'Projects', href: '/admin/projects' },
     { icon: HiCodeBracket, label: 'Skills', href: '/admin/skills' },
-    { icon: HiBriefcase, label: 'Experience', href: '/admin/experience' },
-     { icon: HiBriefcase, label: 'Services', href: '/admin/services' },
+    { icon: HiClock, label: 'Experience', href: '/admin/experience' },
+    { icon: HiBriefcase, label: 'Services', href: '/admin/services' },
     { icon: HiNewspaper, label: 'Blogs', href: '/admin/blogs' },
+    { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' }, // ADD THIS
     { icon: HiPhoto, label: 'Showcase', href: '/admin/showcase' },
     { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },
     { icon: HiCog6Tooth, label: 'Settings', href: '/admin/settings' },
@@ -88,12 +91,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               {theme === 'light' ? <HiMoon size={18} /> : <HiSun size={18} />}
             </button>
             
-           <button 
-  onClick={() => window.open('/', '_blank')}
-  className={styles.viewSiteBtn}
->
-  View Site
-</button>
+            <button 
+              onClick={() => window.open('/', '_blank')}
+              className={styles.viewSiteBtn}
+            >
+              View Site
+            </button>
             <button onClick={handleSignOut} className={styles.signOutBtn}>
               <HiArrowRightOnRectangle size={18} />
             </button>

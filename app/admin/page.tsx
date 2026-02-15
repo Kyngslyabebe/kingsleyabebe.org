@@ -12,7 +12,9 @@ import {
   HiPhoto,
   HiArrowTrendingUp,
   HiEye,
-  HiChartBar
+  HiChartBar,
+  HiCog,
+  HiChatBubbleLeft
 } from 'react-icons/hi2';
 import styles from './dashboard.module.css';
 
@@ -30,10 +32,15 @@ export default function AdminDashboard() {
     blogs: 0,
     blogsPublished: 0,
     showcase: 0,
+    services: 0,
+    servicesVisible: 0,
+    comments: 0,
+    commentsPending: 0,
   });
   const [loading, setLoading] = useState(true);
   const [recentMessages, setRecentMessages] = useState<any[]>([]);
   const [recentBlogs, setRecentBlogs] = useState<any[]>([]);
+  const [recentComments, setRecentComments] = useState<any[]>([]);
 
   useEffect(() => {
     loadData();
@@ -83,12 +90,28 @@ export default function AdminDashboard() {
       if (blogsError) console.error('Blogs error:', blogsError);
       const blogsPublished = blogsData?.filter(b => b.published).length || 0;
 
-      // Fetch showcase - FIXED TABLE NAME
+      // Fetch showcase
       const { count: showcaseCount, error: showcaseError } = await supabase
         .from('hero_showcase')
         .select('*', { count: 'exact', head: true });
       
       if (showcaseError) console.error('Showcase error:', showcaseError);
+
+      // Fetch services
+      const { data: servicesData, error: servicesError } = await supabase
+        .from('services')
+        .select('visible');
+      
+      if (servicesError) console.error('Services error:', servicesError);
+      const servicesVisible = servicesData?.filter(s => s.visible).length || 0;
+
+      // Fetch comments
+      const { data: commentsData, error: commentsError } = await supabase
+        .from('blog_comments')
+        .select('approved');
+      
+      if (commentsError) console.error('Comments error:', commentsError);
+      const commentsPending = commentsData?.filter(c => !c.approved).length || 0;
 
       setStats({
         projects: projectsData?.length || 0,
@@ -102,6 +125,10 @@ export default function AdminDashboard() {
         blogs: blogsData?.length || 0,
         blogsPublished,
         showcase: showcaseCount || 0,
+        services: servicesData?.length || 0,
+        servicesVisible,
+        comments: commentsData?.length || 0,
+        commentsPending,
       });
 
       // Fetch recent messages
@@ -123,6 +150,19 @@ export default function AdminDashboard() {
       
       if (recentBlogsError) console.error('Recent blogs error:', recentBlogsError);
       setRecentBlogs(recentBlogsData || []);
+
+      // Fetch recent comments
+      const { data: recentCommentsData, error: recentCommentsError } = await supabase
+        .from('blog_comments')
+        .select(`
+          *,
+          blogs(title, slug)
+        `)
+        .order('created_at', { ascending: false })
+        .limit(3);
+      
+      if (recentCommentsError) console.error('Recent comments error:', recentCommentsError);
+      setRecentComments(recentCommentsData || []);
 
     } catch (error: any) {
       console.error('Error loading dashboard data:', error);
@@ -149,12 +189,28 @@ export default function AdminDashboard() {
       link: '/admin/skills'
     },
     { 
+      icon: HiCog, 
+      label: 'Services', 
+      value: stats.services, 
+      secondary: `${stats.servicesVisible} visible`,
+      color: '#667eea',
+      link: '/admin/services'
+    },
+    { 
       icon: HiNewspaper, 
       label: 'Blogs', 
       value: stats.blogs, 
       secondary: `${stats.blogsPublished} published`,
       color: '#9F7AEA',
       link: '/admin/blogs'
+    },
+    { 
+      icon: HiChatBubbleLeft, 
+      label: 'Comments', 
+      value: stats.comments, 
+      secondary: `${stats.commentsPending} pending`,
+      color: '#EC4899',
+      link: '/admin/comments'
     },
     { 
       icon: HiBriefcase, 
@@ -184,11 +240,11 @@ export default function AdminDashboard() {
 
   const quickActions = [
     { icon: HiRectangleGroup, label: 'New Project', link: '/admin/projects', color: '#4A90E2' },
+    { icon: HiCog, label: 'New Service', link: '/admin/services', color: '#667eea' },
     { icon: HiNewspaper, label: 'New Blog', link: '/admin/blogs/create', color: '#9F7AEA' },
     { icon: HiCodeBracket, label: 'New Skill', link: '/admin/skills', color: '#48BB78' },
     { icon: HiBriefcase, label: 'New Experience', link: '/admin/experience', color: '#F6AD55' },
-    { icon: HiPhoto, label: 'Add Image', link: '/admin/showcase', color: '#3498DB' },
-    { icon: HiArrowTrendingUp, label: 'Analytics', link: 'https://analytics.google.com', external: true, color: '#E74C3C' },
+    { icon: HiChatBubbleLeft, label: 'Moderate Comments', link: '/admin/comments', color: '#EC4899' },
   ];
 
   if (loading) {
@@ -247,13 +303,7 @@ export default function AdminDashboard() {
             return (
               <button
                 key={action.label}
-                onClick={() => {
-                  if (action.external) {
-                    window.open(action.link, '_blank');
-                  } else {
-                    router.push(action.link);
-                  }
-                }}
+                onClick={() => router.push(action.link)}
                 className={styles.actionBtn}
                 style={{ '--action-color': action.color } as React.CSSProperties}
               >
@@ -296,6 +346,50 @@ export default function AdminDashboard() {
                   </p>
                   <span className={styles.messageDate}>
                     {new Date(message.created_at).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Recent Comments */}
+        {recentComments.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Recent Comments</h2>
+              <button 
+                onClick={() => router.push('/admin/comments')}
+                className={styles.viewAllBtn}
+              >
+                View All
+              </button>
+            </div>
+            <div className={styles.messagesList}>
+              {recentComments.map((comment) => (
+                <div key={comment.id} className={styles.messageCard}>
+                  <div className={styles.messageHeader}>
+                    <span className={styles.messageName}>{comment.user_name}</span>
+                    <span className={`${styles.messageBadge} ${comment.approved ? styles.badgeApproved : styles.badgePending}`}>
+                      {comment.approved ? 'Approved' : 'Pending'}
+                    </span>
+                  </div>
+                  <p className={styles.messageEmail}>{comment.user_email}</p>
+                  <p className={styles.messagePreview}>
+                    {comment.content.length > 80 
+                      ? `${comment.content.substring(0, 80)}...` 
+                      : comment.content}
+                  </p>
+                  <p className={styles.blogName}>
+                    On: {comment.blogs?.title || 'Unknown Blog'}
+                  </p>
+                  <span className={styles.messageDate}>
+                    {new Date(comment.created_at).toLocaleDateString('en-US', { 
                       month: 'short', 
                       day: 'numeric',
                       hour: '2-digit',

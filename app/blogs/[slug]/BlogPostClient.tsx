@@ -31,6 +31,8 @@ interface BlogPost {
   published_at: string;
   reading_time: number;
   views: number;
+   likes_count: number;       
+  comments_count: number;
   categories: { name: string; color: string }[];
   tags: { name: string; slug: string }[];
 }

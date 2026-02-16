@@ -10,70 +10,66 @@ interface LikeButtonProps {
   initialLikes: number;
 }
 
+function getOrCreateVisitorId(): string {
+  let id = localStorage.getItem('visitor_id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('visitor_id', id);
+  }
+  return id;
+}
+
 export default function LikeButton({ blogId, initialLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [visitorId, setVisitorId] = useState<string | null>(null);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    checkIfLiked();
-  }, [blogId]);
+    const id = getOrCreateVisitorId();
+    setVisitorId(id);
 
-  async function checkIfLiked() {
-    // Get email from localStorage (we'll save it when they comment)
-    const email = localStorage.getItem('user_email');
-    if (!email) return;
+    supabase
+      .from('blog_likes')
+      .select('id', { count: 'exact', head: true })
+      .eq('blog_id', blogId)
+      .then(({ count }) => { if (count !== null) setLikes(count); });
 
-    setUserEmail(email);
-
-    const { data } = await supabase
+    supabase
       .from('blog_likes')
       .select('id')
       .eq('blog_id', blogId)
-      .eq('user_email', email)
-      .single();
-
-    setIsLiked(!!data);
-  }
+      .eq('user_email', `anon_${id}`)
+      .maybeSingle()
+      .then(({ data }) => setIsLiked(!!data));
+  }, [blogId]);
 
   async function handleLike() {
-    if (loading) return;
-
-    // If no email, prompt for it
-    if (!userEmail) {
-      const email = prompt('Enter your email to like this post:');
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid email');
-        return;
-      }
-      localStorage.setItem('user_email', email);
-      setUserEmail(email);
-    }
+    if (loading || !visitorId) return;
 
     setLoading(true);
+    setAnimating(true);
+    setTimeout(() => setAnimating(false), 600);
+
+    const anonId = `anon_${visitorId}`;
 
     try {
       if (isLiked) {
-        // Unlike
         await supabase
           .from('blog_likes')
           .delete()
           .eq('blog_id', blogId)
-          .eq('user_email', userEmail!);
+          .eq('user_email', anonId);
 
-        setLikes(likes - 1);
+        setLikes(prev => Math.max(0, prev - 1));
         setIsLiked(false);
       } else {
-        // Like
         await supabase
           .from('blog_likes')
-          .insert({
-            blog_id: blogId,
-            user_email: userEmail!,
-          });
+          .insert({ blog_id: blogId, user_email: anonId });
 
-        setLikes(likes + 1);
+        setLikes(prev => prev + 1);
         setIsLiked(true);
       }
     } catch (error) {
@@ -87,10 +83,12 @@ export default function LikeButton({ blogId, initialLikes }: LikeButtonProps) {
     <button
       onClick={handleLike}
       disabled={loading}
-      className={`${styles.likeButton} ${isLiked ? styles.liked : ''}`}
+      className={`${styles.likeButton} ${isLiked ? styles.liked : ''} ${animating ? styles.animating : ''}`}
+      aria-label={isLiked ? 'Unlike this post' : 'Like this post'}
     >
       <HiHeart size={20} className={styles.icon} />
-      <span>{likes} {likes === 1 ? 'Like' : 'Likes'}</span>
+      <span className={styles.count}>{likes}</span>
+      <span className={styles.label}>{likes === 1 ? 'Like' : 'Likes'}</span>
     </button>
   );
 }

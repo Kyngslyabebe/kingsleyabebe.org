@@ -1,332 +1,255 @@
+/* ── Layout ─────────────────────────────────── */
 .container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
+  background: #f0f4f8;
+  padding: 24px 16px;
 }
 
-/* Animated Background Shapes */
-.bgShapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.shape1, .shape2, .shape3 {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.1;
-  animation: float 20s infinite ease-in-out;
-}
-
-.shape1 {
-  width: 300px;
-  height: 300px;
-  background: white;
-  top: -100px;
-  left: -100px;
-  animation-delay: 0s;
-}
-
-.shape2 {
-  width: 200px;
-  height: 200px;
-  background: white;
-  bottom: -50px;
-  right: 10%;
-  animation-delay: 5s;
-}
-
-.shape3 {
-  width: 150px;
-  height: 150px;
-  background: white;
-  top: 50%;
-  right: -50px;
-  animation-delay: 10s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -30px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-}
-
-/* Content Card */
+/* ── Card ────────────────────────────────────── */
 .content {
-  text-align: center;
-  max-width: 600px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 60px 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 1;
-  animation: slideUp 0.6s ease-out;
+  max-width: 480px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 52px 40px 40px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  text-align: center;
+  animation: fadeUp 0.5s ease-out both;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Icon */
-.iconContainer {
-  margin-bottom: 32px;
-}
-
-.iconBg {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 50%;
+/* ── Icon ────────────────────────────────────── */
+.iconWrap {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 24px;
+  background: #e8f1fb;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-  animation: pulse 3s ease-in-out infinite;
 }
 
 .icon {
-  font-size: 40px;
-  animation: rotate 4s linear infinite;
+  font-size: 22px;
+  display: block;
+  animation: wiggle 3s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6); }
-}
-
-@keyframes rotate {
+@keyframes wiggle {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  75% { transform: rotate(10deg); }
+  20%       { transform: rotate(-8deg); }
+  40%       { transform: rotate(8deg); }
+  60%       { transform: rotate(-4deg); }
+  80%       { transform: rotate(4deg); }
 }
 
-/* Typography */
+/* ── Typography ──────────────────────────────── */
 .title {
-  font-size: 36px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 0 8px 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 6px;
+  letter-spacing: -0.4px;
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  font-size: 16px;
-  color: #718096;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin: 0 0 32px 0;
+  color: #4A90E2;
+  margin: 0 0 28px;
 }
 
-/* Message Card */
+/* ── Message Card ────────────────────────────── */
 .messageCard {
-  background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 24px;
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  background: #f7f9fc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .message {
-  font-size: 17px;
-  color: #2D3748;
-  line-height: 1.7;
+  font-size: 15px;
+  color: #4a5568;
+  line-height: 1.65;
   margin: 0;
-  font-weight: 500;
 }
 
-/* ETA Card */
+/* ── ETA Card ────────────────────────────────── */
 .etaCard {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: linear-gradient(135deg, #667eea15, #764ba215);
-  border: 2px solid #667eea;
-  border-radius: 16px;
-  padding: 20px 24px;
-  margin-bottom: 32px;
+  gap: 14px;
+  background: #f0f7ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  text-align: left;
 }
 
 .etaIcon {
-  font-size: 32px;
-  animation: swing 2s ease-in-out infinite;
-}
-
-@keyframes swing {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(15deg); }
-  75% { transform: rotate(-15deg); }
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .etaLabel {
-  font-size: 13px;
-  color: #667eea;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin: 0 0 4px 0;
+  color: #4A90E2;
+  margin: 0 0 3px;
 }
 
 .etaTime {
-  font-size: 20px;
-  color: #2D3748;
+  font-size: 17px;
   font-weight: 700;
+  color: #1a202c;
   margin: 0;
 }
 
-/* Progress Bar */
-.progressContainer {
+/* ── Progress Bar ────────────────────────────── */
+.progressTrack {
   width: 100%;
-  height: 6px;
-  background: rgba(102, 126, 234, 0.1);
-  border-radius: 10px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
-.progressBar {
+.progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-  background-size: 200% 100%;
-  border-radius: 10px;
-  animation: progress 2s ease-in-out infinite;
+  width: 0;
+  background: #4A90E2;
+  border-radius: 999px;
+  animation: shimmer 2.4s ease-in-out infinite;
 }
 
-@keyframes progress {
-  0% { width: 0%; background-position: 0% 50%; }
-  50% { width: 70%; background-position: 100% 50%; }
-  100% { width: 100%; background-position: 0% 50%; }
+@keyframes shimmer {
+  0%   { width: 0%;   opacity: 1; }
+  60%  { width: 75%;  opacity: 1; }
+  100% { width: 100%; opacity: 0; }
 }
 
-/* Footer */
+/* ── Footer ──────────────────────────────────── */
 .footer {
-  padding-top: 24px;
-  border-top: 2px solid rgba(102, 126, 234, 0.1);
+  border-top: 1px solid #e2e8f0;
+  padding-top: 20px;
+  margin-bottom: 20px;
 }
 
 .footerText {
-  font-size: 15px;
-  color: #4A5568;
-  margin: 0 0 8px 0;
-  font-weight: 500;
+  font-size: 14px;
+  color: #718096;
+  margin: 0 0 6px;
 }
 
 .signature {
-  font-size: 16px;
-  color: #667eea;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
   margin: 0;
+}
+
+/* ── Social Section ──────────────────────────── */
+.socialSection {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
-.dash {
-  color: #CBD5E0;
-}
-
-/* Social Hint */
-.socialHint {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
-}
-
-.socialHint p {
+.socialLabel {
   font-size: 13px;
-  color: #A0AEC0;
+  color: #a0aec0;
   margin: 0;
-  font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a202c;
+  text-decoration: none;
+  padding: 5px 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.socialLink:hover {
+  border-color: #4A90E2;
+  color: #4A90E2;
+  background: #f0f7ff;
+}
+
+/* ── Mobile ──────────────────────────────────── */
+@media (max-width: 480px) {
   .content {
-    padding: 40px 24px;
-    border-radius: 20px;
+    padding: 40px 24px 32px;
+    border-radius: 16px;
   }
 
-  .iconBg {
-    width: 50px;
-    height: 50px;
+  .iconWrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    margin-bottom: 20px;
   }
 
   .icon {
-    font-size: 28px;
+    font-size: 18px;
   }
 
   .title {
-    font-size: 32px;
+    font-size: 22px;
   }
 
   .subtitle {
-    font-size: 14px;
+    font-size: 11px;
+    margin-bottom: 22px;
   }
 
   .messageCard {
-    padding: 20px;
+    padding: 16px 18px;
   }
 
   .message {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .etaCard {
-    padding: 16px 20px;
+    padding: 14px 16px;
+    gap: 12px;
   }
 
   .etaIcon {
-    font-size: 28px;
+    font-size: 16px;
   }
 
-  .shape1 {
-    width: 200px;
-    height: 200px;
+  .etaTime {
+    font-size: 15px;
   }
 
-  .shape2 {
-    width: 150px;
-    height: 150px;
-  }
-
-  .shape3 {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  .content {
-    padding: 32px 20px;
-  }
-
-  .iconBg {
-    width: 70px;
-    height: 70px;
-  }
-
-  .icon {
-    font-size: 32px;
-  }
-
-  .title {
-    font-size: 28px;
+  .socialSection {
+    flex-direction: column;
+    gap: 8px;
   }
 }

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { FaXTwitter } from 'react-icons/fa6';
 import styles from './maintenance.module.css';
 
 async function getMaintenanceInfo() {
@@ -20,59 +21,60 @@ export default async function MaintenancePage() {
 
   return (
     <div className={styles.container}>
-      {/* Animated Background */}
-      <div className={styles.bgShapes}>
-        <div className={styles.shape1}></div>
-        <div className={styles.shape2}></div>
-        <div className={styles.shape3}></div>
-      </div>
-
       <div className={styles.content}>
-        {/* Icon Container */}
-        <div className={styles.iconContainer}>
-          <div className={styles.iconBg}>
-            <div className={styles.icon}>🔧</div>
-          </div>
+
+        {/* Icon */}
+        <div className={styles.iconWrap}>
+          <span className={styles.icon}>🔧</span>
         </div>
 
-        {/* Main Content */}
-        <h1 className={styles.title}>We'll Be Right Back</h1>
-        <p className={styles.subtitle}>Currently Under Maintenance</p>
-        
+        {/* Heading */}
+        <h1 className={styles.title}>We&apos;ll be right back</h1>
+        <p className={styles.subtitle}>Under maintenance</p>
+
+        {/* Message */}
         <div className={styles.messageCard}>
           <p className={styles.message}>
-            {info?.maintenance_message || 
-             "We're currently upgrading our systems to serve you better. Please check back soon!"}
+            {info?.maintenance_message ||
+              "We\u2019re doing a bit of work behind the scenes to make things better. Nothing is broken \u2014 we\u2019re just improving. Check back shortly."}
           </p>
         </div>
 
+        {/* ETA */}
         {info?.maintenance_eta && (
           <div className={styles.etaCard}>
-            <div className={styles.etaIcon}>⏱️</div>
+            <span className={styles.etaIcon}>⏱</span>
             <div>
-              <p className={styles.etaLabel}>Estimated Return</p>
+              <p className={styles.etaLabel}>Expected back</p>
               <p className={styles.etaTime}>{info.maintenance_eta}</p>
             </div>
           </div>
         )}
 
-        {/* Progress Bar */}
-        <div className={styles.progressContainer}>
-          <div className={styles.progressBar}></div>
+        {/* Progress indicator */}
+        <div className={styles.progressTrack}>
+          <div className={styles.progressFill} />
         </div>
 
-        {/* Footer */}
+        {/* Divider + Footer */}
         <div className={styles.footer}>
-          <p className={styles.footerText}>Thank you for your patience!</p>
-          <p className={styles.signature}>
-            <span className={styles.dash}>—</span> {info?.name || 'Kingsley Abebe'}
-          </p>
+          <p className={styles.footerText}>Thanks for your patience.</p>
+          <p className={styles.signature}>— {info?.name || 'Kingsley Abebe'}</p>
         </div>
 
-        {/* Social Links */}
-        <div className={styles.socialHint}>
-          <p>Follow us for updates</p>
+        {/* Social */}
+        <div className={styles.socialSection}>
+          <p className={styles.socialLabel}>Follow for updates</p>
+          <a
+            href="https://x.com/kyngslyRF"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+          >
+          
+          </a>
         </div>
+
       </div>
     </div>
   );

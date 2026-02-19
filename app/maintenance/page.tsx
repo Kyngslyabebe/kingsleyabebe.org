@@ -71,7 +71,8 @@ export default async function MaintenancePage() {
             rel="noopener noreferrer"
             className={styles.socialLink}
           >
-          
+            <FaXTwitter size={13} />
+           
           </a>
         </div>
 

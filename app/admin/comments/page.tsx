@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
+import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import { 
   HiCheck, 
   HiTrash, 
@@ -58,6 +59,53 @@ export default function CommentsAdmin() {
     pending: 0,
     approved: 0
   });
+
+  // Confirm dialog
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => Promise<void>;
+    variant: 'danger' | 'warning' | 'info' | 'success';
+    confirmText: string;
+    loading: boolean;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: async () => {},
+    variant: 'danger',
+    confirmText: 'Delete',
+    loading: false,
+  });
+
+  function openConfirm(config: {
+    title: string;
+    message: string;
+    onConfirm: () => Promise<void>;
+    variant?: 'danger' | 'warning' | 'info' | 'success';
+    confirmText?: string;
+  }) {
+    setConfirmDialog({
+      isOpen: true,
+      title: config.title,
+      message: config.message,
+      onConfirm: config.onConfirm,
+      variant: config.variant || 'danger',
+      confirmText: config.confirmText || 'Confirm',
+      loading: false,
+    });
+  }
+
+  function closeConfirm() {
+    setConfirmDialog(prev => ({ ...prev, isOpen: false, loading: false }));
+  }
+
+  async function handleConfirm() {
+    setConfirmDialog(prev => ({ ...prev, loading: true }));
+    await confirmDialog.onConfirm();
+    closeConfirm();
+  }
 
   useEffect(() => {
     loadBlogs();
@@ -169,20 +217,26 @@ export default function CommentsAdmin() {
   }
 
   async function deleteComment(id: string) {
-    if (!confirm('Delete this comment? This action cannot be undone.')) return;
+    openConfirm({
+      title: 'Delete Comment',
+      message: 'Delete this comment? This action cannot be undone.',
+      confirmText: 'Delete',
+      variant: 'danger',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('blog_comments')
+          .delete()
+          .eq('id', id);
 
-    const { error } = await supabase
-      .from('blog_comments')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      showToast('Error deleting comment', 'error');
-    } else {
-      showToast('Comment deleted', 'success');
-      loadComments();
-      loadStats();
-    }
+        if (error) {
+          showToast('Error deleting comment', 'error');
+        } else {
+          showToast('Comment deleted', 'success');
+          loadComments();
+          loadStats();
+        }
+      },
+    });
   }
 
   // Bulk Actions
@@ -204,40 +258,54 @@ export default function CommentsAdmin() {
 
   async function bulkApprove() {
     if (selectedComments.length === 0) return;
-    if (!confirm(`Approve ${selectedComments.length} comment(s)?`)) return;
+    const count = selectedComments.length;
+    openConfirm({
+      title: 'Approve Comments',
+      message: `Approve ${count} comment${count > 1 ? 's' : ''}? They will be visible to the public.`,
+      confirmText: 'Approve',
+      variant: 'success',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('blog_comments')
+          .update({ approved: true })
+          .in('id', selectedComments);
 
-    const { error } = await supabase
-      .from('blog_comments')
-      .update({ approved: true })
-      .in('id', selectedComments);
-
-    if (error) {
-      showToast('Error approving comments', 'error');
-    } else {
-      showToast(`${selectedComments.length} comment(s) approved!`, 'success');
-      setSelectedComments([]);
-      loadComments();
-      loadStats();
-    }
+        if (error) {
+          showToast('Error approving comments', 'error');
+        } else {
+          showToast(`${count} comment${count > 1 ? 's' : ''} approved!`, 'success');
+          setSelectedComments([]);
+          loadComments();
+          loadStats();
+        }
+      },
+    });
   }
 
   async function bulkDelete() {
     if (selectedComments.length === 0) return;
-    if (!confirm(`Delete ${selectedComments.length} comment(s)? This action cannot be undone.`)) return;
+    const count = selectedComments.length;
+    openConfirm({
+      title: 'Delete Comments',
+      message: `Delete ${count} comment${count > 1 ? 's' : ''}? This action cannot be undone.`,
+      confirmText: 'Delete All',
+      variant: 'danger',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('blog_comments')
+          .delete()
+          .in('id', selectedComments);
 
-    const { error } = await supabase
-      .from('blog_comments')
-      .delete()
-      .in('id', selectedComments);
-
-    if (error) {
-      showToast('Error deleting comments', 'error');
-    } else {
-      showToast(`${selectedComments.length} comment(s) deleted`, 'success');
-      setSelectedComments([]);
-      loadComments();
-      loadStats();
-    }
+        if (error) {
+          showToast('Error deleting comments', 'error');
+        } else {
+          showToast(`${count} comment${count > 1 ? 's' : ''} deleted`, 'success');
+          setSelectedComments([]);
+          loadComments();
+          loadStats();
+        }
+      },
+    });
   }
 
   // Search filtering
@@ -518,6 +586,17 @@ export default function CommentsAdmin() {
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        confirmText={confirmDialog.confirmText}
+        onConfirm={handleConfirm}
+        onCancel={closeConfirm}
+        variant={confirmDialog.variant}
+        loading={confirmDialog.loading}
+      />
     </div>
   );
 }

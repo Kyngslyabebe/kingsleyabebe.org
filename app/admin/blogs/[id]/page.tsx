@@ -6,15 +6,17 @@ import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  HiArrowLeft, 
+import {
+  HiArrowLeft,
   HiCheck,
   HiPhoto,
   HiXMark,
-  HiPlus
+  HiPlus,
+  HiTrash
 } from 'react-icons/hi2';
 
 import styles from '../create/create.module.css';
+import ConfirmDialog from '@/components/admin/ConfirmDialog';
 
 
 import RichTextEditor from '@/components/admin/RichTextEditor';
@@ -71,6 +73,99 @@ export default function EditBlogPage() {
   const [uploading, setUploading] = useState(false);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [showTagForm, setShowTagForm] = useState(false);
+
+  // Confirm dialog
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => Promise<void>;
+    variant: 'danger' | 'warning' | 'info' | 'success';
+    confirmText: string;
+    loading: boolean;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: async () => {},
+    variant: 'danger',
+    confirmText: 'Delete',
+    loading: false,
+  });
+
+  function openConfirm(config: {
+    title: string;
+    message: string;
+    onConfirm: () => Promise<void>;
+    variant?: 'danger' | 'warning' | 'info' | 'success';
+    confirmText?: string;
+  }) {
+    setConfirmDialog({
+      isOpen: true,
+      title: config.title,
+      message: config.message,
+      onConfirm: config.onConfirm,
+      variant: config.variant || 'danger',
+      confirmText: config.confirmText || 'Confirm',
+      loading: false,
+    });
+  }
+
+  function closeConfirm() {
+    setConfirmDialog(prev => ({ ...prev, isOpen: false, loading: false }));
+  }
+
+  async function handleConfirm() {
+    setConfirmDialog(prev => ({ ...prev, loading: true }));
+    await confirmDialog.onConfirm();
+    closeConfirm();
+  }
+
+  async function handleDeleteTag(tag: Tag) {
+    openConfirm({
+      title: 'Delete Tag',
+      message: `Delete "#${tag.name}"? It will be removed from all blog posts.`,
+      confirmText: 'Delete',
+      variant: 'danger',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('blog_tags')
+          .delete()
+          .eq('id', tag.id);
+
+        if (error) {
+          showToast(error.message || 'Error deleting tag', 'error');
+        } else {
+          setTags(prev => prev.filter(t => t.id !== tag.id));
+          setSelectedTags(prev => prev.filter(id => id !== tag.id));
+          showToast(`"#${tag.name}" deleted`, 'success');
+        }
+      },
+    });
+  }
+
+  async function handleDeleteCategory(cat: Category) {
+    openConfirm({
+      title: 'Delete Category',
+      message: `Delete "${cat.name}"? It will be removed from all blog posts.`,
+      confirmText: 'Delete',
+      variant: 'danger',
+      onConfirm: async () => {
+        const { error } = await supabase
+          .from('blog_categories')
+          .delete()
+          .eq('id', cat.id);
+
+        if (error) {
+          showToast(error.message || 'Error deleting category', 'error');
+        } else {
+          setCategories(prev => prev.filter(c => c.id !== cat.id));
+          setSelectedCategories(prev => prev.filter(id => id !== cat.id));
+          showToast(`"${cat.name}" deleted`, 'success');
+        }
+      },
+    });
+  }
 
   useEffect(() => {
     loadBlog();
@@ -558,22 +653,32 @@ export default function EditBlogPage() {
 
               <div className={styles.checkboxList}>
                 {categories.map(cat => (
-                  <label key={cat.id} className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(cat.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedCategories([...selectedCategories, cat.id]);
-                        } else {
-                          setSelectedCategories(selectedCategories.filter(id => id !== cat.id));
-                        }
-                      }}
-                      className={styles.checkbox}
-                    />
-                    <span className={styles.categoryDot} style={{ background: cat.color }} />
-                    <span>{cat.name}</span>
-                  </label>
+                  <div key={cat.id} className={styles.categoryRow}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(cat.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedCategories([...selectedCategories, cat.id]);
+                          } else {
+                            setSelectedCategories(selectedCategories.filter(id => id !== cat.id));
+                          }
+                        }}
+                        className={styles.checkbox}
+                      />
+                      <span className={styles.categoryDot} ref={el => { if (el) el.style.setProperty('--dot-bg', cat.color); }} />
+                      <span>{cat.name}</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCategory(cat)}
+                      className={styles.deleteCategoryBtn}
+                      title={`Delete ${cat.name}`}
+                    >
+                      <HiTrash size={13} />
+                    </button>
+                  </div>
                 ))}
               </div>
 
@@ -629,21 +734,31 @@ export default function EditBlogPage() {
 
               <div className={styles.checkboxList}>
                 {tags.map(tag => (
-                  <label key={tag.id} className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={selectedTags.includes(tag.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedTags([...selectedTags, tag.id]);
-                        } else {
-                          setSelectedTags(selectedTags.filter(id => id !== tag.id));
-                        }
-                      }}
-                      className={styles.checkbox}
-                    />
-                    <span>{tag.name}</span>
-                  </label>
+                  <div key={tag.id} className={styles.categoryRow}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={selectedTags.includes(tag.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedTags([...selectedTags, tag.id]);
+                          } else {
+                            setSelectedTags(selectedTags.filter(id => id !== tag.id));
+                          }
+                        }}
+                        className={styles.checkbox}
+                      />
+                      <span>{tag.name}</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteTag(tag)}
+                      className={styles.deleteCategoryBtn}
+                      title={`Delete ${tag.name}`}
+                    >
+                      <HiTrash size={13} />
+                    </button>
+                  </div>
                 ))}
               </div>
 
@@ -700,6 +815,17 @@ export default function EditBlogPage() {
           </button>
         </div>
       </form>
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        confirmText={confirmDialog.confirmText}
+        onConfirm={handleConfirm}
+        onCancel={closeConfirm}
+        variant={confirmDialog.variant}
+        loading={confirmDialog.loading}
+      />
     </div>
   );
 }

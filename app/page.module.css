@@ -577,7 +577,8 @@
 /* About Section Text Wrapper */
 .aboutTextWrapper {
   margin-bottom: 50px;
-  text-align: center;
+  text-align: left;
+  line-height: 1.8;
 }
 
 @media (max-width: 768px) {
@@ -627,15 +628,28 @@
 }
 
 .statCard {
-  padding: 24px 18px;
+  padding: 18px 20px;
   border-radius: 12px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .statCard {
+    padding: 14px 16px;
+    gap: 6px;
+  }
 }
 
 @media (max-width: 480px) {
   .statCard {
-    padding: 20px 16px;
+    padding: 12px 14px;
+    gap: 4px;
   }
 }
 
@@ -663,14 +677,21 @@
 
 .statNumber {
   font-family: 'Outfit', sans-serif;
-  font-size: 36px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .statNumber {
+    font-size: 28px;
+  }
 }
 
 @media (max-width: 480px) {
   .statNumber {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
 
@@ -683,13 +704,21 @@
 }
 
 .statLabel {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .statLabel {
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 480px) {
   .statLabel {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 
@@ -1780,6 +1809,55 @@
 }
 
 
+/* About Section Layout */
+.aboutContent {
+  position: relative;
+}
+
+.aboutImageWrapper {
+  float: left;
+  margin: 60px 32px 24px 0;
+  shape-outside: circle(50%);
+}
+
+.aboutImage {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme='dark'] .aboutImage {
+  border-color: rgba(74, 144, 226, 0.4);
+}
+
+[data-theme='light'] .aboutImage {
+  border-color: rgba(49, 130, 206, 0.4);
+}
+
+.aboutImage:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 16px 48px rgba(74, 144, 226, 0.3);
+}
+
+@media (max-width: 768px) {
+  .aboutImageWrapper {
+    float: none;
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .aboutImage {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* Legacy avatar classes for compatibility */
 .avatarWrapper {
   display: flex;
   justify-content: center;

@@ -1,0 +1,366 @@
+/* ── Page Layout ─────────────────────────────── */
+.page {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.pageHeader {
+  margin-bottom: 32px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 8px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: #A0AEC0;
+  margin: 0;
+}
+
+/* ── Loading State ───────────────────────────── */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(74, 144, 226, 0.2);
+  border-top-color: #4A90E2;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingState p {
+  color: #A0AEC0;
+  font-size: 14px;
+}
+
+/* ── Documents Grid ──────────────────────────── */
+.documentsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+@media (max-width: 768px) {
+  .documentsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Document Card ───────────────────────────── */
+.docCard {
+  background: rgba(26, 47, 66, 0.6);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.docCard:hover {
+  border-color: rgba(74, 144, 226, 0.4);
+  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.1);
+}
+
+.docHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.docTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 4px;
+}
+
+.docType {
+  font-size: 12px;
+  color: #A0AEC0;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge[data-active="true"] {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22C55E;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.statusBadge[data-active="false"] {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.docMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #A0AEC0;
+}
+
+.metaItem svg {
+  color: #4A90E2;
+}
+
+.docActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.actionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 8px;
+  color: #4A90E2;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background: rgba(74, 144, 226, 0.2);
+  border-color: #4A90E2;
+}
+
+/* ── Toggle Switch ───────────────────────────── */
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.3);
+  border-radius: 999px;
+  transition: 0.3s;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background: #EF4444;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+.toggleSwitch input:checked + .toggleSlider:before {
+  transform: translateX(22px);
+  background: #22C55E;
+}
+
+/* ── Edit View ───────────────────────────────── */
+.editHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .editHeader {
+    flex-direction: column;
+  }
+}
+
+.editActions {
+  display: flex;
+  gap: 12px;
+}
+
+.cancelBtn,
+.saveBtn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid;
+}
+
+.cancelBtn {
+  background: transparent;
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+}
+
+.saveBtn {
+  background: #4A90E2;
+  border-color: #4A90E2;
+  color: #FFFFFF;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #3182CE;
+  border-color: #3182CE;
+}
+
+.cancelBtn:disabled,
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Edit Form ───────────────────────────────── */
+.editForm {
+  background: rgba(26, 47, 66, 0.6);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.helpText {
+  font-size: 13px;
+  color: #A0AEC0;
+  margin: -4px 0 8px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(74, 144, 226, 0.2);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 400px;
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.charCount {
+  text-align: right;
+  font-size: 12px;
+  color: #A0AEC0;
+  margin-top: 8px;
+}
+
+/* ── Mobile Responsive ───────────────────────── */
+@media (max-width: 768px) {
+  .page {
+    padding: 20px 16px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .docCard {
+    padding: 20px;
+  }
+
+  .docActions {
+    flex-direction: column;
+  }
+
+  .actionBtn {
+    width: 100%;
+  }
+
+  .editForm {
+    padding: 24px 20px;
+  }
+}

@@ -73,6 +73,7 @@ export default function SettingsPage() {
   const [showServices, setShowServices] = useState(false);
 const [servicesTitle, setServicesTitle] = useState('Build Your Next Project');
 const [servicesSubtitle, setServicesSubtitle] = useState('Professional web development for startups and businesses');
+const [themeMode, setThemeMode] = useState<'default' | 'force-dark' | 'force-light'>('default');
 
   // Personal Details Visibility Toggles
 const [showYearsExperience, setShowYearsExperience] = useState(true);
@@ -171,6 +172,7 @@ setShowBlog(data.show_blog ?? true);
 setShowServices(data.show_services ?? false);
 setServicesTitle(data.services_title || 'Build Your Next Project');
 setServicesSubtitle(data.services_subtitle || 'Professional web development for startups and businesses');
+setThemeMode(data.theme_mode || 'default');
       }
 
 
@@ -249,9 +251,10 @@ setServicesSubtitle(data.services_subtitle || 'Professional web development for 
   show_services: showServices,
 services_title: servicesTitle,
 services_subtitle: servicesSubtitle,
-  
- 
-        
+theme_mode: themeMode,
+
+
+
         updated_at: new Date().toISOString()
       };
 
@@ -913,6 +916,30 @@ services_subtitle: servicesSubtitle,
           placeholder="G-XXXXXXXXXX"
         />
         <small>Track visitor behavior and site performance</small>
+      </div>
+    </div>
+
+    {/* Theme Mode Control */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Theme Control</h3>
+      <p className={styles.subsectionDesc}>Control how visitors experience your site theme</p>
+      <div className={styles.formGroup}>
+        <label htmlFor="theme-mode-select">Theme Mode</label>
+        <select
+          id="theme-mode-select"
+          value={themeMode}
+          onChange={(e) => setThemeMode(e.target.value as 'default' | 'force-dark' | 'force-light')}
+          className={styles.select}
+        >
+          <option value="default">Default - Users can toggle theme</option>
+          <option value="force-dark">Force Dark Mode - Toggle hidden</option>
+          <option value="force-light">Force Light Mode - Toggle hidden</option>
+        </select>
+        <small className={styles.helpText}>
+          {themeMode === 'default' && 'Visitors will see the theme toggle and can switch between light/dark mode.'}
+          {themeMode === 'force-dark' && 'Site will be locked to dark mode. The theme toggle will be hidden.'}
+          {themeMode === 'force-light' && 'Site will be locked to light mode. The theme toggle will be hidden.'}
+        </small>
       </div>
     </div>
 

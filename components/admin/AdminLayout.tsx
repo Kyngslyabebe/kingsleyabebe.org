@@ -3,12 +3,12 @@ export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { 
-  HiHome, 
-  HiRectangleGroup, 
-  HiCodeBracket, 
-  HiBriefcase, 
-  HiEnvelope, 
+import {
+  HiHome,
+  HiRectangleGroup,
+  HiCodeBracket,
+  HiBriefcase,
+  HiEnvelope,
   HiCog6Tooth,
   HiArrowRightOnRectangle,
   HiSun,
@@ -16,7 +16,8 @@ import {
   HiPhoto,
   HiClock,
   HiNewspaper,
-  HiChatBubbleLeft  // ADD THIS
+  HiChatBubbleLeft,
+  HiDocumentText
 } from 'react-icons/hi2';
 import { supabase } from '@/lib/supabase/client';
 import { useTheme } from '@/components/theme/ThemeProvider';
@@ -61,9 +62,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: HiClock, label: 'Experience', href: '/admin/experience' },
     { icon: HiBriefcase, label: 'Services', href: '/admin/services' },
     { icon: HiNewspaper, label: 'Blogs', href: '/admin/blogs' },
-    { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' }, // ADD THIS
+    { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' },
     { icon: HiPhoto, label: 'Showcase', href: '/admin/showcase' },
     { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },
+    { icon: HiDocumentText, label: 'Legal', href: '/admin/legal' },
     { icon: HiCog6Tooth, label: 'Settings', href: '/admin/settings' },
   ];
 

@@ -27,6 +27,13 @@ export default function Footer() {
           <a href="#contact">Contact</a>
         </div>
 
+        {/* Legal Links */}
+        <div className={styles.footerLegal}>
+          <Link href="/privacy-policy">Privacy Policy</Link>
+          <span className={styles.separator}>•</span>
+          <Link href="/terms-of-service">Terms of Service</Link>
+        </div>
+
         {/* Copyright */}
         <div className={styles.footerCopyright}>
           <p>© {currentYear} {settings.name || 'Kingsley Abebe'}. All rights reserved.</p>

@@ -72,6 +72,53 @@
   color: #3182CE;
 }
 
+/* Legal Links */
+.footerLegal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footerLegal a {
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .footerLegal a {
+  color: #718096;
+}
+
+[data-theme='dark'] .footerLegal a:hover {
+  color: #4A90E2;
+  text-decoration: underline;
+}
+
+[data-theme='light'] .footerLegal a {
+  color: #718096;
+}
+
+[data-theme='light'] .footerLegal a:hover {
+  color: #3182CE;
+  text-decoration: underline;
+}
+
+.separator {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+[data-theme='dark'] .separator {
+  color: #718096;
+}
+
+[data-theme='light'] .separator {
+  color: #718096;
+}
+
 /* Copyright */
 .footerCopyright {
   display: flex;

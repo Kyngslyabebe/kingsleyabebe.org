@@ -362,23 +362,31 @@ export default function Portfolio() {
       >
         <div className={styles.sectionContent}>
           <h2 className={styles.sectionTitle}>About Me</h2>
-          
-          {settings.avatar && (
-            <div className={styles.avatarWrapper}>
-              <img 
-                src={settings.avatar} 
-                alt={settings.name}
-                className={styles.avatar}
+
+          <div className={styles.aboutContent}>
+            {settings.avatar && (
+              <motion.div
+                className={styles.aboutImageWrapper}
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <img
+                  src={settings.avatar}
+                  alt={settings.name}
+                  className={styles.aboutImage}
+                />
+              </motion.div>
+            )}
+
+            <div className={styles.aboutTextWrapper}>
+              <ReadMoreText
+                text={settings.summary || settings.bio || ''}
+                desktopLines={15}
+                mobileLines={12}
               />
             </div>
-          )}
-          
-          <div className={styles.aboutTextWrapper}>
-            <ReadMoreText 
-              text={settings.summary || settings.bio || ''} 
-              desktopLines={15}  
-              mobileLines={12}
-            />
           </div>
         </div>
       </motion.section>
@@ -407,7 +415,7 @@ export default function Portfolio() {
             >
               {settings.show_years_experience && settings.years_experience && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
-                  <HiRocketLaunch size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiRocketLaunch size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber}>
                     <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
                   </h3>
@@ -417,7 +425,7 @@ export default function Portfolio() {
 
               {settings.show_total_projects && settings.total_projects && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
-                  <HiCodeBracket size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiCodeBracket size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber}>
                     <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
                   </h3>
@@ -427,7 +435,7 @@ export default function Portfolio() {
 
               {settings.show_technologies_count && settings.technologies_count && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
-                  <HiCpuChip size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiCpuChip size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber}>
                     <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
                   </h3>
@@ -437,7 +445,7 @@ export default function Portfolio() {
 
               {settings.show_clients_served && settings.clients_served && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
-                  <HiUserGroup size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiUserGroup size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber}>
                     <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
                   </h3>
@@ -447,7 +455,7 @@ export default function Portfolio() {
 
               {settings.show_availability && settings.availability && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
-                  <HiBriefcase size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiBriefcase size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber} style={{ fontSize: '1.5rem' }}>
                     {settings.availability === 'available' && '✓ Available'}
                     {settings.availability === 'busy' && '⏳ Busy'}
@@ -459,7 +467,7 @@ export default function Portfolio() {
 
               {settings.show_hourly_rate && settings.hourly_rate && (
                 <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
-                  <HiCurrencyDollar size={36} style={{ color: settings.brand_color || '#4A90E2', marginBottom: '12px' }} />
+                  <HiCurrencyDollar size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
                   <h3 className={styles.statNumber}>
                     ${settings.hourly_rate}
                   </h3>

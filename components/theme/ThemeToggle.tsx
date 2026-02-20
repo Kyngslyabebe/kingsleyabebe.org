@@ -8,7 +8,12 @@ import { useTheme } from './ThemeProvider';
 import styles from './ThemeToggle.module.css';
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isToggleVisible } = useTheme();
+
+  // Hide toggle if admin has forced a theme
+  if (!isToggleVisible) {
+    return null;
+  }
 
   return (
     <motion.button

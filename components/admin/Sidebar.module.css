@@ -223,7 +223,27 @@
 }
 
 .groupItemsExpanded {
-  max-height: 500px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar for group items */
+.groupItemsExpanded::-webkit-scrollbar {
+  width: 4px;
+}
+
+.groupItemsExpanded::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.groupItemsExpanded::-webkit-scrollbar-thumb {
+  background: rgba(74, 144, 226, 0.25);
+  border-radius: 2px;
+}
+
+.groupItemsExpanded::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 144, 226, 0.4);
 }
 
 /* ── Navigation Items ────────────────────────── */

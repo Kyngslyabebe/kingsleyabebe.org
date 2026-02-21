@@ -129,6 +129,8 @@
   .imagePreview img { height: 180px; }
   .formActions { flex-direction: column-reverse; }
   .formActions button { width: 100%; }
+  .modal { padding: 10px; }
+  .modalContent { max-height: 85vh; }
 }
 
 

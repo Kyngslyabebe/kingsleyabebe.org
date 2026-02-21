@@ -702,7 +702,8 @@
   }
 
   .modal {
-    max-height: 95vh;
+    max-height: 85vh;
+    margin: 20px 0;
   }
 
   .modalFooter {

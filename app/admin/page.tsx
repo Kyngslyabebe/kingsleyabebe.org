@@ -265,7 +265,7 @@ export default function AdminDashboard() {
           <p className={styles.welcomeSubtitle}>Welcome back! Here's what's happening</p>
         </div>
         <button onClick={loadData} className={styles.refreshBtn}>
-          <HiChartBar size={18} />
+          <HiChartBar size={16} />
           <span>Refresh</span>
         </button>
       </div>
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
               style={{ '--stat-color': stat.color } as React.CSSProperties}
             >
               <div className={styles.statIcon}>
-                <Icon size={24} />
+                <Icon size={20} />
               </div>
               <div className={styles.statInfo}>
                 <span className={styles.statValue}>{stat.value}</span>
@@ -307,7 +307,7 @@ export default function AdminDashboard() {
                 className={styles.actionBtn}
                 style={{ '--action-color': action.color } as React.CSSProperties}
               >
-                <Icon size={20} />
+                <Icon size={18} />
                 <span>{action.label}</span>
               </button>
             );
@@ -379,10 +379,9 @@ export default function AdminDashboard() {
                       {comment.approved ? 'Approved' : 'Pending'}
                     </span>
                   </div>
-                  <p className={styles.messageEmail}>{comment.user_email}</p>
                   <p className={styles.messagePreview}>
-                    {comment.content.length > 80 
-                      ? `${comment.content.substring(0, 80)}...` 
+                    {comment.content.length > 80
+                      ? `${comment.content.substring(0, 80)}...`
                       : comment.content}
                   </p>
                   <p className={styles.blogName}>

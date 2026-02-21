@@ -515,7 +515,6 @@ export default function CommentsAdmin() {
                   <div className={styles.commentHeader}>
                     <div className={styles.commentMeta}>
                       <strong className={styles.userName}>{comment.user_name}</strong>
-                      <span className={styles.email}>{comment.user_email}</span>
                       <span className={styles.date}>{formatDate(comment.created_at)}</span>
                       <span className={`${styles.badge} ${comment.approved ? styles.badgeApproved : styles.badgePending}`}>
                         {comment.approved ? 'Approved' : 'Pending'}

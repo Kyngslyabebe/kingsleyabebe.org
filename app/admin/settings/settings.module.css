@@ -16,18 +16,6 @@
 [data-theme='light'] .saveBtn:hover:not(:disabled) { background: #16A34A; }
 .saveBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
 
-/* Tabs */
-.tabs { display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
-.tab { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; white-space: nowrap; }
-[data-theme='dark'] .tab { background: rgba(26, 47, 66, 0.4); color: #A0AEC0; border: 1px solid rgba(74, 144, 226, 0.15); }
-[data-theme='light'] .tab { background: rgba(237, 242, 247, 0.5); color: #718096; border: 1px solid rgba(49, 130, 206, 0.15); }
-.tab:hover { transform: translateY(-1px); }
-[data-theme='dark'] .tab:hover { background: rgba(26, 47, 66, 0.6); }
-[data-theme='light'] .tab:hover { background: rgba(237, 242, 247, 0.8); }
-
-.tabActive { background: #4A90E2 !important; color: #FFFFFF !important; border-color: #4A90E2 !important; }
-[data-theme='light'] .tabActive { background: #3182CE !important; border-color: #3182CE !important; }
-
 /* Tab Content */
 .tabContent { border-radius: 12px; padding: 32px; transition: all 0.3s ease; min-height: 500px; }
 [data-theme='dark'] .tabContent { background: rgba(26, 47, 66, 0.4); border: 1px solid rgba(74, 144, 226, 0.15); }
@@ -130,14 +118,30 @@
 [data-theme='light'] .loadingState p { color: #4A5568; }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .pageHeader { flex-direction: column; align-items: flex-start; }
-  .pageTitle { font-size: 24px; }
-  .tabs { flex-wrap: nowrap; }
-  .tabContent { padding: 20px; }
+@media (max-width: 1024px) {
+  .pageHeader { flex-direction: column; align-items: flex-start; gap: 16px; }
   .formGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .page { padding: 0; }
+  .pageHeader { gap: 12px; }
+  .pageTitle { font-size: 22px; }
+  .pageSubtitle { font-size: 13px; }
+  .saveBtn { font-size: 13px; padding: 8px 16px; }
+  .tabContent { padding: 20px 16px; }
+  .formGrid { gap: 16px; }
   .floatingSave { bottom: 16px; right: 16px; left: 16px; }
   .floatingSave .saveBtn { width: 100%; justify-content: center; }
+  .subsection { margin-top: 24px; padding-top: 24px; }
+}
+
+@media (max-width: 480px) {
+  .pageTitle { font-size: 20px; }
+  .tabContent { padding: 16px 12px; }
+  .saveBtn { font-size: 12px; padding: 7px 14px; }
+  .sectionTitle { font-size: 20px; }
+  .subsectionTitle { font-size: 15px; }
 }
 
 

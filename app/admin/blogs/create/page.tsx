@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import dynamicImport from 'next/dynamic';
 import {
   HiArrowLeft,
   HiCheck,
@@ -18,9 +19,11 @@ import {
 import styles from './create.module.css';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 
-// Dynamic import for rich text editor to avoid SSR issues
-
-import RichTextEditor from '@/components/admin/RichTextEditor';
+// Dynamic import for rich text editor to reduce bundle size
+const RichTextEditor = dynamicImport(() => import('@/components/admin/RichTextEditor'), {
+  loading: () => <div className={styles.editorLoading}>Loading editor...</div>,
+  ssr: false
+});
 interface Category {
   id: string;
   name: string;

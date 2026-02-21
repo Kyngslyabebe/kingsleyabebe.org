@@ -726,3 +726,12 @@
 [data-theme='light'] .divider {
   color: rgba(0, 0, 0, 0.5);
 }
+
+/* Editor Loading State */
+.editorLoading {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  font-style: italic;
+}

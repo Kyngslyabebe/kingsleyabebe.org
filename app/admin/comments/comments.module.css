@@ -583,6 +583,7 @@
 @media (max-width: 1024px) {
   .pageHeader {
     flex-direction: column;
+    gap: 20px;
   }
 
   .statsCards {
@@ -590,8 +591,15 @@
     justify-content: space-between;
   }
 
+  .statCard {
+    min-width: 0;
+    flex: 1;
+    padding: 14px 16px;
+  }
+
   .controlsRow {
     flex-direction: column;
+    gap: 16px;
   }
 
   .filterGroup {
@@ -601,11 +609,57 @@
   .buttonGroup {
     flex-wrap: wrap;
   }
+
+  .select {
+    min-width: 0;
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
   .page {
+    padding: 12px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .statValue {
+    font-size: 24px;
+  }
+
+  .statLabel {
+    font-size: 11px;
+  }
+
+  .controls {
     padding: 16px;
+  }
+
+  .filterBtn {
+    padding: 6px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .select {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .searchBox {
+    padding: 8px 12px;
+  }
+
+  .searchBox input {
+    font-size: 13px;
+    min-width: 0;
+  }
+
+  .comment {
+    padding: 16px;
+    gap: 12px;
   }
 
   .commentHeader {
@@ -613,13 +667,25 @@
     gap: 12px;
   }
 
+  .commentMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
   .actions {
     align-self: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .actions button {
+    padding: 6px;
   }
 
   .bulkActions {
     flex-direction: column;
     gap: 12px;
+    padding: 12px 16px;
   }
 
   .bulkButtons {
@@ -629,6 +695,50 @@
 
   .bulkButtons button {
     flex: 1;
-    min-width: 120px;
+    min-width: 100px;
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 8px;
+  }
+
+  .pageHeader {
+    gap: 16px;
+  }
+
+  .statsCards {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .statCard {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .controls {
+    padding: 12px;
+  }
+
+  .buttonGroup {
+    width: 100%;
+  }
+
+  .filterBtn {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .email, .date {
+    font-size: 12px;
+  }
+
+  .userName {
+    font-size: 14px;
   }
 }

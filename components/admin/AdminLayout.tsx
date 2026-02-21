@@ -2,36 +2,33 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
-  HiHome,
-  HiRectangleGroup,
-  HiCodeBracket,
-  HiBriefcase,
-  HiEnvelope,
-  HiCog6Tooth,
   HiArrowRightOnRectangle,
   HiSun,
   HiMoon,
-  HiPhoto,
-  HiClock,
-  HiNewspaper,
-  HiChatBubbleLeft,
-  HiDocumentText
+  HiBars3
 } from 'react-icons/hi2';
 import { supabase } from '@/lib/supabase/client';
 import { useTheme } from '@/components/theme/ThemeProvider';
+import Sidebar from './Sidebar';
 import styles from './AdminLayout.module.css';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     checkAuth();
+    // Load sidebar collapsed state
+    const savedCollapsed = localStorage.getItem('admin-sidebar-collapsed');
+    if (savedCollapsed !== null) {
+      setSidebarCollapsed(JSON.parse(savedCollapsed));
+    }
   }, []);
 
   async function checkAuth() {
@@ -55,20 +52,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push('/login');
   }
 
-  const navItems = [
-    { icon: HiHome, label: 'Dashboard', href: '/admin' },
-    { icon: HiRectangleGroup, label: 'Projects', href: '/admin/projects' },
-    { icon: HiCodeBracket, label: 'Skills', href: '/admin/skills' },
-    { icon: HiClock, label: 'Experience', href: '/admin/experience' },
-    { icon: HiBriefcase, label: 'Services', href: '/admin/services' },
-    { icon: HiNewspaper, label: 'Blogs', href: '/admin/blogs' },
-    { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' },
-    { icon: HiPhoto, label: 'Showcase', href: '/admin/showcase' },
-    { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },
-    { icon: HiDocumentText, label: 'Legal', href: '/admin/legal' },
-    { icon: HiCog6Tooth, label: 'Settings', href: '/admin/settings' },
-  ];
-
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -79,75 +62,60 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className={styles.adminContainer}>
-      {/* Compact Header */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.logo}>Admin</h1>
-          <div className={styles.headerActions}>
-            {/* Theme Toggle Button */}
-            <button 
-              onClick={toggleTheme}
-              className={styles.themeToggle}
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            >
-              {theme === 'light' ? <HiMoon size={18} /> : <HiSun size={18} />}
-            </button>
-            
-            <button 
-              onClick={() => window.open('/', '_blank')}
-              className={styles.viewSiteBtn}
-            >
-              View Site
-            </button>
-            <button onClick={handleSignOut} className={styles.signOutBtn}>
-              <HiArrowRightOnRectangle size={18} />
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Sidebar */}
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onCollapsedChange={setSidebarCollapsed}
+      />
 
-      {/* Top Nav Pills */}
-      <nav className={styles.topNav}>
-        <div className={styles.navScroll}>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <button
-                key={item.href}
-                onClick={() => router.push(item.href)}
-                className={`${styles.navPill} ${isActive ? styles.navPillActive : ''}`}
-              >
-                <Icon size={16} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className={styles.mainContent}>
-        {children}
-      </main>
-
-      {/* Mobile Bottom Nav */}
-      <nav className={styles.mobileNav}>
-        {navItems.slice(0, 5).map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          return (
+      {/* Main Wrapper */}
+      <div className={`${styles.mainWrapper} ${sidebarCollapsed ? styles.mainWrapperCollapsed : ''}`}>
+        {/* Header */}
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            {/* Mobile Menu Button */}
             <button
-              key={item.href}
-              onClick={() => router.push(item.href)}
-              className={`${styles.mobileNavItem} ${isActive ? styles.mobileNavItemActive : ''}`}
+              type="button"
+              onClick={() => setSidebarOpen(true)}
+              className={styles.mobileMenuBtn}
+              title="Open menu"
             >
-              <Icon size={20} />
-              <span>{item.label}</span>
+              <HiBars3 size={24} />
             </button>
-          );
-        })}
-      </nav>
+
+            <h1 className={styles.logo}>Admin</h1>
+
+            <div className={styles.headerActions}>
+              {/* Theme Toggle Button */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className={styles.themeToggle}
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? <HiMoon size={18} /> : <HiSun size={18} />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => window.open('/', '_blank')}
+                className={styles.viewSiteBtn}
+              >
+                View Site
+              </button>
+              <button type="button" onClick={handleSignOut} className={styles.signOutBtn} title="Sign out">
+                <HiArrowRightOnRectangle size={18} />
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className={styles.mainContent}>
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

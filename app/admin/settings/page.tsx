@@ -2,15 +2,10 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
-import { 
-  HiUser,
-  HiEnvelope,
-  HiBriefcase,
-  HiGlobeAlt,
-  HiWrenchScrewdriver,
-  HiCog6Tooth,
+import {
   HiCheckCircle
 } from 'react-icons/hi2';
 import styles from './settings.module.css';
@@ -19,7 +14,8 @@ type TabType = 'profile' | 'contact' | 'professional' | 'seo' | 'maintenance' | 
 
 export default function SettingsPage() {
   const { showToast } = useToast();
-  const [activeTab, setActiveTab] = useState<TabType>('profile');
+  const searchParams = useSearchParams();
+  const activeTab = (searchParams.get('tab') as TabType) || 'profile';
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
@@ -290,14 +286,18 @@ theme_mode: themeMode,
     }
   }
 
-  const tabs = [
-    { id: 'profile' as TabType, label: 'Profile', icon: HiUser },
-    { id: 'contact' as TabType, label: 'Contact', icon: HiEnvelope },
-    { id: 'professional' as TabType, label: 'Professional', icon: HiBriefcase },
-    { id: 'seo' as TabType, label: 'SEO', icon: HiGlobeAlt },
-    { id: 'maintenance' as TabType, label: 'Maintenance', icon: HiWrenchScrewdriver },
-    { id: 'advanced' as TabType, label: 'Advanced', icon: HiCog6Tooth },
-  ];
+  // Get tab title for display
+  const getTabTitle = (tab: TabType) => {
+    const titles = {
+      profile: 'Profile Information',
+      contact: 'Contact Information',
+      professional: 'Professional Details',
+      seo: 'SEO & Meta Tags',
+      maintenance: 'Maintenance Mode',
+      advanced: 'Advanced Settings'
+    };
+    return titles[tab];
+  };
 
   if (loading) {
     return (
@@ -312,36 +312,18 @@ theme_mode: themeMode,
     <div className={styles.page}>
       <div className={styles.pageHeader}>
         <div>
-          <h1 className={styles.pageTitle}>Settings</h1>
+          <h1 className={styles.pageTitle}>{getTabTitle(activeTab)}</h1>
           <p className={styles.pageSubtitle}>Manage your portfolio configuration</p>
         </div>
 
-         {/* Tabs */}
-        <button 
-          onClick={handleSave} 
+        <button
+          onClick={handleSave}
           disabled={saving}
           className={styles.saveBtn}
         >
           <HiCheckCircle size={18} />
           <span>{saving ? 'Saving...' : 'Save Changes'}</span>
         </button>
-      </div>
-
-      {/* Tabs */}
-      <div className={styles.tabs}>
-        {tabs.map(tab => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
-            >
-              <Icon size={18} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* Tab Content */}

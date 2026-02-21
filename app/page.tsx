@@ -11,6 +11,7 @@ import ReadMoreText from '@/components/common/ReadMoreText';
 import Services from '@/components/services/Services';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import Link from 'next/link';
+import Image from 'next/image';
 import { analytics } from '@/lib/analytics/events';
 
 import React, { useState, useEffect } from 'react';
@@ -241,7 +242,7 @@ export default function Portfolio() {
 
       <div className={styles.mobileLogo}>
         {settings.avatar ? (
-          <img src={settings.avatar} alt={settings.name} />
+          <Image src={settings.avatar} alt={settings.name} width={40} height={40} priority />
         ) : (
           settings.name.split(' ').map(n => n[0]).join('')
         )}
@@ -255,7 +256,7 @@ export default function Portfolio() {
       <nav className={`${styles.desktopNav} ${scrolled ? styles.desktopNavScrolled : ''}`}>
         <div className={styles.navLogo}>
           {settings.avatar ? (
-            <img src={settings.avatar} alt={settings.name} className={styles.navAvatar} />
+            <Image src={settings.avatar} alt={settings.name} className={styles.navAvatar} width={40} height={40} priority />
           ) : (
             settings.name.split(' ').map(n => n[0]).join('')
           )}
@@ -372,10 +373,12 @@ export default function Portfolio() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <img
+                <Image
                   src={settings.avatar}
                   alt={settings.name}
                   className={styles.aboutImage}
+                  width={400}
+                  height={400}
                 />
               </motion.div>
             )}
@@ -503,7 +506,14 @@ export default function Portfolio() {
                 >
                   {project.image && (
                     <div className={styles.projectImageWrapper}>
-                      <img src={project.image} alt={project.title} className={styles.projectImage} />
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        className={styles.projectImage}
+                        width={600}
+                        height={400}
+                        loading="lazy"
+                      />
                       <div className={styles.projectOverlay}>
                         <FaExternalLinkAlt size={20} style={{ color: '#FFFFFF' }} />
                       </div>
@@ -837,9 +847,16 @@ export default function Portfolio() {
             <button onClick={() => setSelectedProject(null)} className={styles.modalClose}>
               <HiXMark size={24} />
             </button>
-            
+
             {selectedProject.image && (
-              <img src={selectedProject.image} alt={selectedProject.title} className={styles.modalImage} />
+              <Image
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className={styles.modalImage}
+                width={800}
+                height={500}
+                priority
+              />
             )}
             
             <div className={styles.modalContent}>

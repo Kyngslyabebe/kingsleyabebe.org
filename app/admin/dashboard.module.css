@@ -590,35 +590,78 @@
   }
 
   .welcomeTitle {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;
   }
 
   .statCard {
     flex-direction: column;
     text-align: center;
-    gap: 12px;
+    gap: 6px;
+    padding: 10px 8px;
   }
 
   .statIcon {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
   }
 
   .statValue {
-    font-size: 24px;
+    font-size: 18px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .statSecondary {
+    font-size: 9px;
   }
 
   .actionsGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
   .recentGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Extra compact for very small screens */
+@media (max-width: 480px) {
+  .welcomeTitle {
+    font-size: 20px;
+  }
+
+  .statsGrid {
+    gap: 6px;
+  }
+
+  .statCard {
+    padding: 8px 6px;
+    gap: 4px;
+  }
+
+  .statIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .statValue {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 9px;
+  }
+
+  .statSecondary {
+    font-size: 8px;
   }
 }
 

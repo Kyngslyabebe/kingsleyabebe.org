@@ -1,0 +1,86 @@
+.backButton {
+  position: fixed;
+  bottom: 32px;
+  left: 32px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2, #667eea);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.4);
+  z-index: 998;
+  overflow: visible;
+}
+
+.backButton:hover {
+  box-shadow: 0 12px 32px rgba(74, 144, 226, 0.5);
+}
+
+.backButton:active {
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.3);
+}
+
+.iconWrapper {
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated ring effect */
+.ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #4A90E2;
+  pointer-events: none;
+}
+
+/* Light mode adjustments */
+[data-theme="light"] .backButton {
+  background: linear-gradient(135deg, #3182CE, #5A67D8);
+  box-shadow: 0 8px 24px rgba(49, 130, 206, 0.3);
+}
+
+[data-theme="light"] .backButton:hover {
+  box-shadow: 0 12px 32px rgba(49, 130, 206, 0.4);
+}
+
+[data-theme="light"] .ring {
+  border-color: #3182CE;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .backButton {
+    bottom: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .iconWrapper svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .backButton {
+    bottom: 28px;
+    left: 28px;
+  }
+}
+
+/* Ensure proper positioning */
+.backButton {
+  right: auto !important;
+  transform: none;
+}

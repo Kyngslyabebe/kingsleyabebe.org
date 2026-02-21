@@ -1,6 +1,5 @@
-import Link from 'next/link';
-import { HiArrowLeft } from 'react-icons/hi2';
 import { createClient } from '@supabase/supabase-js';
+import BackToHome from '@/components/common/BackToHome';
 import styles from './legal.module.css';
 
 async function getLegalDocument() {
@@ -43,12 +42,9 @@ export default async function TermsOfServicePage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        <Link href="/" className={styles.backButton}>
-          <HiArrowLeft size={18} />
-          <span>Back to Home</span>
-        </Link>
+      <BackToHome />
 
+      <div className={styles.content}>
         <header className={styles.header}>
           <h1 className={styles.title}>{legalDoc?.title || 'Terms of Service'}</h1>
           <p className={styles.subtitle}>
@@ -65,22 +61,24 @@ export default async function TermsOfServicePage() {
               {legalDoc.content.split('\n').map((line: string, index: number) => {
                 // Handle headings (markdown-style)
                 if (line.startsWith('# ')) {
-                  return <h2 key={index} className={styles.heading}>{line.substring(2)}</h2>;
+                  const headingText = line.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                  return <h2 key={index} className={styles.heading} dangerouslySetInnerHTML={{ __html: headingText }} />;
                 }
                 if (line.startsWith('## ')) {
-                  return <h3 key={index} className={styles.subheading}>{line.substring(3)}</h3>;
+                  const subheadingText = line.substring(3).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                  return <h3 key={index} className={styles.subheading} dangerouslySetInnerHTML={{ __html: subheadingText }} />;
                 }
-                // Handle list items
+                // Handle list items with bold text support
                 if (line.trim().startsWith('- ')) {
-                  return <p key={index} className={styles.listItem}>• {line.substring(2).trim()}</p>;
+                  const listText = line.substring(2).trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                  return <p key={index} className={styles.listItem} dangerouslySetInnerHTML={{ __html: '• ' + listText }} />;
                 }
-                // Handle bold text **text**
-                const boldText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                // Empty lines create spacing
+                // Skip empty lines (paragraph margins provide spacing)
                 if (line.trim() === '') {
-                  return <br key={index} />;
+                  return null;
                 }
-                // Regular paragraphs
+                // Regular paragraphs with bold text
+                const boldText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 return <p key={index} className={styles.contentParagraph} dangerouslySetInnerHTML={{ __html: boldText }} />;
               })}
             </div>

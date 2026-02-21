@@ -56,8 +56,8 @@
 }
 
 .title {
-  font-size: 42px;
-  font-weight: 700;
+  font-size: 38px;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 12px;
   letter-spacing: -0.5px;
@@ -101,7 +101,7 @@
 
 .section h2 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 16px;
   padding-bottom: 12px;
@@ -187,6 +187,63 @@
 .contactInfo a:hover {
   opacity: 0.7;
   text-decoration: underline;
+}
+
+/* ── Dynamic Content ─────────────────────────── */
+.dynamicContent {
+  line-height: 1.8;
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 24px 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid;
+}
+
+[data-theme='dark'] .heading {
+  border-color: rgba(74, 144, 226, 0.3);
+}
+
+[data-theme='light'] .heading {
+  border-color: rgba(74, 144, 226, 0.2);
+}
+
+.subheading {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 16px 0 8px;
+}
+
+.contentParagraph {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 8px 0;
+}
+
+.listItem {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 4px 0 4px 24px;
+}
+
+.fallbackContent {
+  padding: 40px;
+  text-align: center;
+  background: rgba(74, 144, 226, 0.08);
+  border-radius: 12px;
+  margin: 32px 0;
+}
+
+.fallbackContent p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 /* ── Footer ──────────────────────────────────── */

@@ -4,6 +4,9 @@
 
 .dashboard {
   padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Welcome Header */
@@ -90,6 +93,8 @@
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
   margin-bottom: 28px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .statCard {
@@ -584,9 +589,14 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .dashboard {
+    overflow-x: hidden;
+  }
+
   .welcomeHeader {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
 
   .welcomeTitle {
@@ -596,6 +606,7 @@
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
+    max-width: 100%;
   }
 
   .statCard {

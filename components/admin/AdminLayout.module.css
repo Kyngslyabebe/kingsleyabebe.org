@@ -66,6 +66,9 @@
   backdrop-filter: blur(20px);
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 [data-theme='dark'] .header {
@@ -80,10 +83,13 @@
 
 .headerContent {
   max-width: 100%;
+  width: 100%;
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .logo {
@@ -154,6 +160,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 /* Theme Toggle Button */

@@ -1,4 +1,4 @@
-.page { padding: 0; }
+.page { padding: 0; overflow-x: hidden; width: 100%; max-width: 100%; }
 
 .pageHeader { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
 .pageTitle { font-size: 28px; font-weight: 700; margin: 0; font-family: 'Outfit', sans-serif; transition: color 0.3s ease; }

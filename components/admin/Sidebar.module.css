@@ -250,9 +250,9 @@
 .navItem {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 12px 20px;
+  padding: 10px 18px;
   background: transparent;
   border: none;
   border-left: 3px solid transparent;
@@ -347,6 +347,38 @@
 
   .sidebarFooter {
     display: none;
+  }
+
+  /* Compact spacing for mobile */
+  .navItem {
+    padding: 7px 16px;
+    font-size: 13px;
+  }
+
+  .groupItems {
+    gap: 0;
+  }
+
+  .groupHeader {
+    padding: 6px 16px;
+    font-size: 10px;
+  }
+
+  .groupHeaderSingle {
+    padding: 6px 16px;
+  }
+
+  .navIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .nav {
+    padding: 12px 0;
+  }
+
+  .navGroup {
+    margin-bottom: 0;
   }
 }
 

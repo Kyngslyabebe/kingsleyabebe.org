@@ -446,7 +446,7 @@
   padding: 14px 32px;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;
@@ -481,7 +481,7 @@
   padding: 14px 32px;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;
@@ -629,7 +629,7 @@
 
 .statCard {
   padding: 18px 20px;
-  border-radius: 12px;
+  border-radius: 1px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -741,7 +741,7 @@
 }
 
 .projectCard {
-  border-radius: 14px;
+  border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -862,7 +862,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: 2px;
 }
 
 [data-theme='dark'] .projectStatus {
@@ -942,7 +942,7 @@
 
 .skillCard {
   padding: 18px 16px;
-  border-radius: 10px;
+  border-radius: 1px;
 }
 
 @media (max-width: 480px) {
@@ -1042,7 +1042,7 @@
 }
 
 .experienceCard {
-  border-radius: 12px;
+  border-radius: 1px;
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -1247,7 +1247,7 @@
 }
 
 .input {
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 14px;
   font-size: 14px;
   font-family: 'Source Sans Pro', sans-serif;
@@ -1288,7 +1288,7 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;

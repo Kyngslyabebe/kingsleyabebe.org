@@ -1,7 +1,7 @@
 .featuredCard {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: 2px;
   overflow: hidden;
   transition: all 0.4s ease;
 }
@@ -59,7 +59,7 @@
 
 .categoryBadge {
   padding: 6px 14px;
-  border-radius: 12px;
+  border-radius: 2px;
   font-size: 12px;
   font-weight: 600;
   color: #FFFFFF;
@@ -91,7 +91,7 @@
   padding: 6px 14px;
   background: linear-gradient(135deg, #FFD700, #FFA500);
   color: #1A1A1A;
-  border-radius: 20px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -198,7 +198,7 @@
   padding: 12px 24px;
   background: var(--brand-color, #4A90E2);
   color: #FFFFFF;
-  border-radius: 12px;
+  border-radius: 2px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;

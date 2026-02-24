@@ -195,7 +195,7 @@
 }
 
 .desktopFrame {
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
   box-shadow: 
     0 25px 60px rgba(0, 0, 0, 0.4),
@@ -312,7 +312,7 @@
 }
 
 .mobileFrame {
-  border-radius: 36px;
+  border-radius: 3px;
   padding: 12px;
   position: relative;
   box-shadow: 
@@ -325,7 +325,7 @@
   content: '';
   position: absolute;
   inset: -10px;
-  border-radius: 42px;
+  border-radius: 3px;
   opacity: 0.4;
   z-index: -1;
   filter: blur(20px);
@@ -366,7 +366,7 @@
   transform: translateX(-50%);
   width: 90px;
   height: 24px;
-  border-radius: 0 0 18px 18px;
+  border-radius: 0 0 3px 3px;
   z-index: 10;
 }
 
@@ -379,7 +379,7 @@
 }
 
 .mobileContent {
-  border-radius: 24px;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
   aspect-ratio: 9 / 19.5;
@@ -444,7 +444,7 @@
 
 .showcaseSwiper :global(.swiper-pagination-bullet-active) {
   width: 30px;
-  border-radius: 6px;
+  border-radius: 2px;
 }
 
 [data-theme='dark'] .showcaseSwiper :global(.swiper-pagination-bullet-active) {

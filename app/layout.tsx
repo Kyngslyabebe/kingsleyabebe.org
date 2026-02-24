@@ -4,6 +4,7 @@ import { GoogleAnalytics } from '@/lib/analytics/GoogleAnalytics';
 import { createClient } from '@supabase/supabase-js';
 import type { Metadata } from 'next';
 import './globals.css';
+import styles from './page.module.css';
 
 // Dynamic metadata from database
 export async function generateMetadata(): Promise<Metadata> {

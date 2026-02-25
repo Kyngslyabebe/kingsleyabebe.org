@@ -4,11 +4,15 @@ import { Suspense, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { HiEye, HiEyeSlash, HiHome, HiShieldCheck, HiLockClosed } from 'react-icons/hi2';
+import Image from 'next/image';
+import { HiEye, HiEyeSlash, HiShieldCheck, HiLockClosed } from 'react-icons/hi2';
+import BackToHome from '@/components/common/BackToHome';
+import { useSettings } from '@/lib/hooks/useSettings';
 import styles from './login.module.css';
 
 function LoginContent() {
   const router = useRouter();
+  const { settings } = useSettings();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -61,15 +65,28 @@ function LoginContent() {
         <div className={styles.gradientOrb1} />
         <div className={styles.gradientOrb2} />
       </div>
-      <Link href="/" className={styles.homeLink}>
-        <HiHome size={20} />
-        <span>Back to Home</span>
-      </Link>
+      <BackToHome />
       <div className={styles.loginCard}>
         <div className={styles.brandSection}>
-          <div className={styles.logoIcon}>
-            <HiShieldCheck size={32} />
-          </div>
+          {settings.avatar ? (
+            <div className={styles.avatarWrapper}>
+              <div className={styles.avatarCircle}>
+               <Image 
+  src={settings.avatar} 
+  alt={settings.name} 
+  width={100} 
+  height={100} 
+  className={styles.avatarImage} 
+  style={{ borderRadius: '50%' }}
+  priority 
+/>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.logoIcon}>
+              <HiShieldCheck size={32} />
+            </div>
+          )}
           <h1 className={styles.title}>Admin Portal</h1>
           <p className={styles.subtitle}>Sign in to manage your portfolio</p>
         </div>

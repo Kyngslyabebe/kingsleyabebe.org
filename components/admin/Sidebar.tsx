@@ -61,7 +61,8 @@ const navigationGroups: NavGroup[] = [
     label: 'Engagement',
     items: [
       { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },
-      { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' }
+      { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' },
+      { icon: HiUser, label: 'Subscribers', href: '/admin/subscribers' }
     ]
   },
   {

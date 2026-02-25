@@ -709,3 +709,134 @@
   font-weight: 600;
   text-transform: uppercase;
 }
+
+/* Subscriber list in dashboard */
+.subSummary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.subSummaryDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #718096;
+}
+
+.subSummaryItem {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.subList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .subItem {
+  background: rgba(26, 47, 66, 0.4);
+  border: 1px solid rgba(74, 144, 226, 0.12);
+}
+
+[data-theme='light'] .subItem {
+  background: #FFFFFF;
+  border: 1px solid rgba(49, 130, 206, 0.12);
+}
+
+.subItem:hover {
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .subItem:hover {
+  border-color: rgba(74, 144, 226, 0.25);
+}
+
+[data-theme='light'] .subItem:hover {
+  border-color: rgba(49, 130, 206, 0.25);
+}
+
+.subAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  background: rgba(72, 187, 120, 0.15);
+  color: #48BB78;
+}
+
+.subInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.subEmail {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .subEmail {
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .subEmail {
+  color: #1A202C;
+}
+
+.subDate {
+  font-size: 11px;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .subDate {
+  color: #718096;
+}
+
+[data-theme='light'] .subDate {
+  color: #A0AEC0;
+}
+
+.subBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+
+.subBadgeActive {
+  background: rgba(72, 187, 120, 0.15);
+  color: #48BB78;
+}
+
+.subBadgeInactive {
+  background: rgba(160, 174, 192, 0.15);
+  color: #A0AEC0;
+}

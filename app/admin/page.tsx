@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { 
-  HiRectangleGroup, 
-  HiCodeBracket, 
-  HiEnvelope, 
+import {
+  HiRectangleGroup,
+  HiCodeBracket,
+  HiEnvelope,
   HiBriefcase,
   HiNewspaper,
   HiPhoto,
@@ -14,7 +14,8 @@ import {
   HiEye,
   HiChartBar,
   HiCog,
-  HiChatBubbleLeft
+  HiChatBubbleLeft,
+  HiUsers
 } from 'react-icons/hi2';
 import styles from './dashboard.module.css';
 
@@ -36,11 +37,14 @@ export default function AdminDashboard() {
     servicesVisible: 0,
     comments: 0,
     commentsPending: 0,
+    subscribers: 0,
+    subscribersActive: 0,
   });
   const [loading, setLoading] = useState(true);
   const [recentMessages, setRecentMessages] = useState<any[]>([]);
   const [recentBlogs, setRecentBlogs] = useState<any[]>([]);
   const [recentComments, setRecentComments] = useState<any[]>([]);
+  const [recentSubscribers, setRecentSubscribers] = useState<any[]>([]);
 
   useEffect(() => {
     loadData();
@@ -109,9 +113,17 @@ export default function AdminDashboard() {
       const { data: commentsData, error: commentsError } = await supabase
         .from('blog_comments')
         .select('approved');
-      
+
       if (commentsError) console.error('Comments error:', commentsError);
       const commentsPending = commentsData?.filter(c => !c.approved).length || 0;
+
+      // Fetch subscribers
+      const { data: subscribersData, error: subscribersError } = await supabase
+        .from('blog_subscribers')
+        .select('status');
+
+      if (subscribersError) console.error('Subscribers error:', subscribersError);
+      const subscribersActive = subscribersData?.filter(s => s.status === 'active').length || 0;
 
       setStats({
         projects: projectsData?.length || 0,
@@ -129,6 +141,8 @@ export default function AdminDashboard() {
         servicesVisible,
         comments: commentsData?.length || 0,
         commentsPending,
+        subscribers: subscribersData?.length || 0,
+        subscribersActive,
       });
 
       // Fetch recent messages
@@ -160,9 +174,19 @@ export default function AdminDashboard() {
         `)
         .order('created_at', { ascending: false })
         .limit(3);
-      
+
       if (recentCommentsError) console.error('Recent comments error:', recentCommentsError);
       setRecentComments(recentCommentsData || []);
+
+      // Fetch recent subscribers
+      const { data: recentSubsData, error: recentSubsError } = await supabase
+        .from('blog_subscribers')
+        .select('id, email, status, subscribed_at')
+        .order('subscribed_at', { ascending: false })
+        .limit(5);
+
+      if (recentSubsError) console.error('Recent subscribers error:', recentSubsError);
+      setRecentSubscribers(recentSubsData || []);
 
     } catch (error: any) {
       console.error('Error loading dashboard data:', error);
@@ -228,13 +252,21 @@ export default function AdminDashboard() {
       color: '#E74C3C',
       link: '/admin/messages'
     },
-    { 
-      icon: HiPhoto, 
-      label: 'Showcase', 
-      value: stats.showcase, 
+    {
+      icon: HiPhoto,
+      label: 'Showcase',
+      value: stats.showcase,
       secondary: 'images',
       color: '#3498DB',
       link: '/admin/showcase'
+    },
+    {
+      icon: HiUsers,
+      label: 'Subscribers',
+      value: stats.subscribers,
+      secondary: `${stats.subscribersActive} active`,
+      color: '#48BB78',
+      link: '/admin/subscribers'
     },
   ];
 
@@ -245,6 +277,7 @@ export default function AdminDashboard() {
     { icon: HiCodeBracket, label: 'New Skill', link: '/admin/skills', color: '#48BB78' },
     { icon: HiBriefcase, label: 'New Experience', link: '/admin/experience', color: '#F6AD55' },
     { icon: HiChatBubbleLeft, label: 'Moderate Comments', link: '/admin/comments', color: '#EC4899' },
+    { icon: HiUsers, label: 'View Subscribers', link: '/admin/subscribers', color: '#48BB78' },
   ];
 
   if (loading) {
@@ -394,6 +427,52 @@ export default function AdminDashboard() {
                       hour: '2-digit',
                       minute: '2-digit'
                     })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Recent Subscribers */}
+        {recentSubscribers.length > 0 && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Recent Subscribers</h2>
+              <button
+                onClick={() => router.push('/admin/subscribers')}
+                className={styles.viewAllBtn}
+              >
+                View All ({stats.subscribers})
+              </button>
+            </div>
+            <div className={styles.subSummary}>
+              <span className={styles.subSummaryItem} style={{ color: '#48BB78' }}>
+                {stats.subscribersActive} active
+              </span>
+              <span className={styles.subSummaryDot} />
+              <span className={styles.subSummaryItem} style={{ color: '#A0AEC0' }}>
+                {stats.subscribers - stats.subscribersActive} unsubscribed
+              </span>
+            </div>
+            <div className={styles.subList}>
+              {recentSubscribers.map((sub) => (
+                <div key={sub.id} className={styles.subItem}>
+                  <div className={styles.subAvatar}>
+                    {sub.email.charAt(0).toUpperCase()}
+                  </div>
+                  <div className={styles.subInfo}>
+                    <span className={styles.subEmail}>{sub.email}</span>
+                    <span className={styles.subDate}>
+                      {new Date(sub.subscribed_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                  <span className={`${styles.subBadge} ${sub.status === 'active' ? styles.subBadgeActive : styles.subBadgeInactive}`}>
+                    {sub.status === 'active' ? 'Active' : 'Unsub'}
                   </span>
                 </div>
               ))}

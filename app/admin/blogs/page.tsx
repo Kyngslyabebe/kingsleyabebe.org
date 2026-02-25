@@ -6,15 +6,16 @@ import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  HiPlus, 
-  HiPencil, 
-  HiTrash, 
+import {
+  HiPlus,
+  HiPencil,
+  HiTrash,
   HiEye,
   HiEyeSlash,
   HiMagnifyingGlass,
   HiStar,
-  HiCalendar
+  HiCalendar,
+  HiBellAlert
 } from 'react-icons/hi2';
 import styles from './blogs.module.css';
 
@@ -40,6 +41,7 @@ export default function AdminBlogsPage() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [notifying, setNotifying] = useState<string | null>(null);
 
   useEffect(() => {
     loadBlogs();
@@ -173,6 +175,39 @@ export default function AdminBlogsPage() {
       loadBlogs();
     } catch (error: any) {
       showToast(error.message || 'Error updating blog', 'error');
+    }
+  }
+
+  async function handleNotifySubscribers(blog: Blog) {
+    if (!blog.published) {
+      showToast('Only published blogs can be notified', 'warning');
+      return;
+    }
+
+    setNotifying(blog.id);
+
+    try {
+      const res = await fetch('/api/notify-subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postTitle: blog.title,
+          postExcerpt: blog.excerpt || '',
+          postSlug: blog.slug,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data.error || 'Failed to send notifications', 'error');
+      } else {
+        showToast(data.message || 'Notifications sent!', 'success');
+      }
+    } catch {
+      showToast('Failed to send notifications', 'error');
+    } finally {
+      setNotifying(null);
     }
   }
 
@@ -312,6 +347,21 @@ export default function AdminBlogsPage() {
                 >
                   {blog.published ? <HiEyeSlash size={18} /> : <HiEye size={18} />}
                 </button>
+
+                {blog.published && (
+                  <button
+                    onClick={() => handleNotifySubscribers(blog)}
+                    disabled={notifying === blog.id}
+                    className={`${styles.actionBtn} ${styles.notifyBtn}`}
+                    title="Notify subscribers about this post"
+                  >
+                    {notifying === blog.id ? (
+                      <span className={styles.notifySpinner} />
+                    ) : (
+                      <HiBellAlert size={18} />
+                    )}
+                  </button>
+                )}
 
                 <button
   onClick={(e) => {

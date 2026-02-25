@@ -19,6 +19,7 @@ import { analytics } from '@/lib/analytics/events';
 import FloatingBackButton from '@/components/blog/FloatingBackButton';
 import LikeButton from '@/components/blog/LikeButton';
 import Comments from '@/components/blog/Comments';
+import SubscribeSection from '@/components/blog/SubscribeSection';
 import styles from './post.module.css';
 
 interface BlogPost {
@@ -331,10 +332,13 @@ export default function BlogPostClient({ slug }: Props) {
       )}
 
       {/* Like and Comments */}
-<div style={{ marginTop: '60px' }}>
-  <LikeButton blogId={post.id} initialLikes={post.likes_count || 0} />
-  <Comments blogId={post.id} />
-</div>
+      <div style={{ marginTop: '60px' }}>
+        <LikeButton blogId={post.id} initialLikes={post.likes_count || 0} />
+        <Comments blogId={post.id} />
+      </div>
+
+      {/* Subscribe Section */}
+      <SubscribeSection />
 
     <FloatingBackButton backTo="/blogs" />
     </div>

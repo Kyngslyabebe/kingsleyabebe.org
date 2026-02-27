@@ -84,9 +84,8 @@ export default function SubscribeSection() {
                 </div>
                 <h2 className={styles.title}>Stay in the Loop</h2>
                 <p className={styles.subtitle}>
-                  Get notified whenever I publish — code and tech, lifestyle,
-                  and everything in between that's worth writing about.
-                  No spam — ever.
+                  I write about code and tech, lifestyle, and everything worth sharing. Subscribe 
+                  and I'll let you know when something new drops. No spam, ever.
                 </p>
               </div>
 

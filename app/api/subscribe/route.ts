@@ -75,7 +75,7 @@ function getSubscriberWelcomeEmail(email: string, unsubscribeToken: string): str
                       <tr>
                         <td style="padding:6px 0;">
                           <span style="color:#48BB78;margin-right:12px;">→</span>
-                          <span style="color:#E2E8F0;font-size:14px;">Tech deep-dives, tutorials & engineering breakdowns</span>
+                          <span style="color:#E2E8F0;font-size:14px;">Tech deep-dives, lifestyles & engineering breakdowns</span>
                         </td>
                       </tr>
                       <tr>
@@ -114,8 +114,8 @@ function getSubscriberWelcomeEmail(email: string, unsubscribeToken: string): str
 
                   <p style="margin:32px 0 0;font-size:15px;color:#E2E8F0;line-height:1.7;">
                     Looking forward to sharing great content with you,<br>
-                    <strong style="color:#FFFFFF;">Kingsley Abebe</strong><br>
-                    <span style="color:#4A90E2;font-size:13px;">Full-Stack Software Engineer</span>
+                    <strong style="color:#FFFFFF;">Kingsley</strong><br>
+                    <span style="color:#4A90E2;font-size:13px;">Software Engineer</span>
                   </p>
 
                 </td>

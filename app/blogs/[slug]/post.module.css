@@ -222,10 +222,58 @@
 }
 
 .content img {
+  display: block;
   max-width: 100%;
   height: auto;
   border-radius: 2px;
-  margin: 24px 0;
+  margin: 28px auto;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+[data-theme='dark'] .content img {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='light'] .content img {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.content img:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* Figure with caption — for images inserted with captions */
+.content figure {
+  margin: 32px 0;
+  padding: 0;
+  text-align: center;
+}
+
+.content figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+  margin: 0 auto;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .content figure img {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='light'] .content figure img {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.content figcaption {
+  margin-top: 10px;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 0 16px;
 }
 
 .content hr {
@@ -493,6 +541,23 @@
   .content pre {
     padding: 12px;
     font-size: 0.8125rem;
+  }
+
+  .content img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .content figure {
+    margin: 24px 0;
+  }
+
+  .content figcaption {
+    font-size: 0.8125rem;
+    padding: 0 8px;
   }
 
   .tags {

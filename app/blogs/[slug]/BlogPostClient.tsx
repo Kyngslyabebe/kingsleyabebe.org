@@ -291,7 +291,7 @@ export default function BlogPostClient({ slug }: Props) {
         </div>
         <div>
           <h4>Written by {post.author}</h4>
-          <p>Full-Stack Software Engineer</p>
+          <p>Software Engineer</p>
         </div>
       </motion.div>
 

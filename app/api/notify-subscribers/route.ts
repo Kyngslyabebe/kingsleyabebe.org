@@ -75,9 +75,9 @@ function getBlogNotificationEmail(
 
                   <div style="border-top:1px solid rgba(74,144,226,0.1);padding-top:28px;margin-top:8px;">
                     <p style="margin:0 0 4px;font-size:15px;color:#E2E8F0;">
-                      <strong>Kingsley Abebe</strong>
+                      <strong>Kingsley</strong>
                     </p>
-                    <p style="margin:0;font-size:13px;color:#4A90E2;">Full-Stack Software Engineer</p>
+                    <p style="margin:0;font-size:13px;color:#4A90E2;">Software Engineer</p>
                   </div>
 
                 </td>

@@ -115,7 +115,7 @@ function getSubscriberWelcomeEmail(email: string, unsubscribeToken: string): str
                   <p style="margin:32px 0 0;font-size:15px;color:#E2E8F0;line-height:1.7;">
                     Looking forward to sharing great content with you,<br>
                     <strong style="color:#FFFFFF;">Kingsley</strong><br>
-                    <span style="color:#4A90E2;font-size:13px;">Software Engineer</span>
+                    <span style="color:#4A90E2;font-size:13px;">RF & Software Engineer</span>
                   </p>
 
                 </td>

@@ -227,7 +227,7 @@ function getSenderEmailTemplate(name: string, message: string): string {
                   <p style="margin: 24px 0 0 0; font-size: 15px; color: #4A5568; line-height: 1.7;">
                     Best regards,<br>
                     <strong style="color: #2D3748;">Kingsley Abebe</strong><br>
-                    <span style="color: #718096; font-size: 14px;">Full-Stack Software Engineer</span>
+                    <span style="color: #718096; font-size: 14px;">RF & Software Engineer</span>
                   </p>
 
                 </td>

@@ -77,7 +77,7 @@ function getBlogNotificationEmail(
                     <p style="margin:0 0 4px;font-size:15px;color:#E2E8F0;">
                       <strong>Kingsley</strong>
                     </p>
-                    <p style="margin:0;font-size:13px;color:#4A90E2;">Software Engineer</p>
+                    <p style="margin:0;font-size:13px;color:#4A90E2;">RF &Software Engineer</p>
                   </div>
 
                 </td>

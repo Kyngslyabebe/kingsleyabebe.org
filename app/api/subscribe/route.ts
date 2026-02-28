@@ -1,11 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { createClient } from '@supabase/supabase-js';
+import { isValidOrigin } from '@/lib/security';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+// Rate limiting store
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const limit = rateLimitStore.get(ip);
+
+  if (!limit || now > limit.resetTime) {
+    rateLimitStore.set(ip, { count: 1, resetTime: now + 60 * 60 * 1000 }); // 1 hour
+    return true;
+  }
+
+  if (limit.count >= 3) { // Max 3 subscribe attempts per hour
+    return false;
+  }
+
+  limit.count++;
+  return true;
+}
 
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -244,6 +265,17 @@ function getOwnerNewSubscriberEmail(subscriberEmail: string, totalSubscribers: n
 
 export async function POST(request: NextRequest) {
   try {
+    // CSRF protection
+    if (!isValidOrigin(request)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Rate limit check
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json({ error: 'Too many attempts. Please try again later.' }, { status: 429 });
+    }
+
     const body = await request.json();
     const { email } = body;
 

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import { motion } from 'framer-motion';
+import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import { 
   HiCalendar, 
@@ -95,11 +96,12 @@ export default function BlogPostClient({ slug }: Props) {
       // Track page view
       analytics.navClick(`blog-post-${slug}`);
 
-      // Increment view count
-      await supabase
-        .from('blogs')
-        .update({ views: (postData.views || 0) + 1 })
-        .eq('id', postData.id);
+      // Increment view count via server-side API
+      fetch('/api/views', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blogId: postData.id }),
+      }).catch(() => {});
 
       // Load related posts
       if (formattedPost.categories.length > 0) {
@@ -256,7 +258,7 @@ export default function BlogPostClient({ slug }: Props) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
       />
 
       {/* Tags */}
@@ -295,6 +297,15 @@ export default function BlogPostClient({ slug }: Props) {
         </div>
       </motion.div>
 
+      {/* Like and Comments */}
+      <div style={{ marginTop: '60px' }}>
+        <LikeButton blogId={post.id} initialLikes={post.likes_count || 0} />
+        <Comments blogId={post.id} />
+      </div>
+
+      {/* Subscribe Section */}
+      <SubscribeSection />
+
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
         <motion.section
@@ -306,9 +317,9 @@ export default function BlogPostClient({ slug }: Props) {
           <h2>Related Articles</h2>
           <div className={styles.relatedGrid}>
             {relatedPosts.map(related => (
-              <Link 
-                key={related.id} 
-                href={`/blogs/${related.slug}`} 
+              <Link
+                key={related.id}
+                href={`/blogs/${related.slug}`}
                 className={styles.relatedCard}
                 onClick={() => handleRelatedClick(related.slug)}
               >
@@ -330,15 +341,6 @@ export default function BlogPostClient({ slug }: Props) {
           </div>
         </motion.section>
       )}
-
-      {/* Like and Comments */}
-      <div style={{ marginTop: '60px' }}>
-        <LikeButton blogId={post.id} initialLikes={post.likes_count || 0} />
-        <Comments blogId={post.id} />
-      </div>
-
-      {/* Subscribe Section */}
-      <SubscribeSection />
 
     <FloatingBackButton backTo="/blogs" />
     </div>

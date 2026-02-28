@@ -2,6 +2,19 @@ import { createClient } from '@supabase/supabase-js';
 import BackToHome from '@/components/common/BackToHome';
 import styles from './legal.module.css';
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+function safeBold(text: string): string {
+  return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
 async function getLegalDocument() {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -61,25 +74,21 @@ export default async function TermsOfServicePage() {
               {legalDoc.content.split('\n').map((line: string, index: number) => {
                 // Handle headings (markdown-style)
                 if (line.startsWith('# ')) {
-                  const headingText = line.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                  return <h2 key={index} className={styles.heading} dangerouslySetInnerHTML={{ __html: headingText }} />;
+                  return <h2 key={index} className={styles.heading} dangerouslySetInnerHTML={{ __html: safeBold(line.substring(2)) }} />;
                 }
                 if (line.startsWith('## ')) {
-                  const subheadingText = line.substring(3).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                  return <h3 key={index} className={styles.subheading} dangerouslySetInnerHTML={{ __html: subheadingText }} />;
+                  return <h3 key={index} className={styles.subheading} dangerouslySetInnerHTML={{ __html: safeBold(line.substring(3)) }} />;
                 }
                 // Handle list items with bold text support
                 if (line.trim().startsWith('- ')) {
-                  const listText = line.substring(2).trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                  return <p key={index} className={styles.listItem} dangerouslySetInnerHTML={{ __html: '• ' + listText }} />;
+                  return <p key={index} className={styles.listItem} dangerouslySetInnerHTML={{ __html: '• ' + safeBold(line.substring(2).trim()) }} />;
                 }
                 // Skip empty lines (paragraph margins provide spacing)
                 if (line.trim() === '') {
                   return null;
                 }
                 // Regular paragraphs with bold text
-                const boldText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                return <p key={index} className={styles.contentParagraph} dangerouslySetInnerHTML={{ __html: boldText }} />;
+                return <p key={index} className={styles.contentParagraph} dangerouslySetInnerHTML={{ __html: safeBold(line) }} />;
               })}
             </div>
           ) : (

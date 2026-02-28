@@ -48,6 +48,12 @@ export interface PortfolioSettings {
   accent_color: string;
   services_title: string; // ADD THIS
   services_subtitle: string; // ADD THIS
+  hero_bg_type: 'none' | 'image' | 'video';
+  hero_bg_url: string;
+  hero_bg_overlay_opacity: number;
+  contact_bg_type: 'none' | 'image' | 'video';
+  contact_bg_url: string;
+  contact_bg_overlay_opacity: number;
 }
 
 const defaultSettings: PortfolioSettings = {
@@ -96,7 +102,13 @@ const defaultSettings: PortfolioSettings = {
   brand_color: '#4A90E2',
   accent_color: '#667eea',
   services_title: 'Build Your Next Project', // ADD THIS
-  services_subtitle: 'Professional web development for startups and businesses' // ADD THIS
+  services_subtitle: 'Professional web development for startups and businesses', // ADD THIS
+  hero_bg_type: 'none',
+  hero_bg_url: '',
+  hero_bg_overlay_opacity: 0.6,
+  contact_bg_type: 'none',
+  contact_bg_url: '',
+  contact_bg_overlay_opacity: 0.7,
 };
 
 const CACHE_KEY = 'portfolio_settings_cache';

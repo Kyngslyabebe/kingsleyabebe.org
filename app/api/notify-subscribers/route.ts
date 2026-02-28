@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { createClient } from '@supabase/supabase-js';
+import { createSupabaseRouteClient } from '@/lib/supabase/server';
+import { isValidOrigin } from '@/lib/security';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -105,17 +107,16 @@ function getBlogNotificationEmail(
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify caller is authenticated admin — check referer or a shared notify secret
-    const authHeader = request.headers.get('authorization');
-    const referer = request.headers.get('referer') || '';
-    const siteOrigin = process.env.NEXT_PUBLIC_SITE_URL || '';
+    // CSRF protection
+    if (!isValidOrigin(request)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
-    // Allow if request comes from same origin (admin UI) OR has valid secret
-    const validSecret = process.env.NOTIFY_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY;
-    const hasValidSecret = authHeader === `Bearer ${validSecret}`;
-    const hasValidReferer = referer.includes('/admin');
+    // Verify caller is an authenticated user via Supabase session cookie
+    const authClient = createSupabaseRouteClient(request);
+    const { data: { user }, error: authError } = await authClient.auth.getUser();
 
-    if (!hasValidSecret && !hasValidReferer) {
+    if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

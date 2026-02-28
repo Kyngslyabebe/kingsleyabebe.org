@@ -20,17 +20,11 @@
 }
 
 [data-theme='dark'] .showcaseTitle {
-  background: linear-gradient(135deg, #FFFFFF 0%, #4A90E2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FFFFFF;
 }
 
 [data-theme='light'] .showcaseTitle {
-  background: linear-gradient(135deg, #1A202C 0%, #3182CE 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1A202C;
 }
 
 /* ===================================

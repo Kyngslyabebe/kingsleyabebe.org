@@ -20,7 +20,8 @@ import {
   HiXMark,
   HiUser,
   HiGlobeAlt,
-  HiWrenchScrewdriver
+  HiWrenchScrewdriver,
+  HiPaintBrush
 } from 'react-icons/hi2';
 import styles from './Sidebar.module.css';
 
@@ -81,6 +82,7 @@ const navigationGroups: NavGroup[] = [
       { icon: HiBriefcase, label: 'Professional', href: '/admin/settings?tab=professional' },
       { icon: HiGlobeAlt, label: 'SEO', href: '/admin/settings?tab=seo' },
       { icon: HiWrenchScrewdriver, label: 'Maintenance', href: '/admin/settings?tab=maintenance' },
+      { icon: HiPaintBrush, label: 'Appearance', href: '/admin/settings?tab=appearance' },
       { icon: HiCog6Tooth, label: 'Advanced', href: '/admin/settings?tab=advanced' }
     ]
   }

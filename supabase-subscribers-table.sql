@@ -32,15 +32,14 @@ CREATE POLICY "Anyone can subscribe" ON blog_subscribers
   TO anon
   WITH CHECK (true);
 
--- Policy: allow anon to read their own record by token (for unsubscribe)
-CREATE POLICY "Read by unsubscribe token" ON blog_subscribers
+-- Block anon from reading subscriber data (subscribe/unsubscribe APIs use service_role)
+CREATE POLICY "No anon reads" ON blog_subscribers
   FOR SELECT
   TO anon
-  USING (true);
+  USING (false);
 
--- Policy: allow anon to update status via token (for unsubscribe)
-CREATE POLICY "Update status by token" ON blog_subscribers
+-- Block anon from updating subscriber data (unsubscribe API uses service_role)
+CREATE POLICY "No anon updates" ON blog_subscribers
   FOR UPDATE
   TO anon
-  USING (true)
-  WITH CHECK (true);
+  USING (false);

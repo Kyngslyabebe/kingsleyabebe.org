@@ -275,6 +275,27 @@ export default function Portfolio() {
       </nav>
 
       <section id="home" className={styles.hero}>
+        {/* Background Media */}
+        {settings.hero_bg_type !== 'none' && settings.hero_bg_url && (
+          <div className={styles.bgMedia}>
+            {settings.hero_bg_type === 'image' ? (
+              <img src={settings.hero_bg_url} alt="" className={styles.bgImage} />
+            ) : (
+              <video
+                src={settings.hero_bg_url}
+                className={styles.bgVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            )}
+            <div
+              className={styles.bgOverlay}
+              style={{ opacity: settings.hero_bg_overlay_opacity }}
+            />
+          </div>
+        )}
         <div className={styles.heroGrid}>
           <motion.div 
             className={styles.heroInfo}
@@ -686,13 +707,35 @@ export default function Portfolio() {
       <motion.section
         id="contact"
         className={styles.section}
+        style={{ position: 'relative', overflow: 'hidden' }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={fadeInUp}
         transition={{ duration: 0.6 }}
       >
-        <div className={styles.sectionContent}>
+        {/* Background Media */}
+        {settings.contact_bg_type !== 'none' && settings.contact_bg_url && (
+          <div className={styles.bgMedia}>
+            {settings.contact_bg_type === 'image' ? (
+              <img src={settings.contact_bg_url} alt="" className={styles.bgImage} />
+            ) : (
+              <video
+                src={settings.contact_bg_url}
+                className={styles.bgVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+            )}
+            <div
+              className={styles.bgOverlay}
+              style={{ opacity: settings.contact_bg_overlay_opacity }}
+            />
+          </div>
+        )}
+        <div className={styles.sectionContent} style={{ position: 'relative', zIndex: 2 }}>
           <h2 className={styles.sectionTitle}>Get In Touch</h2>
           <div className={styles.contactContainer}>
             {settings.contact_form_enabled ? (

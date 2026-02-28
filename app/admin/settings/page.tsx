@@ -8,9 +8,10 @@ import { useToast } from '@/components/admin/Toast';
 import {
   HiCheckCircle
 } from 'react-icons/hi2';
+import { FileUpload } from '@/components/admin/FileUpload';
 import styles from './settings.module.css';
 
-type TabType = 'profile' | 'contact' | 'professional' | 'seo' | 'maintenance' | 'advanced';
+type TabType = 'profile' | 'contact' | 'professional' | 'seo' | 'maintenance' | 'appearance' | 'advanced';
 
 export default function SettingsPage() {
   const { showToast } = useToast();
@@ -82,8 +83,13 @@ const [showHourlyRate, setShowHourlyRate] = useState(true);
 // blog post visibility toggles (for future use
 const [showBlog, setShowBlog] = useState(true);
 
-
-
+// Appearance - Background media
+const [heroBgType, setHeroBgType] = useState<'none' | 'image' | 'video'>('none');
+const [heroBgUrl, setHeroBgUrl] = useState('');
+const [heroBgOverlayOpacity, setHeroBgOverlayOpacity] = useState(0.6);
+const [contactBgType, setContactBgType] = useState<'none' | 'image' | 'video'>('none');
+const [contactBgUrl, setContactBgUrl] = useState('');
+const [contactBgOverlayOpacity, setContactBgOverlayOpacity] = useState(0.7);
 
   useEffect(() => {
     loadSettings();
@@ -169,6 +175,14 @@ setShowServices(data.show_services ?? false);
 setServicesTitle(data.services_title || 'Build Your Next Project');
 setServicesSubtitle(data.services_subtitle || 'Professional web development for startups and businesses');
 setThemeMode(data.theme_mode || 'default');
+
+// Appearance
+setHeroBgType(data.hero_bg_type || 'none');
+setHeroBgUrl(data.hero_bg_url || '');
+setHeroBgOverlayOpacity(data.hero_bg_overlay_opacity ?? 0.6);
+setContactBgType(data.contact_bg_type || 'none');
+setContactBgUrl(data.contact_bg_url || '');
+setContactBgOverlayOpacity(data.contact_bg_overlay_opacity ?? 0.7);
       }
 
 
@@ -249,7 +263,13 @@ services_title: servicesTitle,
 services_subtitle: servicesSubtitle,
 theme_mode: themeMode,
 
-
+// Appearance
+hero_bg_type: heroBgType,
+hero_bg_url: heroBgUrl,
+hero_bg_overlay_opacity: heroBgOverlayOpacity,
+contact_bg_type: contactBgType,
+contact_bg_url: contactBgUrl,
+contact_bg_overlay_opacity: contactBgOverlayOpacity,
 
         updated_at: new Date().toISOString()
       };
@@ -294,6 +314,7 @@ theme_mode: themeMode,
       professional: 'Professional Details',
       seo: 'SEO & Meta Tags',
       maintenance: 'Maintenance Mode',
+      appearance: 'Appearance',
       advanced: 'Advanced Settings'
     };
     return titles[tab];
@@ -769,6 +790,118 @@ theme_mode: themeMode,
             </div>
           </div>
         )}
+
+{/* APPEARANCE TAB */}
+{activeTab === 'appearance' && (
+  <div className={styles.section}>
+    <h2 className={styles.sectionTitle}>Appearance</h2>
+    <p className={styles.sectionDesc}>Customize background media for your hero and contact sections</p>
+
+    {/* Hero Background */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Hero Background</h3>
+      <p className={styles.subsectionDesc}>Add a background image or video behind your hero section</p>
+
+      <div className={styles.formGroup}>
+        <label>Background Type</label>
+        <select
+          value={heroBgType}
+          onChange={(e) => {
+            setHeroBgType(e.target.value as 'none' | 'image' | 'video');
+            if (e.target.value === 'none') setHeroBgUrl('');
+          }}
+          className={styles.select}
+          title="Hero background type"
+        >
+          <option value="none">None — Solid color only</option>
+          <option value="image">Image</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+
+      {heroBgType !== 'none' && (
+        <>
+          <div className={styles.formGroup}>
+            <label>{heroBgType === 'image' ? 'Background Image' : 'Background Video'}</label>
+            <FileUpload
+              onUploadComplete={(url) => setHeroBgUrl(url)}
+              currentFileUrl={heroBgUrl}
+              accept={heroBgType === 'image' ? 'image/*' : 'video/mp4,video/webm'}
+              folder="backgrounds"
+              maxSize={heroBgType === 'image' ? 10 : 50}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Overlay Darkness — {Math.round(heroBgOverlayOpacity * 100)}%</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={Math.round(heroBgOverlayOpacity * 100)}
+              onChange={(e) => setHeroBgOverlayOpacity(Number(e.target.value) / 100)}
+              className={styles.rangeInput}
+              title="Hero overlay opacity"
+            />
+            <small>Higher values make the overlay darker, keeping text readable</small>
+          </div>
+        </>
+      )}
+    </div>
+
+    {/* Contact Background */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Contact Section Background</h3>
+      <p className={styles.subsectionDesc}>Add a background image or video behind your contact section</p>
+
+      <div className={styles.formGroup}>
+        <label>Background Type</label>
+        <select
+          value={contactBgType}
+          onChange={(e) => {
+            setContactBgType(e.target.value as 'none' | 'image' | 'video');
+            if (e.target.value === 'none') setContactBgUrl('');
+          }}
+          className={styles.select}
+          title="Contact background type"
+        >
+          <option value="none">None — Solid color only</option>
+          <option value="image">Image</option>
+          <option value="video">Video</option>
+        </select>
+      </div>
+
+      {contactBgType !== 'none' && (
+        <>
+          <div className={styles.formGroup}>
+            <label>{contactBgType === 'image' ? 'Background Image' : 'Background Video'}</label>
+            <FileUpload
+              onUploadComplete={(url) => setContactBgUrl(url)}
+              currentFileUrl={contactBgUrl}
+              accept={contactBgType === 'image' ? 'image/*' : 'video/mp4,video/webm'}
+              folder="backgrounds"
+              maxSize={contactBgType === 'image' ? 10 : 50}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Overlay Darkness — {Math.round(contactBgOverlayOpacity * 100)}%</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={Math.round(contactBgOverlayOpacity * 100)}
+              onChange={(e) => setContactBgOverlayOpacity(Number(e.target.value) / 100)}
+              className={styles.rangeInput}
+              title="Contact overlay opacity"
+            />
+            <small>Higher values make the overlay darker, keeping text readable</small>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+)}
 
 {/* ADVANCED TAB */}
 {activeTab === 'advanced' && (

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { createClient } from '@supabase/supabase-js';
+import { isValidOrigin } from '@/lib/security';
 
 // Initialize Supabase client with service role for server-side operations
 const supabase = createClient(
@@ -298,9 +299,14 @@ function getSenderEmailTemplate(name: string, message: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // CSRF protection
+    if (!isValidOrigin(request)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     // Get client IP for rate limiting
-    const ip = request.headers.get('x-forwarded-for') || 
-               request.headers.get('x-real-ip') || 
+    const ip = request.headers.get('x-forwarded-for') ||
+               request.headers.get('x-real-ip') ||
                'unknown';
 
     // Check rate limit
@@ -344,26 +350,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-  // ✅ SAVE TO DATABASE FIRST
-    console.log('🔍 Attempting to save to database...');
-    console.log('📊 Data to insert:', { name, email, message });
+  // Save to database
     
-    const { data: dbData, error: dbError } = await supabase
+    const { error: dbError } = await supabase
       .from('contact_messages')
       .insert([{
         name,
         email,
         message,
         status: 'new'
-      }])
-      .select()
-      .single();
+      }]);
 
     if (dbError) {
-      console.error('❌ Database error:', dbError);
-      console.error('❌ Full error:', JSON.stringify(dbError, null, 2));
-    } else {
-      console.log('✅ Message saved to database:', dbData);
+      console.error('Database save error:', dbError.code, dbError.message);
     }
 
     // Check environment variables
@@ -409,10 +408,6 @@ export async function POST(request: NextRequest) {
       transporter.sendMail(mailToOwner),
       transporter.sendMail(mailToSender),
     ]);
-
-    // Log success
-    console.log(`✅ Contact form submission from ${name} (${email})`);
-    console.log(`✅ Emails sent successfully`);
 
     return NextResponse.json(
       { 

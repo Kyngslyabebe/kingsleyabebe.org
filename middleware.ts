@@ -1,22 +1,38 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createSupabaseMiddlewareClient } from '@/lib/supabase/server';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip middleware for admin routes, API routes, and static files
+  // Skip middleware for API routes, static files, and login page
   if (
-    pathname.startsWith('/admin') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
+    pathname === '/login' ||
     pathname.includes('.')
   ) {
     return NextResponse.next();
   }
 
-  // Check maintenance mode
+  // Server-side auth check for admin routes
+  if (pathname.startsWith('/admin')) {
+    const response = NextResponse.next();
+    const { supabase } = createSupabaseMiddlewareClient(request, response);
+
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      const loginUrl = new URL('/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return response;
+  }
+
+  // Check maintenance mode for public routes
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,7 +45,6 @@ export async function middleware(request: NextRequest) {
       .single();
 
     if (!error && data?.maintenance_mode) {
-      // Rewrite to maintenance page
       return NextResponse.rewrite(new URL('/maintenance', request.url));
     }
   } catch (error) {
@@ -41,13 +56,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public files (public folder)
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

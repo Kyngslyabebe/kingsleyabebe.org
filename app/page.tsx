@@ -14,7 +14,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { analytics } from '@/lib/analytics/events';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import { HiHome, HiUser, HiRectangleGroup, HiClock, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin, FaEnvelope as FaEmail, FaExternalLinkAlt } from 'react-icons/fa';
@@ -73,6 +73,48 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedExperience, setExpandedExperience] = useState<number | null>(0);
   const [loading, setLoading] = useState(true);
+
+  // Smooth video loop: darken overlay at loop point to mask the restart
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const heroOverlayRef = useRef<HTMLDivElement>(null);
+  const contactVideoRef = useRef<HTMLVideoElement>(null);
+  const contactOverlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const pairs = [
+      { video: heroVideoRef.current, overlay: heroOverlayRef.current, base: settings.hero_bg_overlay_opacity },
+      { video: contactVideoRef.current, overlay: contactOverlayRef.current, base: settings.contact_bg_overlay_opacity },
+    ];
+
+    const rafIds: number[] = [];
+
+    pairs.forEach(({ video, overlay, base }, i) => {
+      if (!video || !overlay) return;
+      const MASK = 0.4; // seconds to mask transition
+
+      const tick = () => {
+        if (video.duration && video.duration > MASK * 2) {
+          const timeLeft = video.duration - video.currentTime;
+          if (timeLeft < MASK) {
+            // Ramp overlay to fully opaque near the end
+            const progress = 1 - (timeLeft / MASK);
+            overlay.style.opacity = String(base + (1 - base) * progress);
+          } else if (video.currentTime < MASK) {
+            // Ramp overlay back to normal after restart
+            const progress = video.currentTime / MASK;
+            overlay.style.opacity = String(base + (1 - base) * (1 - progress));
+          } else {
+            overlay.style.opacity = String(base);
+          }
+        }
+        rafIds[i] = requestAnimationFrame(tick);
+      };
+
+      rafIds[i] = requestAnimationFrame(tick);
+    });
+
+    return () => rafIds.forEach(id => cancelAnimationFrame(id));
+  }, [settings.hero_bg_type, settings.contact_bg_type, settings.hero_bg_overlay_opacity, settings.contact_bg_overlay_opacity]);
 
   // Scroll progress
   const { scrollYProgress } = useScroll();
@@ -282,6 +324,7 @@ export default function Portfolio() {
               <img src={settings.hero_bg_url} alt="" className={styles.bgImage} />
             ) : (
               <video
+                ref={heroVideoRef}
                 src={settings.hero_bg_url}
                 className={styles.bgVideo}
                 autoPlay
@@ -291,6 +334,7 @@ export default function Portfolio() {
               />
             )}
             <div
+              ref={heroOverlayRef}
               className={styles.bgOverlay}
               style={{ opacity: settings.hero_bg_overlay_opacity }}
             />
@@ -721,6 +765,7 @@ export default function Portfolio() {
               <img src={settings.contact_bg_url} alt="" className={styles.bgImage} />
             ) : (
               <video
+                ref={contactVideoRef}
                 src={settings.contact_bg_url}
                 className={styles.bgVideo}
                 autoPlay
@@ -730,6 +775,7 @@ export default function Portfolio() {
               />
             )}
             <div
+              ref={contactOverlayRef}
               className={styles.bgOverlay}
               style={{ opacity: settings.contact_bg_overlay_opacity }}
             />

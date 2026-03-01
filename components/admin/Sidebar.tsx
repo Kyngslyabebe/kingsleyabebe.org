@@ -21,7 +21,8 @@ import {
   HiUser,
   HiGlobeAlt,
   HiWrenchScrewdriver,
-  HiPaintBrush
+  HiPaintBrush,
+  HiStar
 } from 'react-icons/hi2';
 import styles from './Sidebar.module.css';
 
@@ -63,6 +64,7 @@ const navigationGroups: NavGroup[] = [
     items: [
       { icon: HiEnvelope, label: 'Messages', href: '/admin/messages' },
       { icon: HiChatBubbleLeft, label: 'Comments', href: '/admin/comments' },
+      { icon: HiStar, label: 'Reviews', href: '/admin/reviews' },
       { icon: HiUser, label: 'Subscribers', href: '/admin/subscribers' }
     ]
   },

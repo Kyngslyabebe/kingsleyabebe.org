@@ -49,6 +49,10 @@ export interface PortfolioSettings {
   services_title: string; // ADD THIS
   services_subtitle: string; // ADD THIS
   showcase_title: string;
+  reviews_title: string;
+  reviews_subtitle: string;
+  reviews_bg_url: string;
+  reviews_bg_overlay_opacity: number;
   hero_bg_type: 'none' | 'image' | 'video';
   hero_bg_url: string;
   hero_bg_overlay_opacity: number;
@@ -105,6 +109,10 @@ const defaultSettings: PortfolioSettings = {
   services_title: 'Build Your Next Project', 
   services_subtitle: 'Professional web development for startups and businesses',
   showcase_title: 'Currently Building InfinitBooking Platform',
+  reviews_title: 'Client Reviews',
+  reviews_subtitle: 'What people say about working with me',
+  reviews_bg_url: '',
+  reviews_bg_overlay_opacity: 0.7,
   hero_bg_type: 'none',
   hero_bg_url: '',
   hero_bg_overlay_opacity: 0.6,

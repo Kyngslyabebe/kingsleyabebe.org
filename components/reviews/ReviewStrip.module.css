@@ -1,0 +1,176 @@
+.strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 6px 0;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.strip:hover {
+  transform: translateY(-1px);
+}
+
+/* Stars */
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.starFilled {
+  color: #F59E0B;
+}
+
+[data-theme='dark'] .starEmpty {
+  color: rgba(160, 174, 192, 0.3);
+}
+
+[data-theme='light'] .starEmpty {
+  color: rgba(113, 128, 150, 0.3);
+}
+
+.ratingText {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+[data-theme='dark'] .ratingText {
+  color: #F59E0B;
+}
+
+[data-theme='light'] .ratingText {
+  color: #D97706;
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 20px;
+}
+
+[data-theme='dark'] .divider {
+  background: rgba(160, 174, 192, 0.2);
+}
+
+[data-theme='light'] .divider {
+  background: rgba(113, 128, 150, 0.2);
+}
+
+/* Avatars */
+.avatars {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: -8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+[data-theme='dark'] .avatar {
+  border: 2px solid #0A1929;
+}
+
+[data-theme='light'] .avatar {
+  border: 2px solid #FFFFFF;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitial {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .avatarInitial {
+  background: linear-gradient(135deg, #4A90E2, #667eea);
+  color: #FFFFFF;
+}
+
+[data-theme='light'] .avatarInitial {
+  background: linear-gradient(135deg, #3182CE, #5A67D8);
+  color: #FFFFFF;
+}
+
+.avatarCount {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+[data-theme='dark'] .avatarCount {
+  background: rgba(26, 47, 66, 0.9);
+  color: #A0AEC0;
+}
+
+[data-theme='light'] .avatarCount {
+  background: #EDF2F7;
+  color: #718096;
+}
+
+/* Reviews label */
+.reviewsLabel {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+  transition: all 0.25s ease;
+}
+
+[data-theme='dark'] .reviewsLabel {
+  color: #A0AEC0;
+}
+
+[data-theme='light'] .reviewsLabel {
+  color: #718096;
+}
+
+.strip:hover .reviewsLabel {
+  color: #F59E0B;
+  border-bottom-color: #F59E0B;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .strip {
+    justify-content: center;
+  }
+}

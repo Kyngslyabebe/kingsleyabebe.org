@@ -10,6 +10,7 @@ import FeaturedBlog from '@/components/blog/FeaturedBlog';
 import ReadMoreText from '@/components/common/ReadMoreText';
 import Services from '@/components/services/Services';
 import ScrollToTop from '@/components/common/ScrollToTop';
+import ReviewStrip from '@/components/reviews/ReviewStrip';
 import Link from 'next/link';
 import Image from 'next/image';
 import { analytics } from '@/lib/analytics/events';
@@ -404,6 +405,8 @@ export default function Portfolio() {
                 )}
               </motion.div>
             )}
+
+            <ReviewStrip />
           </motion.div>
 
           <motion.div

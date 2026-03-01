@@ -85,6 +85,10 @@ const [showBlog, setShowBlog] = useState(true);
 
 // Appearance
 const [showcaseTitle, setShowcaseTitle] = useState('Currently Building InfinitBooking Platform');
+const [reviewsTitle, setReviewsTitle] = useState('Client Reviews');
+const [reviewsSubtitle, setReviewsSubtitle] = useState('What people say about working with me');
+const [reviewsBgUrl, setReviewsBgUrl] = useState('');
+const [reviewsBgOverlayOpacity, setReviewsBgOverlayOpacity] = useState(0.7);
 const [heroBgType, setHeroBgType] = useState<'none' | 'image' | 'video'>('none');
 const [heroBgUrl, setHeroBgUrl] = useState('');
 const [heroBgOverlayOpacity, setHeroBgOverlayOpacity] = useState(0.6);
@@ -179,6 +183,10 @@ setThemeMode(data.theme_mode || 'default');
 
 // Appearance
 setShowcaseTitle(data.showcase_title || 'Currently Building InfinitBooking Platform');
+setReviewsTitle(data.reviews_title || 'Client Reviews');
+setReviewsSubtitle(data.reviews_subtitle || 'What people say about working with me');
+setReviewsBgUrl(data.reviews_bg_url || '');
+setReviewsBgOverlayOpacity(data.reviews_bg_overlay_opacity ?? 0.7);
 setHeroBgType(data.hero_bg_type || 'none');
 setHeroBgUrl(data.hero_bg_url || '');
 setHeroBgOverlayOpacity(data.hero_bg_overlay_opacity ?? 0.6);
@@ -267,6 +275,10 @@ theme_mode: themeMode,
 
 // Appearance
 showcase_title: showcaseTitle,
+reviews_title: reviewsTitle,
+reviews_subtitle: reviewsSubtitle,
+reviews_bg_url: reviewsBgUrl,
+reviews_bg_overlay_opacity: reviewsBgOverlayOpacity,
 hero_bg_type: heroBgType,
 hero_bg_url: heroBgUrl,
 hero_bg_overlay_opacity: heroBgOverlayOpacity,
@@ -814,6 +826,57 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           placeholder="Currently Building InfinitBooking Platform"
         />
       </div>
+    </div>
+
+    {/* Reviews Page Headers */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Reviews Page</h3>
+      <p className={styles.subsectionDesc}>Customize the heading and subheading on the reviews page</p>
+      <div className={styles.formGroup}>
+        <label>Title</label>
+        <input
+          type="text"
+          value={reviewsTitle}
+          onChange={(e) => setReviewsTitle(e.target.value)}
+          className={styles.input}
+          placeholder="Client Reviews"
+        />
+      </div>
+      <div className={styles.formGroup}>
+        <label>Subtitle</label>
+        <input
+          type="text"
+          value={reviewsSubtitle}
+          onChange={(e) => setReviewsSubtitle(e.target.value)}
+          className={styles.input}
+          placeholder="What people say about working with me"
+        />
+      </div>
+      <div className={styles.formGroup}>
+        <label>Background Image</label>
+        <FileUpload
+          onUploadComplete={(url) => setReviewsBgUrl(url)}
+          currentFileUrl={reviewsBgUrl}
+          accept="image/*"
+          folder="backgrounds"
+          maxSize={10}
+        />
+      </div>
+      {reviewsBgUrl && (
+        <div className={styles.formGroup}>
+          <label>Overlay Darkness — {Math.round(reviewsBgOverlayOpacity * 100)}%</label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={Math.round(reviewsBgOverlayOpacity * 100)}
+            onChange={(e) => setReviewsBgOverlayOpacity(Number(e.target.value) / 100)}
+            className={styles.rangeInput}
+            title="Reviews overlay opacity"
+          />
+          <small>Higher values make the overlay darker, keeping text readable</small>
+        </div>
+      )}
     </div>
 
     {/* Hero Background */}

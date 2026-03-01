@@ -83,7 +83,8 @@ const [showHourlyRate, setShowHourlyRate] = useState(true);
 // blog post visibility toggles (for future use
 const [showBlog, setShowBlog] = useState(true);
 
-// Appearance - Background media
+// Appearance
+const [showcaseTitle, setShowcaseTitle] = useState('Currently Building InfinitBooking Platform');
 const [heroBgType, setHeroBgType] = useState<'none' | 'image' | 'video'>('none');
 const [heroBgUrl, setHeroBgUrl] = useState('');
 const [heroBgOverlayOpacity, setHeroBgOverlayOpacity] = useState(0.6);
@@ -177,6 +178,7 @@ setServicesSubtitle(data.services_subtitle || 'Professional web development for 
 setThemeMode(data.theme_mode || 'default');
 
 // Appearance
+setShowcaseTitle(data.showcase_title || 'Currently Building InfinitBooking Platform');
 setHeroBgType(data.hero_bg_type || 'none');
 setHeroBgUrl(data.hero_bg_url || '');
 setHeroBgOverlayOpacity(data.hero_bg_overlay_opacity ?? 0.6);
@@ -264,6 +266,7 @@ services_subtitle: servicesSubtitle,
 theme_mode: themeMode,
 
 // Appearance
+showcase_title: showcaseTitle,
 hero_bg_type: heroBgType,
 hero_bg_url: heroBgUrl,
 hero_bg_overlay_opacity: heroBgOverlayOpacity,
@@ -796,6 +799,22 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
   <div className={styles.section}>
     <h2 className={styles.sectionTitle}>Appearance</h2>
     <p className={styles.sectionDesc}>Customize background media for your hero and contact sections</p>
+
+    {/* Showcase Title */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Showcase Title</h3>
+      <p className={styles.subsectionDesc}>The title displayed above your project showcase in the hero section</p>
+      <div className={styles.formGroup}>
+        <label>Title</label>
+        <input
+          type="text"
+          value={showcaseTitle}
+          onChange={(e) => setShowcaseTitle(e.target.value)}
+          className={styles.input}
+          placeholder="Currently Building InfinitBooking Platform"
+        />
+      </div>
+    </div>
 
     {/* Hero Background */}
     <div className={styles.subsection}>

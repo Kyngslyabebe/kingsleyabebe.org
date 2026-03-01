@@ -17,7 +17,11 @@ interface ShowcaseItem {
   order_index: number;
 }
 
-export default function HeroShowcase() {
+interface HeroShowcaseProps {
+  showcaseTitle?: string;
+}
+
+export default function HeroShowcase({ showcaseTitle = 'Currently Building' }: HeroShowcaseProps) {
   const [items, setItems] = useState<ShowcaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -63,7 +67,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Currently Building InfinitBooking Platform</h3>
+          <h3 className={styles.showcaseTitle}>{showcaseTitle}</h3>
         </div>
         <div className={styles.loadingWrapper}>
           <div className={styles.loadingSpinner} />
@@ -76,7 +80,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Currently Building InfinitBooking Platform</h3>
+          <h3 className={styles.showcaseTitle}>{showcaseTitle}</h3>
         </div>
         <div className={styles.emptyState}>
           <p className={styles.emptyText}>No active showcase items</p>
@@ -92,7 +96,7 @@ export default function HeroShowcase() {
     return (
       <div className={styles.showcaseContainer}>
         <div className={styles.showcaseHeader}>
-          <h3 className={styles.showcaseTitle}>Currently Building InfinitBooking Platform</h3>
+          <h3 className={styles.showcaseTitle}>{showcaseTitle}</h3>
         </div>
         <div className={styles.showcaseContent}>
           <div className={styles.deviceContainer}>
@@ -128,7 +132,7 @@ export default function HeroShowcase() {
   return (
     <div className={styles.showcaseContainer}>
       <div className={styles.showcaseHeader}>
-        <h3 className={styles.showcaseTitle}>Currently Building InfinitBooking Platform</h3>
+        <h3 className={styles.showcaseTitle}>{showcaseTitle}</h3>
       </div>
       <div className={styles.showcaseContent}>
         <Swiper

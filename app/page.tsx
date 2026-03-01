@@ -412,7 +412,7 @@ export default function Portfolio() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <HeroShowcase />
+            <HeroShowcase showcaseTitle={settings.showcase_title} />
           </motion.div>
         </div>
       </section>

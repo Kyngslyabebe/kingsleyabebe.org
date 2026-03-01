@@ -48,6 +48,7 @@ export interface PortfolioSettings {
   accent_color: string;
   services_title: string; // ADD THIS
   services_subtitle: string; // ADD THIS
+  showcase_title: string;
   hero_bg_type: 'none' | 'image' | 'video';
   hero_bg_url: string;
   hero_bg_overlay_opacity: number;
@@ -65,7 +66,7 @@ const defaultSettings: PortfolioSettings = {
   summary: '',
   email: 'kingsleyabebe@hotmail.com',
   phone: '301-674-0120',
-  location: 'Capitol Heights, MD',
+  location: 'Bowie, MD',
   github: 'https://github.com/kingsleyabebe',
   linkedin: 'https://linkedin.com/in/kingsleyabebe',
   twitter: '',
@@ -83,7 +84,7 @@ const defaultSettings: PortfolioSettings = {
   show_clients_served: true,
   show_availability: true,
   show_hourly_rate: true,
-  meta_title: 'Kingsley Abebe - Full-Stack Software Engineer',
+  meta_title: 'Kingsley Abebe -  Software Engineer',
   meta_description: 'Professional portfolio showcasing web development projects',
   meta_keywords: '',
   og_image: '',
@@ -94,15 +95,16 @@ const defaultSettings: PortfolioSettings = {
   show_projects: true,
   show_skills: true,
   show_experience: true,
-  show_services: false, // ADD THIS
+  show_services: false, 
   show_blog: true,
   contact_form_enabled: true,
   email_notifications: true,
   google_analytics_id: '',
   brand_color: '#4A90E2',
   accent_color: '#667eea',
-  services_title: 'Build Your Next Project', // ADD THIS
-  services_subtitle: 'Professional web development for startups and businesses', // ADD THIS
+  services_title: 'Build Your Next Project', 
+  services_subtitle: 'Professional web development for startups and businesses',
+  showcase_title: 'Currently Building InfinitBooking Platform',
   hero_bg_type: 'none',
   hero_bg_url: '',
   hero_bg_overlay_opacity: 0.6,

@@ -307,6 +307,23 @@
   color: #1A202C;
 }
 
+/* Input Row (value + trend side by side) */
+.statInputRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.statInputRow .statInput {
+  margin-top: 0;
+  flex: 1;
+}
+
+.statInputRow .statInput:last-child {
+  max-width: 120px;
+}
+
 /* Input Field Below Checkbox */
 .statInput {
   margin-top: 12px;

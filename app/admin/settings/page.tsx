@@ -45,6 +45,12 @@ export default function SettingsPage() {
   const [resumeUrl, setResumeUrl] = useState('');
   const [availability, setAvailability] = useState('available');
   const [hourlyRate, setHourlyRate] = useState('');
+  const [trendYearsExperience, setTrendYearsExperience] = useState('');
+  const [trendTotalProjects, setTrendTotalProjects] = useState('');
+  const [trendTechnologiesCount, setTrendTechnologiesCount] = useState('');
+  const [trendClientsServed, setTrendClientsServed] = useState('');
+  const [trendAvailability, setTrendAvailability] = useState('');
+  const [trendHourlyRate, setTrendHourlyRate] = useState('');
   
   // SEO
   const [metaTitle, setMetaTitle] = useState('');
@@ -140,7 +146,13 @@ const [contactBgOverlayOpacity, setContactBgOverlayOpacity] = useState(0.7);
         setResumeUrl(data.resume_url || '');
         setAvailability(data.availability || 'available');
         setHourlyRate(data.hourly_rate || '');
-        
+        setTrendYearsExperience(data.trend_years_experience || '');
+        setTrendTotalProjects(data.trend_total_projects || '');
+        setTrendTechnologiesCount(data.trend_technologies_count || '');
+        setTrendClientsServed(data.trend_clients_served || '');
+        setTrendAvailability(data.trend_availability || '');
+        setTrendHourlyRate(data.trend_hourly_rate || '');
+
         // SEO
         setMetaTitle(data.meta_title || '');
         setMetaDescription(data.meta_description || '');
@@ -234,7 +246,13 @@ setContactBgOverlayOpacity(data.contact_bg_overlay_opacity ?? 0.7);
         resume_url: resumeUrl,
         availability,
         hourly_rate: hourlyRate,
-        
+        trend_years_experience: trendYearsExperience,
+        trend_total_projects: trendTotalProjects,
+        trend_technologies_count: trendTechnologiesCount,
+        trend_clients_served: trendClientsServed,
+        trend_availability: trendAvailability,
+        trend_hourly_rate: trendHourlyRate,
+
         // SEO
         meta_title: metaTitle,
         meta_description: metaDescription,
@@ -533,13 +551,23 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Years of Experience</span>
         </label>
         {showYearsExperience && (
-          <div className={styles.statInput}>
-            <input
-              type="number"
-              value={yearsExperience}
-              onChange={(e) => setYearsExperience(e.target.value)}
-              placeholder="5"
-            />
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <input
+                type="number"
+                value={yearsExperience}
+                onChange={(e) => setYearsExperience(e.target.value)}
+                placeholder="5"
+              />
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendYearsExperience}
+                onChange={(e) => setTrendYearsExperience(e.target.value)}
+                placeholder="Trend e.g. +20%"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -555,13 +583,23 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Total Projects</span>
         </label>
         {showTotalProjects && (
-          <div className={styles.statInput}>
-            <input
-              type="number"
-              value={totalProjects}
-              onChange={(e) => setTotalProjects(e.target.value)}
-              placeholder="50"
-            />
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <input
+                type="number"
+                value={totalProjects}
+                onChange={(e) => setTotalProjects(e.target.value)}
+                placeholder="50"
+              />
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendTotalProjects}
+                onChange={(e) => setTrendTotalProjects(e.target.value)}
+                placeholder="Trend e.g. +15%"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -577,13 +615,23 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Technologies Count</span>
         </label>
         {showTechnologiesCount && (
-          <div className={styles.statInput}>
-            <input
-              type="number"
-              value={technologiesCount}
-              onChange={(e) => setTechnologiesCount(e.target.value)}
-              placeholder="25"
-            />
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <input
+                type="number"
+                value={technologiesCount}
+                onChange={(e) => setTechnologiesCount(e.target.value)}
+                placeholder="25"
+              />
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendTechnologiesCount}
+                onChange={(e) => setTrendTechnologiesCount(e.target.value)}
+                placeholder="Trend e.g. +10%"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -599,13 +647,23 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Clients Served</span>
         </label>
         {showClientsServed && (
-          <div className={styles.statInput}>
-            <input
-              type="number"
-              value={clientsServed}
-              onChange={(e) => setClientsServed(e.target.value)}
-              placeholder="30"
-            />
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <input
+                type="number"
+                value={clientsServed}
+                onChange={(e) => setClientsServed(e.target.value)}
+                placeholder="30"
+              />
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendClientsServed}
+                onChange={(e) => setTrendClientsServed(e.target.value)}
+                placeholder="Trend e.g. +25%"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -621,15 +679,26 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Availability Status</span>
         </label>
         {showAvailability && (
-          <div className={styles.statInput}>
-            <select
-              value={availability}
-              onChange={(e) => setAvailability(e.target.value)}
-            >
-              <option value="available">Available for Work</option>
-              <option value="busy">Currently Busy</option>
-              <option value="not-looking">Not Looking</option>
-            </select>
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <select
+                title="Availability status"
+                value={availability}
+                onChange={(e) => setAvailability(e.target.value)}
+              >
+                <option value="available">Available for Work</option>
+                <option value="busy">Currently Busy</option>
+                <option value="not-looking">Not Looking</option>
+              </select>
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendAvailability}
+                onChange={(e) => setTrendAvailability(e.target.value)}
+                placeholder="Trend e.g. Open"
+              />
+            </div>
           </div>
         )}
       </div>
@@ -645,13 +714,23 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Hourly Rate (USD)</span>
         </label>
         {showHourlyRate && (
-          <div className={styles.statInput}>
-            <input
-              type="number"
-              value={hourlyRate}
-              onChange={(e) => setHourlyRate(e.target.value)}
-              placeholder="150"
-            />
+          <div className={styles.statInputRow}>
+            <div className={styles.statInput}>
+              <input
+                type="number"
+                value={hourlyRate}
+                onChange={(e) => setHourlyRate(e.target.value)}
+                placeholder="150"
+              />
+            </div>
+            <div className={styles.statInput}>
+              <input
+                type="text"
+                value={trendHourlyRate}
+                onChange={(e) => setTrendHourlyRate(e.target.value)}
+                placeholder="Trend e.g. +10%"
+              />
+            </div>
           </div>
         )}
       </div>

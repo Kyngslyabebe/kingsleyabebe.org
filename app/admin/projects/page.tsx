@@ -6,15 +6,16 @@ import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
 import ConfirmDialog from '@/components/admin/ConfirmDialog';
 import { FileUpload } from '@/components/admin/FileUpload';
-import { 
-  HiPlus, 
-  HiPencil, 
-  HiTrash, 
+import {
+  HiPlus,
+  HiPencil,
+  HiTrash,
   HiXMark,
   HiPhoto,
   HiEye,
   HiEyeSlash,
-  HiMagnifyingGlass
+  HiMagnifyingGlass,
+  HiStar
 } from 'react-icons/hi2';
 import styles from './projects.module.css';
 
@@ -32,6 +33,7 @@ interface Project {
   tags: string[];
   features: string[];
   visible: boolean;
+  featured: boolean;
 }
 
 export default function ProjectsPage() {
@@ -54,7 +56,8 @@ export default function ProjectsPage() {
     github: '',
     tags: '',
     features: '',
-    visible: true
+    visible: true,
+    featured: false
   });
   const [saving, setSaving] = useState(false);
 
@@ -94,7 +97,8 @@ export default function ProjectsPage() {
         github: project.github || '',
         tags: project.tags?.join(', ') || '',
         features: project.features?.join('\n') || '',
-        visible: project.visible !== false
+        visible: project.visible !== false,
+        featured: project.featured || false
       });
     } else {
       setEditingProject(null);
@@ -110,7 +114,8 @@ export default function ProjectsPage() {
         github: '',
         tags: '',
         features: '',
-        visible: true
+        visible: true,
+        featured: false
       });
     }
     setShowModal(true);
@@ -146,7 +151,8 @@ export default function ProjectsPage() {
         github: formData.github,
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
         features: formData.features.split('\n').map(f => f.trim()).filter(Boolean),
-        visible: formData.visible
+        visible: formData.visible,
+        featured: formData.featured
       };
 
       if (editingProject) {
@@ -208,6 +214,22 @@ export default function ProjectsPage() {
       loadProjects();
     } catch (error: any) {
       console.error('Error toggling visibility:', error);
+      showToast('Error updating project', 'error');
+    }
+  }
+
+  async function toggleFeatured(id: string, currentFeatured: boolean) {
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .update({ featured: !currentFeatured })
+        .eq('id', id);
+
+      if (error) throw error;
+      showToast(`Project ${!currentFeatured ? 'featured' : 'unfeatured'}!`, 'success');
+      loadProjects();
+    } catch (error: any) {
+      console.error('Error toggling featured:', error);
       showToast('Error updating project', 'error');
     }
   }
@@ -274,6 +296,12 @@ export default function ProjectsPage() {
                       <span>Hidden</span>
                     </div>
                   )}
+                  {project.featured && (
+                    <div className={styles.featuredBadge}>
+                      <HiStar size={14} />
+                      <span>Featured</span>
+                    </div>
+                  )}
                 </div>
               )}
               <div className={styles.cardContent}>
@@ -283,7 +311,14 @@ export default function ProjectsPage() {
                     <h3 className={styles.cardTitle}>{project.title}</h3>
                   </div>
                   <div className={styles.cardActions}>
-                    <button 
+                    <button
+                      onClick={() => toggleFeatured(project.id, project.featured || false)}
+                      className={`${styles.iconBtn} ${project.featured ? styles.starActive : ''}`}
+                      title={project.featured ? 'Unfeature' : 'Feature'}
+                    >
+                      <HiStar size={16} />
+                    </button>
+                    <button
                       onClick={() => toggleVisibility(project.id, project.visible !== false)}
                       className={styles.iconBtn}
                       title={project.visible !== false ? 'Hide' : 'Show'}
@@ -482,15 +517,27 @@ export default function ProjectsPage() {
                 />
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={formData.visible}
-                    onChange={(e) => setFormData({...formData, visible: e.target.checked})}
-                  />
-                  <span>Visible on portfolio</span>
-                </label>
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.visible}
+                      onChange={(e) => setFormData({...formData, visible: e.target.checked})}
+                    />
+                    <span>Visible on portfolio</span>
+                  </label>
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData({...formData, featured: e.target.checked})}
+                    />
+                    <span>Featured (large card)</span>
+                  </label>
+                </div>
               </div>
 
               <div className={styles.formActions}>

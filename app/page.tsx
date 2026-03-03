@@ -11,13 +11,14 @@ import ReadMoreText from '@/components/common/ReadMoreText';
 import Services from '@/components/services/Services';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import ReviewStrip from '@/components/reviews/ReviewStrip';
+import AnalyticsPanel from '@/components/analytics/AnalyticsPanel';
 import Link from 'next/link';
 import Image from 'next/image';
 import { analytics } from '@/lib/analytics/events';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll } from 'framer-motion';
-import { HiHome, HiUser, HiRectangleGroup, HiClock, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar } from 'react-icons/hi2';
+import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { HiHome, HiUser, HiRectangleGroup, HiClock, HiCodeBracket, HiEnvelope, HiArrowDown, HiRocketLaunch, HiCpuChip, HiBriefcase, HiXMark, HiChevronDown, HiArrowRight, HiUserGroup, HiCurrencyDollar, HiArrowTrendingUp } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin, FaEnvelope as FaEmail, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiReact, SiNextdotjs, SiTypescript, SiNodedotjs, SiPostgresql, SiMongodb, SiAmazonwebservices, SiDocker, SiStripe, SiTailwindcss } from 'react-icons/si';
 import { supabase } from '@/lib/supabase/client';
@@ -74,6 +75,7 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedExperience, setExpandedExperience] = useState<number | null>(0);
   const [loading, setLoading] = useState(true);
+  const loadStartTime = useRef(Date.now());
 
   // Smooth video loop: darken overlay at loop point to mask the restart
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -161,7 +163,11 @@ export default function Portfolio() {
     } catch (error) {
       console.error('Error loading portfolio data:', error);
     } finally {
-      setLoading(false);
+      // Ensure loading screen shows for at least 2s (matches progress bar)
+      const elapsed = Date.now() - loadStartTime.current;
+      const minTime = 2000;
+      const remaining = Math.max(0, minTime - elapsed);
+      setTimeout(() => setLoading(false), remaining);
     }
   }
 
@@ -169,7 +175,7 @@ export default function Portfolio() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
-      const sections = ['home', 'about', 'projects', 'skills', 'experience', 'contact'];
+      const sections = ['home', 'about', 'projects', 'skills', 'experience', 'services', 'contact'];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -268,9 +274,7 @@ export default function Portfolio() {
     analytics.socialClick(platform);
   };
 
-  if (settingsLoading || loading) {
-    return <LoadingScreen name={settings?.name || "Kingsley"} />;
-  }
+  const isLoading = settingsLoading || loading;
 
   const navSections = ['home', 'about'];
   if (settings.show_projects) navSections.push('projects');
@@ -280,16 +284,33 @@ export default function Portfolio() {
   navSections.push('contact');
 
   return (
-    <div className={styles.container}>
+    <AnimatePresence mode="wait">
+      {isLoading ? (
+        <motion.div
+          key="loading"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+        >
+          <LoadingScreen name={settings?.name || "Kingsley"} />
+        </motion.div>
+      ) : (
+    <motion.div
+      key="content"
+      className={styles.container}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+    >
       <ThemeToggle />
 
-      <div className={styles.mobileLogo}>
+      <button type="button" className={styles.mobileLogo} onClick={() => scrollToSection('home')}>
         {settings.avatar ? (
           <Image src={settings.avatar} alt={settings.name} width={40} height={40} priority />
         ) : (
           settings.name.split(' ').map(n => n[0]).join('')
         )}
-      </div>
+      </button>
 
       <motion.div 
         className={styles.progressBar}
@@ -297,13 +318,13 @@ export default function Portfolio() {
       />
 
       <nav className={`${styles.desktopNav} ${scrolled ? styles.desktopNavScrolled : ''}`}>
-        <div className={styles.navLogo}>
+        <button type="button" className={styles.navLogo} onClick={() => scrollToSection('home')}>
           {settings.avatar ? (
             <Image src={settings.avatar} alt={settings.name} className={styles.navAvatar} width={40} height={40} priority />
           ) : (
             settings.name.split(' ').map(n => n[0]).join('')
           )}
-        </div>
+        </button>
         <div className={styles.navLinks}>
           {navSections.map((section) => (
             <button
@@ -441,13 +462,15 @@ export default function Portfolio() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Image
-                  src={settings.avatar}
-                  alt={settings.name}
-                  className={styles.aboutImage}
-                  width={400}
-                  height={400}
-                />
+                <div className={styles.aboutImageGlow}>
+                  <Image
+                    src={settings.avatar}
+                    alt={settings.name}
+                    className={styles.aboutImage}
+                    width={400}
+                    height={400}
+                  />
+                </div>
               </motion.div>
             )}
 
@@ -457,6 +480,18 @@ export default function Portfolio() {
                 desktopLines={15}
                 mobileLines={12}
               />
+
+              {settings.summary && (
+                <motion.blockquote
+                  className={styles.aboutQuote}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  &ldquo;I approach every decision with intention. I&rsquo;m building something I&rsquo;d stake my name on.&rdquo;
+                </motion.blockquote>
+              )}
             </div>
           </div>
         </div>
@@ -477,75 +512,129 @@ export default function Portfolio() {
           viewport={{ once: true }}
         >
           <div className={styles.sectionContent}>
-            <motion.div
-              className={styles.statsGrid}
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              {settings.show_years_experience && settings.years_experience && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5 }}>
-                  <HiRocketLaunch size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Years Experience</p>
-                </motion.div>
-              )}
+            <div className={styles.statsSplitLayout}>
+              <motion.div
+                className={styles.statsGrid}
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {settings.show_years_experience && settings.years_experience && (
+                  <motion.div className={`${styles.statCard} ${styles.statPurple}`} variants={scaleIn} transition={{ duration: 0.5 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloPurple}`}>
+                      <HiRocketLaunch size={20} />
+                    </div>
+                    <h3 className={styles.statNumber}>
+                      <Counter from={0} to={parseInt(settings.years_experience) || 0} />+
+                    </h3>
+                    <p className={styles.statLabel}>Years Experience</p>
+                    {settings.trend_years_experience && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_years_experience}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
 
-              {settings.show_total_projects && settings.total_projects && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
-                  <HiCodeBracket size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Projects Built</p>
-                </motion.div>
-              )}
+                {settings.show_total_projects && settings.total_projects && (
+                  <motion.div className={`${styles.statCard} ${styles.statBlue}`} variants={scaleIn} transition={{ duration: 0.5, delay: 0.1 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloBlue}`}>
+                      <HiCodeBracket size={20} />
+                    </div>
+                    <h3 className={styles.statNumber}>
+                      <Counter from={0} to={parseInt(settings.total_projects) || 0} />+
+                    </h3>
+                    <p className={styles.statLabel}>Projects Built</p>
+                    {settings.trend_total_projects && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_total_projects}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
 
-              {settings.show_technologies_count && settings.technologies_count && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
-                  <HiCpuChip size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Technologies</p>
-                </motion.div>
-              )}
+                {settings.show_technologies_count && settings.technologies_count && (
+                  <motion.div className={`${styles.statCard} ${styles.statEmerald}`} variants={scaleIn} transition={{ duration: 0.5, delay: 0.2 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloEmerald}`}>
+                      <HiCpuChip size={20} />
+                    </div>
+                    <h3 className={styles.statNumber}>
+                      <Counter from={0} to={parseInt(settings.technologies_count) || 0} />+
+                    </h3>
+                    <p className={styles.statLabel}>Technologies</p>
+                    {settings.trend_technologies_count && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_technologies_count}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
 
-              {settings.show_clients_served && settings.clients_served && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
-                  <HiUserGroup size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber}>
-                    <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
-                  </h3>
-                  <p className={styles.statLabel}>Happy Clients</p>
-                </motion.div>
-              )}
+                {settings.show_clients_served && settings.clients_served && (
+                  <motion.div className={`${styles.statCard} ${styles.statRose}`} variants={scaleIn} transition={{ duration: 0.5, delay: 0.3 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloRose}`}>
+                      <HiUserGroup size={20} />
+                    </div>
+                    <h3 className={styles.statNumber}>
+                      <Counter from={0} to={parseInt(settings.clients_served) || 0} />+
+                    </h3>
+                    <p className={styles.statLabel}>Happy Clients</p>
+                    {settings.trend_clients_served && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_clients_served}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
 
-              {settings.show_availability && settings.availability && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
-                  <HiBriefcase size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber} style={{ fontSize: '1.5rem' }}>
-                    {settings.availability === 'available' && '✓ Available'}
-                    {settings.availability === 'busy' && '⏳ Busy'}
-                    {settings.availability === 'not-looking' && '✗ Not Available'}
-                  </h3>
-                  <p className={styles.statLabel}>Current Status</p>
-                </motion.div>
-              )}
+                {settings.show_availability && settings.availability && (
+                  <motion.div className={`${styles.statCard} ${styles.statAmber}`} variants={scaleIn} transition={{ duration: 0.5, delay: 0.4 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloAmber}`}>
+                      <HiBriefcase size={20} />
+                    </div>
+                    <h3 className={styles.statNumber} style={{ fontSize: '1.1rem' }}>
+                      {settings.availability === 'available' && '✓ Available'}
+                      {settings.availability === 'busy' && '⏳ Busy'}
+                      {settings.availability === 'not-looking' && '✗ Not Available'}
+                    </h3>
+                    <p className={styles.statLabel}>Current Status</p>
+                    {settings.trend_availability && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_availability}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
 
-              {settings.show_hourly_rate && settings.hourly_rate && (
-                <motion.div className={styles.statCard} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
-                  <HiCurrencyDollar size={28} style={{ color: settings.brand_color || '#4A90E2' }} />
-                  <h3 className={styles.statNumber}>
-                    ${settings.hourly_rate}
-                  </h3>
-                  <p className={styles.statLabel}>Hourly Rate</p>
-                </motion.div>
-              )}
-            </motion.div>
+                {settings.show_hourly_rate && settings.hourly_rate && (
+                  <motion.div className={`${styles.statCard} ${styles.statCyan}`} variants={scaleIn} transition={{ duration: 0.5, delay: 0.5 }}>
+                    <div className={`${styles.iconHalo} ${styles.haloCyan}`}>
+                      <HiCurrencyDollar size={20} />
+                    </div>
+                    <h3 className={styles.statNumber}>
+                      ${settings.hourly_rate}
+                    </h3>
+                    <p className={styles.statLabel}>Hourly Rate</p>
+                    {settings.trend_hourly_rate && (
+                      <span className={styles.trendBadge}>
+                        <HiArrowTrendingUp size={12} />
+                        {settings.trend_hourly_rate}
+                      </span>
+                    )}
+                  </motion.div>
+                )}
+              </motion.div>
+
+              <div className={styles.analyticsColumn}>
+                <AnalyticsPanel />
+              </div>
+            </div>
           </div>
         </motion.section>
       )}
@@ -563,10 +652,10 @@ export default function Portfolio() {
           <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>Projects</h2>
             <motion.div className={styles.projectsGrid} variants={staggerContainer}>
-              {projects.map((project, index) => (
+              {[...projects].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)).map((project, index) => (
                 <motion.div
                   key={project.id}
-                  className={styles.projectCard}
+                  className={`${styles.projectCard} ${project.featured ? styles.projectCardFeatured : ''}`}
                   variants={fadeInUp}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -8, boxShadow: `0 12px 40px ${settings.brand_color}40` }}
@@ -578,8 +667,8 @@ export default function Portfolio() {
                         src={project.image}
                         alt={project.title}
                         className={styles.projectImage}
-                        width={600}
-                        height={400}
+                        width={project.featured ? 800 : 600}
+                        height={project.featured ? 500 : 400}
                         loading="lazy"
                       />
                       <div className={styles.projectOverlay}>
@@ -590,7 +679,9 @@ export default function Portfolio() {
                   <div className={styles.projectContent}>
                     <p className={styles.projectCategory}>{project.category}</p>
                     <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <p className={styles.projectDescription}>{project.description}</p>
+                    <p className={styles.projectDescription}>
+                      {project.featured ? (project.long_description || project.description) : project.description}
+                    </p>
                     <div className={styles.projectMeta}>
                       <span className={styles.projectStatus}>{project.status}</span>
                       <span className={styles.projectYear}>{project.year}</span>
@@ -1038,7 +1129,9 @@ export default function Portfolio() {
       <Footer />
 
         <ScrollToTop />
-    </div>
+    </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

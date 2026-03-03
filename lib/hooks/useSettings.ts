@@ -53,6 +53,12 @@ export interface PortfolioSettings {
   reviews_subtitle: string;
   reviews_bg_url: string;
   reviews_bg_overlay_opacity: number;
+  trend_years_experience: string;
+  trend_total_projects: string;
+  trend_technologies_count: string;
+  trend_clients_served: string;
+  trend_availability: string;
+  trend_hourly_rate: string;
   hero_bg_type: 'none' | 'image' | 'video';
   hero_bg_url: string;
   hero_bg_overlay_opacity: number;
@@ -113,6 +119,12 @@ const defaultSettings: PortfolioSettings = {
   reviews_subtitle: 'What people say about working with me',
   reviews_bg_url: '',
   reviews_bg_overlay_opacity: 0.7,
+  trend_years_experience: '',
+  trend_total_projects: '',
+  trend_technologies_count: '',
+  trend_clients_served: '',
+  trend_availability: '',
+  trend_hourly_rate: '',
   hero_bg_type: 'none',
   hero_bg_url: '',
   hero_bg_overlay_opacity: 0.6,

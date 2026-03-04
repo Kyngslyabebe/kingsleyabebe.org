@@ -75,7 +75,7 @@
   height: 36px;
   background: rgba(74, 144, 226, 0.1);
   border: 1px solid rgba(74, 144, 226, 0.2);
-  border-radius: 8px;
+  border-radius: 2px;
   color: #4A90E2;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -96,7 +96,7 @@
   height: 36px;
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 8px;
+  border-radius: 2px;
   color: #EF4444;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -145,7 +145,7 @@
 
 .nav::-webkit-scrollbar-thumb {
   background: rgba(74, 144, 226, 0.3);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .nav::-webkit-scrollbar-thumb:hover {
@@ -394,7 +394,7 @@
     padding: 6px 12px;
     background: rgba(15, 27, 42, 0.98);
     border: 1px solid rgba(74, 144, 226, 0.3);
-    border-radius: 6px;
+    border-radius: 2px;
     color: #FFFFFF;
     font-size: 13px;
     font-weight: 500;
@@ -420,7 +420,7 @@
     padding: 6px 12px;
     background: rgba(15, 27, 42, 0.98);
     border: 1px solid rgba(74, 144, 226, 0.3);
-    border-radius: 6px;
+    border-radius: 2px;
     color: #FFFFFF;
     font-size: 13px;
     font-weight: 500;

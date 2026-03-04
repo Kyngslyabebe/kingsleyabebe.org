@@ -46,7 +46,7 @@
 .statCard {
   background: rgba(26, 47, 66, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 16px 24px;
   display: flex;
   flex-direction: column;
@@ -100,7 +100,7 @@
 .controls {
   background: rgba(26, 47, 66, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 24px;
   margin-bottom: 24px;
 }
@@ -145,7 +145,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.2);
   color: rgba(255, 255, 255, 0.7);
@@ -173,7 +173,7 @@
 
 .select {
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.2);
   color: #FFFFFF;
@@ -194,7 +194,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 2px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.2);
 }
@@ -247,7 +247,7 @@
   padding: 16px 20px;
   background: rgba(74, 144, 226, 0.1);
   border: 1px solid #4A90E2;
-  border-radius: 8px;
+  border-radius: 2px;
   margin-bottom: 16px;
 }
 
@@ -266,7 +266,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: none;
   font-size: 14px;
   font-weight: 500;
@@ -307,7 +307,7 @@
   padding: 12px 20px;
   background: rgba(26, 47, 66, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px 8px 0 0;
+  border-radius: 2px 2px 0 0;
 }
 
 [data-theme="light"] .selectAll {
@@ -421,7 +421,7 @@
 
 .badge {
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: 2px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -445,7 +445,7 @@
 
 .actions button {
   padding: 8px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;

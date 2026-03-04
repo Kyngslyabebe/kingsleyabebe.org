@@ -132,7 +132,7 @@
   width: 0;
   height: 2px;
   border-radius: 1px;
-  background: linear-gradient(90deg, #667eea, #4A90E2);
+  background: #4A90E2;
   transition: width 0.3s ease;
 }
 
@@ -435,7 +435,7 @@
   margin-bottom: 16px;
   max-width: 600px;
   padding-left: 20px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #4A90E2;
 }
 
 @media (min-width: 769px) {
@@ -517,7 +517,7 @@
   padding: 14px 32px;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 1px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;
@@ -552,7 +552,7 @@
   padding: 14px 32px;
   font-size: 15px;
   font-weight: 600;
-  border-radius: 1px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;
@@ -614,7 +614,7 @@
   height: 2px;
   margin: 12px auto 0;
   border-radius: 1px;
-  background: linear-gradient(90deg, #667eea, #4A90E2);
+  background: #4A90E2;
 }
 
 [data-theme='dark'] .sectionTitle {
@@ -725,7 +725,7 @@
 
 .statCard {
   padding: 14px 12px;
-  border-radius: 2px;
+  border-radius: 6px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -782,7 +782,7 @@
   font-size: 10px;
   font-weight: 600;
   padding: 1px 6px;
-  border-radius: 20px;
+  border-radius: 6px;
   color: #48BB78;
   background: rgba(72, 187, 120, 0.1);
   border: 1px solid rgba(72, 187, 120, 0.2);
@@ -984,7 +984,7 @@
 }
 
 .projectCard {
-  border-radius: 2px;
+  border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -1168,7 +1168,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 
 [data-theme='dark'] .projectStatus {
@@ -1202,7 +1202,7 @@
 
 .projectTag {
   padding: 4px 10px;
-  border-radius: 2px;
+  border-radius: 5px;
   font-size: 11px;
   font-weight: 600;
 }
@@ -1248,7 +1248,7 @@
 
 .skillCard {
   padding: 18px 16px;
-  border-radius: 1px;
+  border-radius: 6px;
 }
 
 @media (max-width: 480px) {
@@ -1304,7 +1304,7 @@
 .skillBarContainer {
   width: 100%;
   height: 4px;
-  border-radius: 2px;
+  border-radius: 6px;
   overflow: hidden;
   margin-bottom: 6px;
 }
@@ -1348,7 +1348,7 @@
 }
 
 .experienceCard {
-  border-radius: 1px;
+  border-radius: 6px;
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -1553,7 +1553,7 @@
 }
 
 .input {
-  border-radius: 2px;
+  border-radius: 5px;
   padding: 14px;
   font-size: 14px;
   font-family: 'Source Sans Pro', sans-serif;
@@ -1594,7 +1594,7 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 1px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Source Sans Pro', sans-serif;
@@ -1688,7 +1688,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
-  border-radius: 2px;
+  border-radius: 6px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -1749,7 +1749,7 @@
 }
 
 .modal {
-  border-radius: 2px;
+  border-radius: 6px;
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
@@ -1885,7 +1885,7 @@
   font-size: 11px;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 2px;
+  border-radius: 6px;
   white-space: nowrap;
 }
 
@@ -1975,7 +1975,7 @@
 
 .modalTag {
   padding: 6px 12px;
-  border-radius: 2px;
+  border-radius: 5px;
   font-size: 12px;
   font-weight: 600;
 }
@@ -2002,7 +2002,7 @@
   align-items: center;
   gap: 6px;
   padding: 12px 20px;
-  border-radius: 2px;
+  border-radius: 6px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -2077,7 +2077,7 @@
   padding: 12px 24px;
   background: var(--card-bg);
   border: 2px solid var(--brand-color, #4A90E2);
-  border-radius: 2px;
+  border-radius: 5px;
   color: var(--brand-color, #4A90E2);
   text-decoration: none;
   font-weight: 600;
@@ -2181,8 +2181,8 @@
 .aboutQuote {
   margin: 24px 0 0 0;
   padding: 16px 20px;
-  border-left: 3px solid #667eea;
-  border-radius: 0 2px 2px 0;
+  border-left: 3px solid #4A90E2;
+  border-radius: 0 5px 5px 0;
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
   font-weight: 500;
@@ -2192,12 +2192,12 @@
 
 [data-theme='dark'] .aboutQuote {
   color: #CBD5E0;
-  background: rgba(102, 126, 234, 0.06);
+  background: rgba(74, 144, 226, 0.06);
 }
 
 [data-theme='light'] .aboutQuote {
   color: #4A5568;
-  background: rgba(102, 126, 234, 0.04);
+  background: rgba(74, 144, 226, 0.04);
 }
 
 @media (max-width: 768px) {

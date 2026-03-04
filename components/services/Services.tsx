@@ -212,7 +212,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
     onClick={handleCTAClick}
     style={{ backgroundColor: service.accent_color }}
   >
-    {service.cta_text} <HiArrowRight size={16} />
+    {service.cta_text} 
   </button>
 </div>
       </motion.div>

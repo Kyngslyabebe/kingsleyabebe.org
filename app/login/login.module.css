@@ -64,7 +64,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(74, 144, 226, 0.18);
-  border-radius: 24px;
+  border-radius: 2px;
   padding: 52px 48px;
   width: 100%;
   max-width: 460px;
@@ -102,7 +102,7 @@
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #4A90E2 0%, #2d6cb5 100%);
-  border-radius: 20px;
+  border-radius: 2px;
   color: #FFFFFF;
   box-shadow:
     0 12px 32px rgba(74, 144, 226, 0.35),
@@ -120,7 +120,7 @@
   right: 0;
   height: 50%;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px 20px 0 0;
+  border-radius: 2px 2px 0 0;
 }
 
 .avatarWrapper {
@@ -172,7 +172,7 @@
   border: 1px solid rgba(231, 76, 60, 0.3);
   color: #ff6b6b;
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: 2px;
   margin-bottom: 24px;
   font-size: 14px;
   animation: slideDown 0.3s ease;
@@ -209,7 +209,7 @@
   padding: 14px 16px;
   background: rgba(6, 14, 26, 0.6);
   border: 1px solid rgba(74, 144, 226, 0.2);
-  border-radius: 12px;
+  border-radius: 2px;
   color: #FFFFFF;
   font-size: 15px;
   transition: all 0.25s ease;
@@ -301,7 +301,7 @@
   background: linear-gradient(135deg, #4A90E2 0%, #2d72c4 100%);
   color: #FFFFFF;
   border: none;
-  border-radius: 12px;
+  border-radius: 4px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -420,7 +420,7 @@
 
   .loginCard {
     padding: 36px 24px;
-    border-radius: 20px;
+    border-radius: 2px;
     max-width: 100%;
   }
 
@@ -431,7 +431,7 @@
   .logoIcon {
     width: 58px;
     height: 58px;
-    border-radius: 16px;
+    border-radius: 2px;
   }
 
   .avatarCircle {

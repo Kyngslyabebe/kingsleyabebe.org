@@ -44,7 +44,7 @@
   background: #4A90E2;
   color: #FFFFFF;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -99,7 +99,7 @@
   background: #4A90E2;
   color: #FFFFFF;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -121,7 +121,7 @@
 .serviceCard {
   background: #1A2A3A;
   border: 1px solid #2D3748;
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 20px;
   transition: all 0.3s ease;
 }
@@ -164,7 +164,7 @@
   height: 32px;
   background: #0F1419;
   border: 1px solid #2D3748;
-  border-radius: 6px;
+  border-radius: 4px;
   color: #A0AEC0;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -222,7 +222,7 @@
 
 .timeline {
   padding: 4px 12px;
-  border-radius: 12px;
+  border-radius: 2px;
   font-size: 12px;
   font-weight: 600;
 }
@@ -275,7 +275,7 @@
 .modal {
   background: #1A2A3A;
   border: 1px solid #2D3748;
-  border-radius: 16px;
+  border-radius: 2px;
   width: 100%;
   max-width: 700px;
   max-height: 90vh;
@@ -319,7 +319,7 @@
   height: 36px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   color: #A0AEC0;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -368,7 +368,7 @@
   padding: 10px 14px;
   background: #0F1419;
   border: 1px solid #2D3748;
-  border-radius: 8px;
+  border-radius: 2px;
   color: #FFFFFF;
   font-size: 14px;
   transition: all 0.2s ease;
@@ -425,7 +425,7 @@
   aspect-ratio: 1;
   background: #0F1419;
   border: 2px solid #2D3748;
-  border-radius: 8px;
+  border-radius: 2px;
   color: #A0AEC0;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -471,7 +471,7 @@
   height: 36px;
   background: transparent;
   border: 1px solid #2D3748;
-  border-radius: 6px;
+  border-radius: 4px;
   color: #A0AEC0;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -496,7 +496,7 @@
   padding: 8px 16px;
   background: transparent;
   border: 1px dashed #2D3748;
-  border-radius: 6px;
+  border-radius: 4px;
   color: #A0AEC0;
   font-size: 13px;
   cursor: pointer;
@@ -566,7 +566,7 @@
   width: 50px;
   height: 40px;
   border: 1px solid #2D3748;
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
 }
 
@@ -642,7 +642,7 @@
 .saveButton {
   padding: 10px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -720,7 +720,7 @@
 .confirmDialog {
   background: #1A2A3A;
   border: 1px solid #2D3748;
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 24px;
   max-width: 400px;
   width: 90%;
@@ -763,7 +763,7 @@
   background: #E74C3C;
   color: #FFFFFF;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;

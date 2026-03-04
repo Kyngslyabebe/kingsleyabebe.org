@@ -51,7 +51,7 @@
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 2px;
+  border-radius: 6px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
@@ -156,7 +156,7 @@
 
 .timeline {
   padding: 6px 16px;
-  border-radius: 2px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -235,7 +235,7 @@
 
 .deliverables::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .deliverables::-webkit-scrollbar-thumb {
@@ -312,7 +312,7 @@
   gap: 6px;
   padding: 10px 20px;
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   color: #FFFFFF;

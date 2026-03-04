@@ -5,7 +5,7 @@
 .section {
   position: relative;
   margin: 64px 0;
-  border-radius: 2px;
+  border-radius: 6px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -15,7 +15,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 2px;
+  border-radius: 6px;
   padding: 1.5px;
   background: linear-gradient(135deg, rgba(74, 144, 226, 0.6), rgba(102, 126, 234, 0.4), rgba(74, 144, 226, 0.2));
   -webkit-mask:
@@ -371,7 +371,7 @@
 
   .inputWrapper {
     flex-direction: column;
-    border-radius: 16px;
+    border-radius: 5px;
     overflow: visible;
     background: transparent !important;
     border: none !important;

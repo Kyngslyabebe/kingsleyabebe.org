@@ -89,6 +89,14 @@ const [showHourlyRate, setShowHourlyRate] = useState(true);
 // blog post visibility toggles (for future use
 const [showBlog, setShowBlog] = useState(true);
 
+// Section Headers
+const [aboutTitle, setAboutTitle] = useState('About Me');
+const [projectsTitle, setProjectsTitle] = useState('Projects');
+const [skillsTitle, setSkillsTitle] = useState('Technical Skills');
+const [experienceTitle, setExperienceTitle] = useState('Experience & Impact');
+const [contactTitle, setContactTitle] = useState('Get In Touch');
+const [blogTitle, setBlogTitle] = useState('Blog');
+
 // Appearance
 const [showcaseTitle, setShowcaseTitle] = useState('Currently Building InfinitBooking Platform');
 const [reviewsTitle, setReviewsTitle] = useState('Client Reviews');
@@ -191,6 +199,14 @@ setShowBlog(data.show_blog ?? true);
 setShowServices(data.show_services ?? false);
 setServicesTitle(data.services_title || 'Build Your Next Project');
 setServicesSubtitle(data.services_subtitle || 'Professional web development for startups and businesses');
+
+// Section Headers
+setAboutTitle(data.about_title || 'About Me');
+setProjectsTitle(data.projects_title || 'Projects');
+setSkillsTitle(data.skills_title || 'Technical Skills');
+setExperienceTitle(data.experience_title || 'Experience & Impact');
+setContactTitle(data.contact_title || 'Get In Touch');
+setBlogTitle(data.blog_title || 'Blog');
 setThemeMode(data.theme_mode || 'default');
 
 // Appearance
@@ -290,6 +306,14 @@ setContactBgOverlayOpacity(data.contact_bg_overlay_opacity ?? 0.7);
 services_title: servicesTitle,
 services_subtitle: servicesSubtitle,
 theme_mode: themeMode,
+
+// Section Headers
+about_title: aboutTitle,
+projects_title: projectsTitle,
+skills_title: skillsTitle,
+experience_title: experienceTitle,
+contact_title: contactTitle,
+blog_title: blogTitle,
 
 // Appearance
 showcase_title: showcaseTitle,
@@ -1163,6 +1187,41 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           />
           <span>Enable Contact Form</span>
         </label>
+      </div>
+    </div>
+
+    {/* Section Headers */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Section Headers</h3>
+      <div className={styles.formRow}>
+        <div className={styles.formGroup}>
+          <label>About Section</label>
+          <input type="text" value={aboutTitle} onChange={(e) => setAboutTitle(e.target.value)} placeholder="About Me" maxLength={50} />
+        </div>
+        <div className={styles.formGroup}>
+          <label>Projects Section</label>
+          <input type="text" value={projectsTitle} onChange={(e) => setProjectsTitle(e.target.value)} placeholder="Projects" maxLength={50} />
+        </div>
+      </div>
+      <div className={styles.formRow}>
+        <div className={styles.formGroup}>
+          <label>Skills Section</label>
+          <input type="text" value={skillsTitle} onChange={(e) => setSkillsTitle(e.target.value)} placeholder="Technical Skills" maxLength={50} />
+        </div>
+        <div className={styles.formGroup}>
+          <label>Experience Section</label>
+          <input type="text" value={experienceTitle} onChange={(e) => setExperienceTitle(e.target.value)} placeholder="Experience & Impact" maxLength={50} />
+        </div>
+      </div>
+      <div className={styles.formRow}>
+        <div className={styles.formGroup}>
+          <label>Contact Section</label>
+          <input type="text" value={contactTitle} onChange={(e) => setContactTitle(e.target.value)} placeholder="Get In Touch" maxLength={50} />
+        </div>
+        <div className={styles.formGroup}>
+          <label>Blog Section</label>
+          <input type="text" value={blogTitle} onChange={(e) => setBlogTitle(e.target.value)} placeholder="Blog" maxLength={50} />
+        </div>
       </div>
     </div>
 

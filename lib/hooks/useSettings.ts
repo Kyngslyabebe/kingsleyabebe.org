@@ -46,8 +46,14 @@ export interface PortfolioSettings {
   google_analytics_id: string;
   brand_color: string;
   accent_color: string;
-  services_title: string; // ADD THIS
-  services_subtitle: string; // ADD THIS
+  about_title: string;
+  projects_title: string;
+  skills_title: string;
+  experience_title: string;
+  contact_title: string;
+  blog_title: string;
+  services_title: string;
+  services_subtitle: string;
   showcase_title: string;
   reviews_title: string;
   reviews_subtitle: string;
@@ -112,7 +118,13 @@ const defaultSettings: PortfolioSettings = {
   google_analytics_id: '',
   brand_color: '#4A90E2',
   accent_color: '#667eea',
-  services_title: 'Build Your Next Project', 
+  about_title: 'About Me',
+  projects_title: 'Projects',
+  skills_title: 'Technical Skills',
+  experience_title: 'Experience & Impact',
+  contact_title: 'Get In Touch',
+  blog_title: 'Blog',
+  services_title: 'Build Your Next Project',
   services_subtitle: 'Professional web development for startups and businesses',
   showcase_title: 'Currently Building InfinitBooking Platform',
   reviews_title: 'Client Reviews',

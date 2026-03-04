@@ -3,7 +3,7 @@
    =================================== */
 
 .editor {
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
   transition: all 0.2s ease;
   position: relative;
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 2px;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -252,7 +252,7 @@
 }
 
 .content :global(.ProseMirror pre) {
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 16px;
   overflow-x: auto;
   margin: 1.5em 0;
@@ -495,7 +495,7 @@
   width: 480px;
   max-width: 92vw;
   max-height: 85vh;
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -552,7 +552,7 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -644,7 +644,7 @@
   justify-content: center;
   gap: 10px;
   padding: 40px 20px;
-  border-radius: 8px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -782,7 +782,7 @@
 /* Upload Preview */
 .uploadPreview {
   position: relative;
-  border-radius: 8px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -831,7 +831,7 @@
 }
 
 .urlPreview {
-  border-radius: 8px;
+  border-radius: 2px;
   overflow: hidden;
   max-height: 180px;
 }
@@ -877,7 +877,7 @@
 
 .modalInput {
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 2px;
   font-size: 14px;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -946,7 +946,7 @@
 
 .modalCancelBtn {
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
   border: none;
@@ -974,7 +974,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 18px;
-  border-radius: 8px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
   border: none;

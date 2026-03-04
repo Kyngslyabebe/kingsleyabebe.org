@@ -8,7 +8,7 @@
 
 .dropzone {
   border: 2px dashed;
-  border-radius: 12px;
+  border-radius: 2px;
   padding: 40px 20px;
   text-align: center;
   cursor: pointer;
@@ -163,7 +163,7 @@
 
 .preview {
   position: relative;
-  border-radius: 12px;
+  border-radius: 2px;
   overflow: hidden;
   border: 2px solid;
 }
@@ -216,7 +216,7 @@
 .error {
   margin-top: 12px;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 2px;
   font-size: 13px;
   font-weight: 500;
 }

@@ -451,7 +451,7 @@ export default function Portfolio() {
         transition={{ duration: 0.6 }}
       >
         <div className={styles.sectionContent}>
-          <h2 className={styles.sectionTitle}>About Me</h2>
+          <h2 className={styles.sectionTitle}>{settings.about_title || 'About Me'}</h2>
 
           <div className={styles.aboutContent}>
             {settings.avatar && (
@@ -650,7 +650,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Projects</h2>
+            <h2 className={styles.sectionTitle}>{settings.projects_title || 'Projects'}</h2>
             <motion.div className={styles.projectsGrid} variants={staggerContainer}>
               {[...projects].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)).map((project, index) => (
                 <motion.div
@@ -715,7 +715,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Technical Skills</h2>
+            <h2 className={styles.sectionTitle}>{settings.skills_title || 'Technical Skills'}</h2>
             <motion.div className={styles.skillsGrid} variants={staggerContainer}>
               {skills.map((skill, index) => {
                 const IconComponent = skillIcons[skill.name] || HiCodeBracket;
@@ -761,7 +761,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Experience & Impact</h2>
+            <h2 className={styles.sectionTitle}>{settings.experience_title || 'Experience & Impact'}</h2>
             <motion.div className={styles.experienceContainer} variants={staggerContainer}>
               {experience.map((exp, index) => (
                 <motion.div
@@ -876,7 +876,7 @@ export default function Portfolio() {
           </div>
         )}
         <div className={styles.sectionContent} style={{ position: 'relative', zIndex: 2 }}>
-          <h2 className={styles.sectionTitle}>Get In Touch</h2>
+          <h2 className={styles.sectionTitle}>{settings.contact_title || 'Get In Touch'}</h2>
           <div className={styles.contactContainer}>
             {settings.contact_form_enabled ? (
               <form onSubmit={handleFormSubmit} className={styles.contactForm}>
@@ -1120,7 +1120,7 @@ export default function Portfolio() {
           transition={{ duration: 0.6 }}
         >
           <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Blog</h2>
+            <h2 className={styles.sectionTitle}>{settings.blog_title || 'Blog'}</h2>
             <FeaturedBlog />
           </div>
         </motion.section>

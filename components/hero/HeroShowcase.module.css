@@ -67,7 +67,7 @@
   justify-content: center;
   text-align: center;
   padding: 40px 20px;
-  border-radius: 12px;
+  border-radius: 5px;
   border: 2px dashed;
 }
 
@@ -189,7 +189,7 @@
 }
 
 .desktopFrame {
-  border-radius: 2px;
+  border-radius: 5px;
   overflow: hidden;
   box-shadow: 
     0 25px 60px rgba(0, 0, 0, 0.4),
@@ -306,7 +306,7 @@
 }
 
 .mobileFrame {
-  border-radius: 3px;
+  border-radius: 5px;
   padding: 12px;
   position: relative;
   box-shadow: 
@@ -319,7 +319,7 @@
   content: '';
   position: absolute;
   inset: -10px;
-  border-radius: 3px;
+  border-radius: 5px;
   opacity: 0.4;
   z-index: -1;
   filter: blur(20px);
@@ -360,7 +360,7 @@
   transform: translateX(-50%);
   width: 90px;
   height: 24px;
-  border-radius: 0 0 3px 3px;
+  border-radius: 0 0 5px 5px;
   z-index: 10;
 }
 
@@ -373,7 +373,7 @@
 }
 
 .mobileContent {
-  border-radius: 3px;
+  border-radius: 10px;
   overflow: hidden;
   position: relative;
   aspect-ratio: 9 / 19.5;
@@ -401,7 +401,7 @@
   transform: translateX(-50%);
   width: 110px;
   height: 5px;
-  border-radius: 3px;
+  border-radius: 4px;
   z-index: 10;
 }
 
@@ -438,7 +438,7 @@
 
 .showcaseSwiper :global(.swiper-pagination-bullet-active) {
   width: 30px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 [data-theme='dark'] .showcaseSwiper :global(.swiper-pagination-bullet-active) {

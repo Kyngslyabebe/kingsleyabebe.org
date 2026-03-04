@@ -40,7 +40,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 2px;
   border: none;
 }
 
@@ -92,7 +92,7 @@
 .statIcon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,7 +142,7 @@
   gap: 10px;
   padding: 0 14px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 2px;
   flex: 1;
   min-width: 200px;
 }
@@ -180,7 +180,7 @@
 
 .filterBtn {
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -220,7 +220,7 @@
   gap: 16px;
   padding: 60px 20px;
   text-align: center;
-  border-radius: 12px;
+  border-radius: 2px;
 }
 
 [data-theme='dark'] .empty {
@@ -253,7 +253,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-radius: 10px;
+  border-radius: 2px;
   transition: all 0.2s ease;
   gap: 12px;
 }
@@ -378,7 +378,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;

@@ -4,15 +4,16 @@ export const dynamic = 'force-dynamic';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useToast } from '@/components/admin/Toast';
-import { 
-  HiPlus, 
-  HiPencil, 
-  HiTrash, 
-  HiEye, 
+import {
+  HiPlus,
+  HiPencil,
+  HiTrash,
+  HiEye,
   HiEyeSlash,
   HiXMark,
   HiCheckCircle
 } from 'react-icons/hi2';
+import { FileUpload } from '@/components/admin/FileUpload';
 import styles from './services.module.css';
 
 interface Service {
@@ -27,6 +28,8 @@ interface Service {
   cta_text: string;
   cta_link: string;
   accent_color: string;
+  background_image: string;
+  overlay_opacity: number;
   display_order: number;
   visible: boolean;
 }
@@ -72,6 +75,8 @@ export default function ServicesAdmin() {
   const [ctaText, setCtaText] = useState('Get Started');
   const [ctaLink, setCtaLink] = useState('#contact');
   const [accentColor, setAccentColor] = useState('#4A90E2');
+  const [backgroundImage, setBackgroundImage] = useState('');
+  const [overlayOpacity, setOverlayOpacity] = useState(0.6);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -108,6 +113,8 @@ export default function ServicesAdmin() {
       setCtaText(service.cta_text);
       setCtaLink(service.cta_link);
       setAccentColor(service.accent_color);
+      setBackgroundImage(service.background_image || '');
+      setOverlayOpacity(service.overlay_opacity ?? 0.6);
       setVisible(service.visible);
     } else {
       resetForm();
@@ -127,6 +134,8 @@ export default function ServicesAdmin() {
     setCtaText('Get Started');
     setCtaLink('#contact');
     setAccentColor('#4A90E2');
+    setBackgroundImage('');
+    setOverlayOpacity(0.6);
     setVisible(true);
   }
 
@@ -159,6 +168,8 @@ export default function ServicesAdmin() {
       cta_text: ctaText,
       cta_link: ctaLink,
       accent_color: accentColor,
+      background_image: backgroundImage,
+      overlay_opacity: overlayOpacity,
       visible,
       display_order: editingService?.display_order || services.length + 1,
       updated_at: new Date().toISOString()
@@ -321,6 +332,10 @@ export default function ServicesAdmin() {
                   </div>
                 </div>
 
+                {service.background_image && (
+                  <img src={service.background_image} alt="" className={styles.cardThumbnail} />
+                )}
+
                 <h3 className={styles.cardTitle}>{service.title}</h3>
                 <p className={styles.cardTagline}>{service.tagline}</p>
                 
@@ -452,6 +467,36 @@ export default function ServicesAdmin() {
                 />
                 <small>{description.length}/200 characters</small>
               </div>
+
+              {/* Background Image */}
+              <div className={styles.formGroup}>
+                <label>Background Image</label>
+                <FileUpload
+                  onUploadComplete={(url) => setBackgroundImage(url)}
+                  currentFileUrl={backgroundImage}
+                  folder="services"
+                  accept="image/*"
+                  maxSize={5}
+                />
+              </div>
+
+              {/* Overlay Opacity - only show when background image is set */}
+              {backgroundImage && (
+                <div className={styles.formGroup}>
+                  <label>Image Overlay Darkness — {Math.round(overlayOpacity * 100)}%</label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={overlayOpacity}
+                    onChange={(e) => setOverlayOpacity(parseFloat(e.target.value))}
+                    className={styles.rangeSlider}
+                    title="Image overlay darkness"
+                  />
+                  <small>Lower = brighter image, Higher = darker overlay for text readability</small>
+                </div>
+              )}
 
               {/* Deliverables */}
               <div className={styles.formGroup}>

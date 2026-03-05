@@ -29,6 +29,8 @@ interface Service {
   cta_text: string;
   cta_link: string;
   accent_color: string;
+  background_image: string;
+  overlay_opacity: number;
 }
 
 const techIcons: any = {
@@ -141,79 +143,101 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
 
 
 {/* FRONT */}
-<div className={styles.cardFront}>
-  <div className={styles.iconWrapper}>
-    <IconComponent 
-      size={48} 
-      className={styles.icon}
-      style={{ color: service.accent_color }}
-    />
-  </div>
-  
-  <h3 className={styles.cardTitle}>{service.title}</h3>
-  <p className={styles.cardTagline}>{service.tagline}</p>
-  
-  {/* ADD DESCRIPTION ON FRONT */}
-  {service.description && (
-    <p className={styles.frontDescription}>{service.description}</p>
+<div
+  className={styles.cardFront}
+  style={service.background_image ? {
+    backgroundImage: `url(${service.background_image})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  } : undefined}
+>
+  {service.background_image && (
+    <div className={styles.cardBgOverlay} style={{ opacity: service.overlay_opacity ?? 0.6 }} />
   )}
-  
-  {/* Preview deliverables */}
-  <ul className={styles.previewDeliverables}>
-    {service.deliverables.slice(0, 3).map((item, i) => (
-      <li key={i} className={styles.previewItem}>
-        <HiCheckCircle size={14} style={{ color: service.accent_color }} />
-        <span>{item}</span>
-      </li>
-    ))}
-  </ul>
-  
-  <div className={styles.timeline} style={{ backgroundColor: `${service.accent_color}20`, color: service.accent_color }}>
-    {service.timeline}
-  </div>
+  <div className={styles.cardFrontContent}>
+    <div className={styles.iconWrapper}>
+      <IconComponent
+        size={48}
+        className={styles.icon}
+        style={{ color: service.accent_color }}
+      />
+    </div>
 
-  <p className={styles.flipHint}>
-    <span className={styles.desktopHint}>Hover for full details</span>
-    <span className={styles.mobileHint}>Tap for full details</span>
-  </p>
+    <h3 className={styles.cardTitle}>{service.title}</h3>
+    <p className={styles.cardTagline}>{service.tagline}</p>
+
+    {service.description && (
+      <p className={styles.frontDescription}>{service.description}</p>
+    )}
+
+    <ul className={styles.previewDeliverables}>
+      {service.deliverables.slice(0, 3).map((item, i) => (
+        <li key={i} className={styles.previewItem}>
+          <HiCheckCircle size={14} style={{ color: service.accent_color }} />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div className={styles.timeline} style={{ backgroundColor: `${service.accent_color}20`, color: service.accent_color }}>
+      {service.timeline}
+    </div>
+
+    <p className={styles.flipHint}>
+      <span className={styles.desktopHint}>Hover for full details</span>
+      <span className={styles.mobileHint}>Tap for full details</span>
+    </p>
+  </div>
 </div>
 
 
 {/* BACK */}
-<div className={styles.cardBack}>
-  <h4 className={styles.backTitle}>Full Feature Set:</h4>
-  
-  {service.description && (
-    <p className={styles.description}>{service.description}</p>
+<div
+  className={styles.cardBack}
+  style={service.background_image ? {
+    backgroundImage: `url(${service.background_image})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  } : undefined}
+>
+  {service.background_image && (
+    <div className={styles.cardBgOverlay} style={{ opacity: service.overlay_opacity ?? 0.6 }} />
   )}
-  
-  <ul className={styles.deliverables}>
-    {service.deliverables.map((item, i) => ( 
-      <li key={i} className={styles.deliverable}>
-        <HiCheckCircle size={16} style={{ color: service.accent_color }} />
-        <span>{item}</span>
-      </li>
-    ))}
-  </ul>
+  <div className={styles.cardBackContent}>
+    <h4 className={styles.backTitle}>Full Feature Set:</h4>
 
-  <div className={styles.techStack}>
-    {service.tech_stack.map((tech) => {
-      const TechIcon = techIcons[tech];
-      return TechIcon ? (
-        <div key={tech} className={styles.techIcon} title={tech}>
-          <TechIcon size={18} />
-        </div>
-      ) : null;
-    })}
+    {service.description && (
+      <p className={styles.description}>{service.description}</p>
+    )}
+
+    <ul className={styles.deliverables}>
+      {service.deliverables.map((item, i) => (
+        <li key={i} className={styles.deliverable}>
+          <HiCheckCircle size={16} style={{ color: service.accent_color }} />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div className={styles.techStack}>
+      {service.tech_stack.map((tech) => {
+        const TechIcon = techIcons[tech];
+        return TechIcon ? (
+          <div key={tech} className={styles.techIcon} title={tech}>
+            <TechIcon size={18} />
+          </div>
+        ) : null;
+      })}
+    </div>
+
+    <button
+      className={styles.ctaButton}
+      onClick={handleCTAClick}
+      style={{ backgroundColor: service.accent_color }}
+    >
+      {service.cta_text} <HiArrowRight size={16} />
+    </button>
   </div>
-
-  <button 
-    className={styles.ctaButton}
-    onClick={handleCTAClick}
-    style={{ backgroundColor: service.accent_color }}
-  >
-    {service.cta_text} <HiArrowRight size={16} />
-  </button>
 </div>
       </motion.div>
     </motion.div>

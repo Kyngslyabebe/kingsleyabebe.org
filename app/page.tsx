@@ -443,7 +443,7 @@ export default function Portfolio() {
 
       <motion.section
         id="about"
-        className={styles.section}
+        className={`${styles.section} ${styles.aboutSection}`}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}

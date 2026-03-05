@@ -324,7 +324,7 @@
 }
 
 [data-theme='light'] .bgOverlay {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.55);
 }
 
 /* ===================================
@@ -2114,6 +2114,42 @@
   }
 }
 
+
+/* About Section — Diagonal Split Background */
+.aboutSection {
+  position: relative;
+  overflow: hidden;
+}
+
+.aboutSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 10%, 0 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+[data-theme='dark'] .aboutSection::before {
+  background: #0F2234;
+}
+
+[data-theme='light'] .aboutSection::before {
+  background: #F0F4F8;
+}
+
+[data-theme='dark'] .aboutSection {
+  background: #0A1929;
+}
+
+[data-theme='light'] .aboutSection {
+  background: #FFFFFF;
+}
+
+.aboutSection > .sectionContent {
+  position: relative;
+  z-index: 1;
+}
 
 /* About Section Layout */
 .aboutContent {

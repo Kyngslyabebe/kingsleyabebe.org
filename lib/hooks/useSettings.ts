@@ -55,6 +55,9 @@ export interface PortfolioSettings {
   services_title: string;
   services_subtitle: string;
   showcase_title: string;
+  showcase_subtitle: string;
+  hero_cta_text: string;
+  hero_cta_color: string;
   reviews_title: string;
   reviews_subtitle: string;
   reviews_bg_url: string;
@@ -127,6 +130,9 @@ const defaultSettings: PortfolioSettings = {
   services_title: 'Build Your Next Project',
   services_subtitle: 'Professional web development for startups and businesses',
   showcase_title: 'Currently Building InfinitBooking Platform',
+  showcase_subtitle: '',
+  hero_cta_text: '',
+  hero_cta_color: '',
   reviews_title: 'Client Reviews',
   reviews_subtitle: 'What people say about working with me',
   reviews_bg_url: '',

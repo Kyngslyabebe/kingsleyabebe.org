@@ -73,7 +73,7 @@ export default function Portfolio() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [expandedExperience, setExpandedExperience] = useState<number | null>(0);
+  const [expandedExperience, setExpandedExperience] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const loadStartTime = useRef(Date.now());
 
@@ -407,25 +407,35 @@ export default function Portfolio() {
               {settings.bio || settings.summary}
             </motion.p>
 
-            {((settings.show_projects && projects.length > 0) || settings.resume_url) && (
-              <motion.div
-                className={`${styles.heroCTA} ${styles.ctaDesktop}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                {settings.show_projects && projects.length > 0 && (
-                  <button onClick={() => scrollToSection('projects')} className={styles.ctaPrimary}>
-                    View Projects
-                  </button>
-                )}
-                {settings.resume_url && (
-                  <button onClick={downloadResume} className={styles.ctaSecondary}>
-                    Download Resume
-                  </button>
-                )}
-              </motion.div>
-            )}
+            <motion.div
+              className={`${styles.heroCTA} ${styles.ctaDesktop}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              {settings.show_projects && projects.length > 0 ? (
+                <button
+                  onClick={() => scrollToSection('projects')}
+                  className={styles.ctaPrimary}
+                  style={settings.hero_cta_color ? { backgroundColor: settings.hero_cta_color } : undefined}
+                >
+                  {settings.hero_cta_text || 'View Projects'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className={styles.ctaPrimary}
+                  style={settings.hero_cta_color ? { backgroundColor: settings.hero_cta_color } : undefined}
+                >
+                  {settings.hero_cta_text || 'Contact Me'}
+                </button>
+              )}
+              {settings.resume_url && (
+                <button onClick={downloadResume} className={styles.ctaSecondary}>
+                  Download Resume
+                </button>
+              )}
+            </motion.div>
 
             <ReviewStrip />
           </motion.div>
@@ -436,7 +446,7 @@ export default function Portfolio() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <HeroShowcase showcaseTitle={settings.showcase_title} />
+            <HeroShowcase showcaseTitle={settings.showcase_title} showcaseSubtitle={settings.showcase_subtitle} />
           </motion.div>
         </div>
       </section>

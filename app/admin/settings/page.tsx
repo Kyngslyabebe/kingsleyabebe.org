@@ -99,6 +99,9 @@ const [blogTitle, setBlogTitle] = useState('Blog');
 
 // Appearance
 const [showcaseTitle, setShowcaseTitle] = useState('Currently Building InfinitBooking Platform');
+const [showcaseSubtitle, setShowcaseSubtitle] = useState('');
+const [heroCtaText, setHeroCtaText] = useState('');
+const [heroCtaColor, setHeroCtaColor] = useState('');
 const [reviewsTitle, setReviewsTitle] = useState('Client Reviews');
 const [reviewsSubtitle, setReviewsSubtitle] = useState('What people say about working with me');
 const [reviewsBgUrl, setReviewsBgUrl] = useState('');
@@ -211,6 +214,9 @@ setThemeMode(data.theme_mode || 'default');
 
 // Appearance
 setShowcaseTitle(data.showcase_title || 'Currently Building InfinitBooking Platform');
+setShowcaseSubtitle(data.showcase_subtitle || '');
+setHeroCtaText(data.hero_cta_text || '');
+setHeroCtaColor(data.hero_cta_color || '');
 setReviewsTitle(data.reviews_title || 'Client Reviews');
 setReviewsSubtitle(data.reviews_subtitle || 'What people say about working with me');
 setReviewsBgUrl(data.reviews_bg_url || '');
@@ -317,6 +323,9 @@ blog_title: blogTitle,
 
 // Appearance
 showcase_title: showcaseTitle,
+showcase_subtitle: showcaseSubtitle,
+hero_cta_text: heroCtaText,
+hero_cta_color: heroCtaColor,
 reviews_title: reviewsTitle,
 reviews_subtitle: reviewsSubtitle,
 reviews_bg_url: reviewsBgUrl,
@@ -915,10 +924,10 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
     <h2 className={styles.sectionTitle}>Appearance</h2>
     <p className={styles.sectionDesc}>Customize background media for your hero and contact sections</p>
 
-    {/* Showcase Title */}
+    {/* Showcase Title & Subtitle */}
     <div className={styles.subsection}>
-      <h3 className={styles.subsectionTitle}>Showcase Title</h3>
-      <p className={styles.subsectionDesc}>The title displayed above your project showcase in the hero section</p>
+      <h3 className={styles.subsectionTitle}>Showcase Section</h3>
+      <p className={styles.subsectionDesc}>The title and subtitle displayed above your project showcase in the hero section</p>
       <div className={styles.formGroup}>
         <label>Title</label>
         <input
@@ -928,6 +937,65 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           className={styles.input}
           placeholder="Currently Building InfinitBooking Platform"
         />
+      </div>
+      <div className={styles.formGroup}>
+        <label>Subtitle</label>
+        <input
+          type="text"
+          value={showcaseSubtitle}
+          onChange={(e) => setShowcaseSubtitle(e.target.value)}
+          className={styles.input}
+          placeholder="e.g. A SaaS booking platform for beauty & wellness professionals"
+        />
+        <small>Briefly describe what you're currently building (leave empty to hide)</small>
+      </div>
+    </div>
+
+    {/* Hero CTA Button */}
+    <div className={styles.subsection}>
+      <h3 className={styles.subsectionTitle}>Hero CTA Button</h3>
+      <p className={styles.subsectionDesc}>Customize the primary call-to-action button in the hero section. When all projects are hidden, it automatically links to the contact section.</p>
+      <div className={styles.formGroup}>
+        <label>Button Text (optional)</label>
+        <input
+          type="text"
+          value={heroCtaText}
+          onChange={(e) => setHeroCtaText(e.target.value)}
+          className={styles.input}
+          placeholder="Leave empty for default (View Projects / Contact Me)"
+        />
+        <small>Default: &quot;View Projects&quot; when projects are visible, &quot;Contact Me&quot; when hidden</small>
+      </div>
+      <div className={styles.formGroup}>
+        <label>Button Color (optional)</label>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <input
+            type="color"
+            title="CTA button color"
+            value={heroCtaColor || '#4A90E2'}
+            onChange={(e) => setHeroCtaColor(e.target.value)}
+            style={{ width: '48px', height: '36px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          />
+          <input
+            type="text"
+            value={heroCtaColor}
+            onChange={(e) => setHeroCtaColor(e.target.value)}
+            className={styles.input}
+            placeholder="#4A90E2"
+            style={{ flex: 1 }}
+          />
+          {heroCtaColor && (
+            <button
+              type="button"
+              onClick={() => setHeroCtaColor('')}
+              className={styles.removeBtn}
+              style={{ padding: '8px 12px', fontSize: '12px' }}
+            >
+              Reset
+            </button>
+          )}
+        </div>
+        <small>Leave empty to use the default brand color</small>
       </div>
     </div>
 

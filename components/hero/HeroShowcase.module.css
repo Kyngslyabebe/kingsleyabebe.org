@@ -2,13 +2,14 @@
 
 .showcaseContainer {
   width: 100%;
-  max-width: 100%; 
-  overflow: hidden; 
+  max-width: 100%;
 }
 
 .showcaseHeader {
   text-align: center;
   margin-bottom: 30px;
+  position: relative;
+  z-index: 3;
 }
 
 .showcaseTitle {
@@ -25,6 +26,17 @@
 
 [data-theme='light'] .showcaseTitle {
   color: #1A202C;
+}
+
+.showcaseSubtitle {
+  font-size: clamp(12px, 1.8vw, 14px);
+  margin: 6px 0 0;
+  line-height: 1.4;
+  color: #A0AEC0;
+}
+
+[data-theme='light'] .showcaseSubtitle {
+  color: #718096;
 }
 
 /* ===================================
@@ -115,6 +127,9 @@
 .showcaseContent {
   width: 100%;
   min-height: 450px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
 .showcaseSwiper {

@@ -2,7 +2,6 @@
 export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { useToast } from '@/components/admin/Toast';
 import {
   HiUsers,
@@ -15,12 +14,6 @@ import {
   HiArrowPath
 } from 'react-icons/hi2';
 import styles from './subscribers.module.css';
-
-// Use service role for admin operations
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface Subscriber {
   id: string;
@@ -57,13 +50,10 @@ export default function SubscribersPage() {
   async function loadSubscribers() {
     setLoading(true);
     try {
-      const { data, error } = await supabaseAdmin
-        .from('blog_subscribers')
-        .select('*')
-        .order('subscribed_at', { ascending: false });
-
-      if (error) throw error;
-      setSubscribers(data || []);
+      const res = await fetch('/api/subscribers');
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to load subscribers');
+      setSubscribers(json.subscribers || []);
     } catch (error: any) {
       showToast(error.message || 'Failed to load subscribers', 'error');
     } finally {
@@ -80,12 +70,13 @@ export default function SubscribersPage() {
     }
 
     try {
-      const { error } = await supabaseAdmin
-        .from('blog_subscribers')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
+      const res = await fetch('/api/subscribers', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to delete subscriber');
       showToast('Subscriber removed', 'success');
       setSubscribers(prev => prev.filter(s => s.id !== id));
       setDeleteConfirm(null);
@@ -97,12 +88,13 @@ export default function SubscribersPage() {
   async function handleToggleStatus(subscriber: Subscriber) {
     const newStatus = subscriber.status === 'active' ? 'unsubscribed' : 'active';
     try {
-      const { error } = await supabaseAdmin
-        .from('blog_subscribers')
-        .update({ status: newStatus })
-        .eq('id', subscriber.id);
-
-      if (error) throw error;
+      const res = await fetch('/api/subscribers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: subscriber.id, status: newStatus }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to update subscriber');
       showToast(`Subscriber ${newStatus === 'active' ? 'reactivated' : 'unsubscribed'}`, 'success');
       setSubscribers(prev => prev.map(s => s.id === subscriber.id ? { ...s, status: newStatus } : s));
     } catch (error: any) {

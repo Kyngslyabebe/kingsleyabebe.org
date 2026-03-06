@@ -117,13 +117,16 @@ export default function AdminDashboard() {
       if (commentsError) console.error('Comments error:', commentsError);
       const commentsPending = commentsData?.filter(c => !c.approved).length || 0;
 
-      // Fetch subscribers
-      const { data: subscribersData, error: subscribersError } = await supabase
-        .from('blog_subscribers')
-        .select('status');
-
-      if (subscribersError) console.error('Subscribers error:', subscribersError);
-      const subscribersActive = subscribersData?.filter(s => s.status === 'active').length || 0;
+      // Fetch subscribers via API route (uses service role key to bypass RLS)
+      let subscribersData: any[] = [];
+      try {
+        const subsRes = await fetch('/api/subscribers');
+        const subsJson = await subsRes.json();
+        subscribersData = subsJson.subscribers || [];
+      } catch (e) {
+        console.error('Subscribers fetch error:', e);
+      }
+      const subscribersActive = subscribersData.filter((s: any) => s.status === 'active').length;
 
       setStats({
         projects: projectsData?.length || 0,
@@ -178,15 +181,8 @@ export default function AdminDashboard() {
       if (recentCommentsError) console.error('Recent comments error:', recentCommentsError);
       setRecentComments(recentCommentsData || []);
 
-      // Fetch recent subscribers
-      const { data: recentSubsData, error: recentSubsError } = await supabase
-        .from('blog_subscribers')
-        .select('id, email, status, subscribed_at')
-        .order('subscribed_at', { ascending: false })
-        .limit(5);
-
-      if (recentSubsError) console.error('Recent subscribers error:', recentSubsError);
-      setRecentSubscribers(recentSubsData || []);
+      // Recent subscribers (already fetched via API above)
+      setRecentSubscribers(subscribersData.slice(0, 5));
 
     } catch (error: any) {
       console.error('Error loading dashboard data:', error);

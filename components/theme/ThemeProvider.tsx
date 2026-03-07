@@ -47,8 +47,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         if (savedTheme) {
           initialTheme = savedTheme;
         } else {
-          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          initialTheme = prefersDark ? 'dark' : 'light';
+          // Default to dark when no preference is saved
+          initialTheme = 'dark';
         }
       }
 

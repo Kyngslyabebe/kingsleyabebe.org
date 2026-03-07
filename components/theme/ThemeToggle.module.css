@@ -1,36 +1,25 @@
-/* Theme Toggle Button */
+/* Theme Toggle Button - MOBILE ONLY (desktop uses InlineThemeToggle in navbar) */
 .themeToggle {
   position: fixed;
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  top: 12px;
+  right: 12px;
 }
 
-/* Desktop - TOP CENTER */
-@media (min-width: 769px) {
-  .themeToggle {
-    top: 7.5px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
-}
-
-/* Mobile - top right corner (unchanged) */
+/* Only show on mobile */
 @media (max-width: 768px) {
   .themeToggle {
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
+    display: flex;
   }
 }
 
@@ -45,7 +34,6 @@
 [data-theme='dark'] .themeToggle:hover {
   background: rgba(26, 47, 66, 0.95);
   box-shadow: 0 4px 16px rgba(74, 144, 226, 0.3);
-  transform: translateX(-50%) scale(1.1);
 }
 
 /* Light theme */
@@ -59,5 +47,4 @@
 [data-theme='light'] .themeToggle:hover {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 16px rgba(49, 130, 206, 0.2);
-  transform: translateX(-50%) scale(1.1);
 }

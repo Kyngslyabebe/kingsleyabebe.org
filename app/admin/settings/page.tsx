@@ -74,6 +74,7 @@ export default function SettingsPage() {
   const [brandColor, setBrandColor] = useState('#4A90E2');
   const [accentColor, setAccentColor] = useState('#667eea');
   const [showServices, setShowServices] = useState(false);
+const [showStats, setShowStats] = useState(true);
 const [servicesTitle, setServicesTitle] = useState('Build Your Next Project');
 const [servicesSubtitle, setServicesSubtitle] = useState('Professional web development for startups and businesses');
 const [themeMode, setThemeMode] = useState<'default' | 'force-dark' | 'force-light'>('default');
@@ -200,6 +201,7 @@ setShowBlog(data.show_blog ?? true);
 
 
 setShowServices(data.show_services ?? false);
+setShowStats(data.show_stats !== false);
 setServicesTitle(data.services_title || 'Build Your Next Project');
 setServicesSubtitle(data.services_subtitle || 'Professional web development for startups and businesses');
 
@@ -309,6 +311,7 @@ setContactBgOverlayOpacity(data.contact_bg_overlay_opacity ?? 0.7);
   show_blog: showBlog,
 
   show_services: showServices,
+  show_stats: showStats,
 services_title: servicesTitle,
 services_subtitle: servicesSubtitle,
 theme_mode: themeMode,
@@ -1206,7 +1209,17 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
           <span>Show Services Section</span>
         </label>
 
-         {/* ADD THIS - Services Configuration */}
+        <label className={styles.switchLabel}>
+          <input
+            type="checkbox"
+            checked={showStats}
+            onChange={(e) => setShowStats(e.target.checked)}
+            className={styles.switch}
+          />
+          <span>Show Stats Section</span>
+        </label>
+
+         {/* Services Configuration */}
         {showServices && (
           <div className={styles.nestedConfig}>
             <div className={styles.formGroup}>

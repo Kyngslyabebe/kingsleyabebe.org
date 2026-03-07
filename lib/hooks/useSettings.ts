@@ -39,7 +39,8 @@ export interface PortfolioSettings {
   show_projects: boolean;
   show_skills: boolean;
   show_experience: boolean;
-  show_services: boolean; // ADD THIS
+  show_services: boolean;
+  show_stats: boolean;
   show_blog: boolean;
   contact_form_enabled: boolean;
   email_notifications: boolean;
@@ -114,7 +115,8 @@ const defaultSettings: PortfolioSettings = {
   show_projects: true,
   show_skills: true,
   show_experience: true,
-  show_services: false, 
+  show_services: false,
+  show_stats: true,
   show_blog: true,
   contact_form_enabled: true,
   email_notifications: true,

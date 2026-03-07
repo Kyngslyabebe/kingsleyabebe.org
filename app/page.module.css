@@ -586,6 +586,10 @@
   padding: 60px 20px;
 }
 
+.section + .section {
+  padding-top: 20px;
+}
+
 [data-theme='dark'] .section {
   background: #0A1929;
 }

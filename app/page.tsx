@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 
 import HeroShowcase from '@/components/hero/HeroShowcase';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { InlineThemeToggle } from '@/components/theme/InlineThemeToggle';
 import { useSettings } from '@/lib/hooks/useSettings';
 import Footer from '@/components/footer/Footer';
 import LoadingScreen from '@/components/loadingscreen/LoadingScreen';
@@ -335,6 +336,7 @@ export default function Portfolio() {
               {section.charAt(0).toUpperCase() + section.slice(1)}
             </button>
           ))}
+          <InlineThemeToggle />
         </div>
       </nav>
 
@@ -507,7 +509,7 @@ export default function Portfolio() {
         </div>
       </motion.section>
 
-      {(
+      {settings.show_stats && (
         (settings.show_years_experience && settings.years_experience) ||
         (settings.show_total_projects && settings.total_projects) ||
         (settings.show_technologies_count && settings.technologies_count) ||

@@ -10,7 +10,7 @@ import LoadingScreen from '@/components/loadingscreen/LoadingScreen';
 import FeaturedBlog from '@/components/blog/FeaturedBlog';
 import ReadMoreText from '@/components/common/ReadMoreText';
 import Services from '@/components/services/Services';
-import ScrollToTop from '@/components/common/ScrollToTop';
+// ScrollToTop removed — not needed
 import ReviewStrip from '@/components/reviews/ReviewStrip';
 import AnalyticsPanel from '@/components/analytics/AnalyticsPanel';
 import Link from 'next/link';
@@ -278,10 +278,10 @@ export default function Portfolio() {
   const isLoading = settingsLoading || loading;
 
   const navSections = ['home', 'about'];
-  if (settings.show_projects) navSections.push('projects');
-  if (settings.show_skills) navSections.push('skills');
-  if (settings.show_experience) navSections.push('experience');
-  if (settings.show_services) navSections.push('services'); 
+  if (settings.show_projects && projects.length > 0) navSections.push('projects');
+  if (settings.show_skills && skills.length > 0) navSections.push('skills');
+  if (settings.show_experience && experience.length > 0) navSections.push('experience');
+  if (settings.show_services) navSections.push('services');
   navSections.push('contact');
 
   return (
@@ -327,15 +327,23 @@ export default function Portfolio() {
           )}
         </button>
         <div className={styles.navLinks}>
-          {navSections.map((section) => (
-            <button
-              key={section}
-              onClick={() => scrollToSection(section)}
-              className={`${styles.navLink} ${activeSection === section ? styles.navLinkActive : ''}`}
-            >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
-            </button>
-          ))}
+          {navSections.map((section) => {
+            const isActive = activeSection === section;
+            return (
+              <button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
+              >
+                <div className={`${styles.ringContainerDesktop} ${isActive ? styles.ringActive : ''}`}>
+                  <div className={styles.ringGlow} />
+                  <div className={styles.ringClipDesktop}><div className={styles.ringGradient} /></div>
+                  <div className={styles.ringInnerDesktop} />
+                </div>
+                <span className={styles.navLinkText}>{section.charAt(0).toUpperCase() + section.slice(1)}</span>
+              </button>
+            );
+          })}
           <InlineThemeToggle />
         </div>
       </nav>
@@ -999,30 +1007,35 @@ export default function Portfolio() {
       </motion.section>
 
    <nav className={styles.mobileNav}>
-  {navSections.slice(0, 5).map((section) => {
-    const icons: any = {
-      home: HiHome,
-      about: HiUser,
-      projects: HiRectangleGroup,
-      services: HiBriefcase,
-      skills: HiCodeBracket,
-      experience: HiClock,
-      contact: HiEnvelope
-    };
-    
-    const Icon = icons[section] || HiHome;
-    
-    return (
-      <button
-        key={section}
-        onClick={() => scrollToSection(section)}
-        className={`${styles.mobileNavItem} ${activeSection === section ? styles.mobileNavItemActive : ''}`}
-      >
-        <Icon size={22} />
-      </button>
-    );
-  })}
-</nav>
+     <div className={styles.mobileNavToolbar}>
+       <div className={styles.mobileNavGrain} />
+       {navSections.slice(0, 5).map((section, index) => {
+         const icons: any = {
+           home: HiHome, about: HiUser, projects: HiRectangleGroup,
+           services: HiBriefcase, skills: HiCodeBracket,
+           experience: HiClock, contact: HiEnvelope
+         };
+         const Icon = icons[section] || HiHome;
+         const isActive = activeSection === section;
+         return (
+           <React.Fragment key={section}>
+             {index > 0 && <div className={styles.mobileNavDivider} />}
+             <button
+               onClick={() => scrollToSection(section)}
+               className={`${styles.mobileNavItem} ${isActive ? styles.mobileNavItemActive : ''}`}
+             >
+               <div className={`${styles.ringContainer} ${isActive ? styles.ringActive : ''}`}>
+                 <div className={styles.ringGlow} />
+                 <div className={styles.ringClip}><div className={styles.ringGradient} /></div>
+                 <div className={styles.ringInner} />
+               </div>
+               <Icon size={22} className={styles.mobileNavIcon} />
+             </button>
+           </React.Fragment>
+         );
+       })}
+     </div>
+   </nav>
 
       {selectedProject && (
         <motion.div
@@ -1140,7 +1153,6 @@ export default function Portfolio() {
 
       <Footer />
 
-        <ScrollToTop />
     </motion.div>
       )}
     </AnimatePresence>

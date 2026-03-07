@@ -123,21 +123,9 @@
   position: relative;
 }
 
+/* Old underline replaced by spinning ring */
 .navLink::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  border-radius: 1px;
-  background: #4A90E2;
-  transition: width 0.3s ease;
-}
-
-.navLinkActive::after {
-  width: 60%;
+  display: none;
 }
 
 [data-theme='dark'] .navLink {
@@ -197,69 +185,244 @@
 }
 
 /* ===================================
-   NAVIGATION - MOBILE BOTTOM
+   NAVIGATION - MOBILE BOTTOM (PREMIUM)
    =================================== */
 
 .mobileNav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 12px 12px;
-  padding-bottom: max(24px, env(safe-area-inset-bottom)); 
-  display: none;
-  justify-content: space-around;
-  align-items: center;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
-  backdrop-filter: blur(20px);
+  display: none;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 @media (max-width: 768px) {
   .mobileNav {
-    display: flex !important;
+    display: block !important;
   }
 }
 
-[data-theme='dark'] .mobileNav {
-  background: rgba(15, 15, 15, 0.98);
-  border-top: 1px solid rgba(74, 144, 226, 0.2);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
-}
-
-[data-theme='light'] .mobileNav {
-  background: rgba(255, 255, 255, 0.98);
-  border-top: 1px solid rgba(49, 130, 206, 0.2);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
-}
-
-.mobileNavItem {
+.mobileNavToolbar {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 2px;
+  padding: 8px 14px;
+  border-radius: 22px;
+  backdrop-filter: blur(24px);
+  position: relative;
+  overflow: visible;
+}
+
+[data-theme='dark'] .mobileNavToolbar {
+  background: rgba(10, 25, 41, 0.85);
+  border: 1px solid rgba(74, 144, 226, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(74, 144, 226, 0.08);
+}
+
+[data-theme='light'] .mobileNavToolbar {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(49, 130, 206, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(49, 130, 206, 0.08);
+}
+
+/* Film grain noise overlay */
+.mobileNavGrain {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Dividers between nav items */
+.mobileNavDivider {
+  width: 1px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .mobileNavDivider {
+  background: rgba(74, 144, 226, 0.1);
+}
+
+[data-theme='light'] .mobileNavDivider {
+  background: rgba(49, 130, 206, 0.1);
+}
+
+/* Nav item buttons */
+.mobileNavItem {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.3s ease;
-  padding: 6px;
+  transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.mobileNavIcon {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 [data-theme='dark'] .mobileNavItem {
-  color: #A0AEC0;
+  color: #64748B;
 }
 
-[data-theme='dark'] .mobileNavItem:hover,
 [data-theme='dark'] .mobileNavItemActive {
   color: #4A90E2;
 }
 
-[data-theme='light'] .mobileNavItem {
-  color: #718096;
+[data-theme='dark'] .mobileNavItem:hover {
+  color: #A0AEC0;
 }
 
-[data-theme='light'] .mobileNavItem:hover,
+[data-theme='light'] .mobileNavItem {
+  color: #A0AEC0;
+}
+
 [data-theme='light'] .mobileNavItemActive {
   color: #3182CE;
+}
+
+[data-theme='light'] .mobileNavItem:hover {
+  color: #4A5568;
+}
+
+.mobileNavItemActive .mobileNavIcon {
+  transform: scale(1.1);
+}
+
+/* ===================================
+   SPINNING RING SYSTEM (SHARED)
+   =================================== */
+
+/* Mobile ring container — hidden by default, shown via .ringActive */
+.ringContainer {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  pointer-events: none;
+}
+
+/* Desktop ring container — hidden by default, shown via .ringActive */
+.ringContainerDesktop {
+  position: absolute;
+  inset: -2px -6px;
+  border-radius: 8px;
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  pointer-events: none;
+}
+
+/* Active state — smoothly reveal ring */
+.ringActive {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Layer 1: Glow — blurred brand color behind ring */
+.ringGlow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 20px;
+  filter: blur(8px);
+  opacity: 0.2;
+}
+
+[data-theme='dark'] .ringGlow { background: #4A90E2; }
+[data-theme='light'] .ringGlow { background: #3182CE; }
+
+/* Layer 2: Clip containers */
+.ringClip {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.ringClipDesktop {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Layer 3: Spinning conic gradient */
+.ringGradient {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  animation: ringSpin 4.5s linear infinite;
+}
+
+[data-theme='dark'] .ringGradient {
+  background: conic-gradient(from 0deg,
+    #1a3a5c, #4A90E2 15%, #a8d4ff 30%, #ffffff 33%, #b794f6 34.5%, #4A90E2 36%,
+    #1a3a5c 50%, #4A90E2 65%, #a8d4ff 80%, #ffffff 83%, #87ceeb 84.5%, #4A90E2 86%,
+    #1a3a5c);
+}
+
+[data-theme='light'] .ringGradient {
+  background: conic-gradient(from 0deg,
+    #1a5276, #3182CE 15%, #90cdf4 30%, #ffffff 33%, #b794f6 34.5%, #3182CE 36%,
+    #1a5276 50%, #3182CE 65%, #90cdf4 80%, #ffffff 83%, #87ceeb 84.5%, #3182CE 86%,
+    #1a5276);
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Layer 4: Inner plate — covers center, exposes 2px ring */
+.ringInner {
+  position: absolute;
+  inset: 2px;
+  border-radius: 16px;
+}
+
+[data-theme='dark'] .ringInner { background: rgba(10, 25, 41, 0.92); }
+[data-theme='light'] .ringInner { background: rgba(255, 255, 255, 0.92); }
+
+/* Desktop inner plate */
+.ringInnerDesktop {
+  position: absolute;
+  inset: 2px;
+  border-radius: 6px;
+}
+
+[data-theme='dark'] .ringInnerDesktop { background: rgba(10, 25, 41, 0.95); }
+[data-theme='light'] .ringInnerDesktop { background: rgba(255, 255, 255, 0.95); }
+
+[data-theme='dark'] .desktopNavScrolled .ringInnerDesktop {
+  background: rgba(10, 25, 41, 0.97);
+}
+
+[data-theme='light'] .desktopNavScrolled .ringInnerDesktop {
+  background: rgba(255, 255, 255, 0.97);
+}
+
+/* Desktop nav link text sits above ring */
+.navLinkText {
+  position: relative;
+  z-index: 1;
 }
 
 /* ===================================

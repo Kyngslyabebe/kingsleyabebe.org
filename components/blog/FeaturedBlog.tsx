@@ -42,6 +42,7 @@ export default function FeaturedBlog() {
           )
         `)
         .eq('published', true)
+        .neq('hidden', true)
         .eq('is_featured', true)
         .order('published_at', { ascending: false })
         .limit(1)

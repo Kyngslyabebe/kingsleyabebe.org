@@ -434,6 +434,35 @@
   }
 }
 
+/* Hidden Button */
+.hiddenActive {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #F59E0B !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+[data-theme='light'] .hiddenActive {
+  background: rgba(217, 119, 6, 0.12) !important;
+  color: #D97706 !important;
+  border: 1px solid rgba(217, 119, 6, 0.25) !important;
+}
+
+/* Hidden Badge */
+.hiddenBadge {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #F59E0B !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+[data-theme='light'] .hiddenBadge {
+  background: rgba(217, 119, 6, 0.12) !important;
+  color: #D97706 !important;
+  border: 1px solid rgba(217, 119, 6, 0.25) !important;
+}
+
 /* Notify Button */
 .notifyBtn {
   background: rgba(72, 187, 120, 0.1) !important;

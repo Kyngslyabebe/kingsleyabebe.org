@@ -76,6 +76,7 @@ export default function BlogPostClient({ slug }: Props) {
         `)
         .eq('slug', slug)
         .eq('published', true)
+        .neq('hidden', true)
         .single();
 
       if (error) throw error;
@@ -110,6 +111,7 @@ export default function BlogPostClient({ slug }: Props) {
           .select('id, title, slug, excerpt, featured_image, published_at, reading_time')
           .neq('id', postData.id)
           .eq('published', true)
+          .neq('hidden', true)
           .limit(3);
 
         setRelatedPosts(related || []);

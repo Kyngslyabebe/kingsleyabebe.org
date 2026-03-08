@@ -15,7 +15,8 @@ import {
   HiMagnifyingGlass,
   HiStar,
   HiCalendar,
-  HiBellAlert
+  HiBellAlert,
+  HiNoSymbol
 } from 'react-icons/hi2';
 import styles from './blogs.module.css';
 
@@ -26,6 +27,7 @@ interface Blog {
   excerpt: string;
   published: boolean;
   is_featured: boolean;
+  hidden: boolean;
   published_at: string;
   views: number;
   created_at: string;
@@ -38,7 +40,7 @@ export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft' | 'hidden'>('all');
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [notifying, setNotifying] = useState<string | null>(null);
@@ -55,7 +57,7 @@ export default function AdminBlogsPage() {
     try {
       const { data, error } = await supabase
         .from('blogs')
-        .select('id, title, slug, excerpt, published, is_featured, published_at, views, created_at')
+        .select('id, title, slug, excerpt, published, is_featured, hidden, published_at, views, created_at')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -72,9 +74,11 @@ export default function AdminBlogsPage() {
 
     // Filter by status
     if (filterStatus === 'published') {
-      filtered = filtered.filter(blog => blog.published);
+      filtered = filtered.filter(blog => blog.published && !blog.hidden);
     } else if (filterStatus === 'draft') {
       filtered = filtered.filter(blog => !blog.published);
+    } else if (filterStatus === 'hidden') {
+      filtered = filtered.filter(blog => blog.hidden);
     }
 
     // Filter by search
@@ -178,6 +182,25 @@ export default function AdminBlogsPage() {
     }
   }
 
+  async function toggleHidden(id: string, currentStatus: boolean) {
+    try {
+      const { error } = await supabase
+        .from('blogs')
+        .update({ hidden: !currentStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      showToast(
+        !currentStatus ? 'Blog hidden from website' : 'Blog is now visible',
+        'success'
+      );
+      loadBlogs();
+    } catch (error: any) {
+      showToast(error.message || 'Error updating blog', 'error');
+    }
+  }
+
   async function handleNotifySubscribers(blog: Blog) {
     if (!blog.published) {
       showToast('Only published blogs can be notified', 'warning');
@@ -235,7 +258,7 @@ export default function AdminBlogsPage() {
         <div>
           <h1 className={styles.title}>Blog Posts</h1>
           <p className={styles.subtitle}>
-            {blogs.length} total • {blogs.filter(b => b.published).length} published • {blogs.filter(b => !b.published).length} drafts
+            {blogs.length} total • {blogs.filter(b => b.published && !b.hidden).length} published • {blogs.filter(b => !b.published).length} drafts • {blogs.filter(b => b.hidden).length} hidden
           </p>
         </div>
         <Link href="/admin/blogs/create" className={styles.createBtn}>
@@ -275,6 +298,12 @@ export default function AdminBlogsPage() {
           >
             Drafts ({blogs.filter(b => !b.published).length})
           </button>
+          <button
+            onClick={() => setFilterStatus('hidden')}
+            className={`${styles.filterBtn} ${filterStatus === 'hidden' ? styles.active : ''}`}
+          >
+            Hidden ({blogs.filter(b => b.hidden).length})
+          </button>
         </div>
       </div>
 
@@ -298,6 +327,12 @@ export default function AdminBlogsPage() {
                       <span className={styles.featuredBadge}>
                         <HiStar size={14} />
                         Featured
+                      </span>
+                    )}
+                    {blog.hidden && (
+                      <span className={`${styles.statusBadge} ${styles.hiddenBadge}`}>
+                        <HiNoSymbol size={12} />
+                        Hidden
                       </span>
                     )}
                     <span className={`${styles.statusBadge} ${blog.published ? styles.published : styles.draft}`}>
@@ -346,6 +381,14 @@ export default function AdminBlogsPage() {
                   title={blog.published ? 'Unpublish' : 'Publish'}
                 >
                   {blog.published ? <HiEyeSlash size={18} /> : <HiEye size={18} />}
+                </button>
+
+                <button
+                  onClick={() => toggleHidden(blog.id, blog.hidden)}
+                  className={`${styles.actionBtn} ${blog.hidden ? styles.hiddenActive : ''}`}
+                  title={blog.hidden ? 'Unhide from website' : 'Hide from website'}
+                >
+                  <HiNoSymbol size={18} />
                 </button>
 
                 {blog.published && (

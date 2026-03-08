@@ -67,6 +67,7 @@ export default function BlogsPage() {
           )
         `)
         .eq('published', true)
+        .neq('hidden', true)
         .order('published_at', { ascending: false });
 
       if (error) throw error;

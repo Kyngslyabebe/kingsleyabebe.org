@@ -127,6 +127,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'postTitle and postSlug are required.' }, { status: 400 });
     }
 
+    // Validate slug format to prevent URL injection
+    const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (!slugRegex.test(postSlug) || postSlug.length > 200) {
+      return NextResponse.json({ error: 'Invalid slug format.' }, { status: 400 });
+    }
+
+    if (postTitle.length > 300 || (postExcerpt && postExcerpt.length > 1000)) {
+      return NextResponse.json({ error: 'Title or excerpt too long.' }, { status: 400 });
+    }
+
     // Fetch all active subscribers
     const { data: subscribers, error: fetchError } = await supabase
       .from('blog_subscribers')

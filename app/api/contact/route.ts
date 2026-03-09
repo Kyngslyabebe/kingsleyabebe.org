@@ -421,16 +421,7 @@ export async function POST(request: NextRequest) {
     // Log error details
     console.error('❌ Error:', error);
 
-    // Determine error message
-    let errorMessage = 'Failed to send message. Please try again later.';
-    
-    if (error instanceof Error) {
-      if (error.message.includes('Invalid login')) {
-        errorMessage = 'Email service authentication failed';
-      } else if (error.message.includes('Network')) {
-        errorMessage = 'Network error. Please check your connection.';
-      }
-    }
+    const errorMessage = 'Failed to send message. Please try again later.';
 
     return NextResponse.json(
       { 

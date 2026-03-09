@@ -43,9 +43,6 @@ export default function MessagesPage() {
       .select('*')
       .order('created_at', { ascending: false });
 
-    console.log('📬 Messages data:', data);
-    console.log('❌ Messages error:', error);
-
     if (error) throw error;
     setMessages(data || []);
     } catch (error: any) {

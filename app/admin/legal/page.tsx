@@ -100,7 +100,7 @@ export default function LegalManagementPage() {
 
   function viewDocument(type: string) {
     const url = type === 'privacy-policy' ? '/privacy-policy' : '/terms-of-service';
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   if (loading) {

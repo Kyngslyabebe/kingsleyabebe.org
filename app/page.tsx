@@ -255,7 +255,14 @@ export default function Portfolio() {
   const downloadResume = () => {
     analytics.resumeDownload();
     if (settings.resume_url) {
-      window.open(settings.resume_url, '_blank');
+      try {
+        const parsed = new URL(settings.resume_url);
+        if (['http:', 'https:'].includes(parsed.protocol)) {
+          window.open(settings.resume_url, '_blank', 'noopener,noreferrer');
+        }
+      } catch {
+        // Invalid URL, ignore
+      }
     }
   };
 

@@ -118,6 +118,16 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
   // Insert from URL tab
   const handleInsertFromUrl = useCallback(() => {
     if (!imageUrl.trim()) return;
+    try {
+      const parsed = new URL(imageUrl.trim());
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        alert('Please enter a valid image URL starting with http:// or https://');
+        return;
+      }
+    } catch {
+      alert('Please enter a valid image URL');
+      return;
+    }
     insertImage(imageUrl.trim(), altText);
     setShowImageModal(false);
     setImageUrl('');
@@ -240,9 +250,22 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     return null;
   }
 
+  const isValidUrl = (url: string): boolean => {
+    try {
+      const parsed = new URL(url);
+      return ['http:', 'https:', 'mailto:'].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  };
+
   const addLink = () => {
     const url = window.prompt('Enter URL');
     if (url) {
+      if (!isValidUrl(url)) {
+        alert('Please enter a valid URL starting with http:// or https://');
+        return;
+      }
       editor.chain().focus().setLink({ href: url }).run();
     }
   };
@@ -508,7 +531,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
                     className={styles.modalInput}
                     autoFocus
                   />
-                  {imageUrl && imageUrl.startsWith('http') && (
+                  {imageUrl && isValidUrl(imageUrl) && imageUrl.startsWith('http') && (
                     <div className={styles.urlPreview}>
                       <img
                         src={imageUrl}

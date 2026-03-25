@@ -1,5 +1,4 @@
 'use client';
-export const dynamic = 'force-dynamic';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
@@ -18,49 +17,47 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark');
+  // Resolve local theme synchronously so we can render immediately
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('portfolio-theme') as Theme;
+      if (saved === 'light' || saved === 'dark') return saved;
+    }
+    return 'dark';
+  });
   const [themeMode, setThemeMode] = useState<ThemeMode>('default');
   const [mounted, setMounted] = useState(false);
 
+  // Apply theme to DOM immediately on mount (no await)
   useEffect(() => {
-    async function initializeTheme() {
-      setMounted(true);
+    document.documentElement.setAttribute('data-theme', theme);
+    setMounted(true);
 
-      // Fetch admin theme preference
-      const { data } = await supabase
-        .from('personal_info')
-        .select('theme_mode')
-        .single();
+    // Fetch admin theme preference in the background
+    supabase
+      .from('personal_info')
+      .select('theme_mode')
+      .single()
+      .then(({ data }) => {
+        const adminThemeMode: ThemeMode = data?.theme_mode || 'default';
+        setThemeMode(adminThemeMode);
 
-      const adminThemeMode: ThemeMode = data?.theme_mode || 'default';
-      setThemeMode(adminThemeMode);
-
-      let initialTheme: Theme;
-
-      if (adminThemeMode === 'force-dark') {
-        initialTheme = 'dark';
-      } else if (adminThemeMode === 'force-light') {
-        initialTheme = 'light';
-      } else {
-        // Default mode - check localStorage or system preference
-        const savedTheme = localStorage.getItem('portfolio-theme') as Theme;
-        if (savedTheme) {
-          initialTheme = savedTheme;
+        let resolvedTheme: Theme;
+        if (adminThemeMode === 'force-dark') {
+          resolvedTheme = 'dark';
+        } else if (adminThemeMode === 'force-light') {
+          resolvedTheme = 'light';
         } else {
-          // Default to dark when no preference is saved
-          initialTheme = 'dark';
+          return; // already using local/default theme
         }
-      }
 
-      setThemeState(initialTheme);
-      document.documentElement.setAttribute('data-theme', initialTheme);
-    }
-
-    initializeTheme();
+        // Only update if admin forces a different theme
+        setThemeState(resolvedTheme);
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+      });
   }, []);
 
   const setTheme = (newTheme: Theme) => {
-    // Only allow theme changes if admin hasn't forced a theme
     if (themeMode === 'default') {
       document.documentElement.setAttribute('data-theme', newTheme);
       setThemeState(newTheme);
@@ -69,7 +66,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleTheme = () => {
-    // Only allow toggling if admin hasn't forced a theme
     if (themeMode === 'default') {
       setTheme(theme === 'light' ? 'dark' : 'light');
     }

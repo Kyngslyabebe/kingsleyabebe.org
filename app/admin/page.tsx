@@ -52,136 +52,69 @@ export default function AdminDashboard() {
 
   async function loadData() {
     setLoading(true);
-    
+
     try {
-      // Fetch projects
-      const { data: projectsData, error: projectsError } = await supabase
-        .from('projects')
-        .select('visible');
-      
-      if (projectsError) console.error('Projects error:', projectsError);
-      const projectsVisible = projectsData?.filter(p => p.visible).length || 0;
+      // Fetch everything in parallel
+      const [
+        projectsResult,
+        skillsResult,
+        messagesResult,
+        experienceResult,
+        blogsResult,
+        showcaseResult,
+        servicesResult,
+        commentsResult,
+        subscribersResult,
+        recentMessagesResult,
+        recentBlogsResult,
+        recentCommentsResult,
+      ] = await Promise.all([
+        supabase.from('projects').select('visible'),
+        supabase.from('skills').select('visible'),
+        supabase.from('contact_messages').select('status'),
+        supabase.from('experience').select('visible'),
+        supabase.from('blogs').select('published'),
+        supabase.from('hero_showcase').select('*', { count: 'exact', head: true }),
+        supabase.from('services').select('visible'),
+        supabase.from('blog_comments').select('approved'),
+        fetch('/api/subscribers').then(r => r.json()).catch(() => ({ subscribers: [] })),
+        supabase.from('contact_messages').select('*').order('created_at', { ascending: false }).limit(3),
+        supabase.from('blogs').select('id, title, published, created_at, views').order('created_at', { ascending: false }).limit(3),
+        supabase.from('blog_comments').select('*, blogs(title, slug)').order('created_at', { ascending: false }).limit(3),
+      ]);
 
-      // Fetch skills
-      const { data: skillsData, error: skillsError } = await supabase
-        .from('skills')
-        .select('visible');
-      
-      if (skillsError) console.error('Skills error:', skillsError);
-      const skillsVisible = skillsData?.filter(s => s.visible).length || 0;
-
-      // Fetch messages
-      const { data: messagesData, error: messagesError } = await supabase
-        .from('contact_messages')
-        .select('status');
-      
-      if (messagesError) console.error('Messages error:', messagesError);
-      const messagesNew = messagesData?.filter(m => m.status === 'new').length || 0;
-
-      // Fetch experience
-      const { data: experienceData, error: experienceError } = await supabase
-        .from('experience')
-        .select('visible');
-      
-      if (experienceError) console.error('Experience error:', experienceError);
-      const experienceVisible = experienceData?.filter(e => e.visible).length || 0;
-
-      // Fetch blogs
-      const { data: blogsData, error: blogsError } = await supabase
-        .from('blogs')
-        .select('published');
-      
-      if (blogsError) console.error('Blogs error:', blogsError);
-      const blogsPublished = blogsData?.filter(b => b.published).length || 0;
-
-      // Fetch showcase
-      const { count: showcaseCount, error: showcaseError } = await supabase
-        .from('hero_showcase')
-        .select('*', { count: 'exact', head: true });
-      
-      if (showcaseError) console.error('Showcase error:', showcaseError);
-
-      // Fetch services
-      const { data: servicesData, error: servicesError } = await supabase
-        .from('services')
-        .select('visible');
-      
-      if (servicesError) console.error('Services error:', servicesError);
-      const servicesVisible = servicesData?.filter(s => s.visible).length || 0;
-
-      // Fetch comments
-      const { data: commentsData, error: commentsError } = await supabase
-        .from('blog_comments')
-        .select('approved');
-
-      if (commentsError) console.error('Comments error:', commentsError);
-      const commentsPending = commentsData?.filter(c => !c.approved).length || 0;
-
-      // Fetch subscribers via API route (uses service role key to bypass RLS)
-      let subscribersData: any[] = [];
-      try {
-        const subsRes = await fetch('/api/subscribers');
-        const subsJson = await subsRes.json();
-        subscribersData = subsJson.subscribers || [];
-      } catch (e) {
-        console.error('Subscribers fetch error:', e);
-      }
-      const subscribersActive = subscribersData.filter((s: any) => s.status === 'active').length;
+      const projectsData = projectsResult.data;
+      const skillsData = skillsResult.data;
+      const messagesData = messagesResult.data;
+      const experienceData = experienceResult.data;
+      const blogsData = blogsResult.data;
+      const servicesData = servicesResult.data;
+      const commentsData = commentsResult.data;
+      const subscribersData: any[] = subscribersResult.subscribers || [];
 
       setStats({
         projects: projectsData?.length || 0,
-        projectsVisible,
+        projectsVisible: projectsData?.filter(p => p.visible).length || 0,
         skills: skillsData?.length || 0,
-        skillsVisible,
+        skillsVisible: skillsData?.filter(s => s.visible).length || 0,
         messages: messagesData?.length || 0,
-        messagesNew,
+        messagesNew: messagesData?.filter(m => m.status === 'new').length || 0,
         experience: experienceData?.length || 0,
-        experienceVisible,
+        experienceVisible: experienceData?.filter(e => e.visible).length || 0,
         blogs: blogsData?.length || 0,
-        blogsPublished,
-        showcase: showcaseCount || 0,
+        blogsPublished: blogsData?.filter(b => b.published).length || 0,
+        showcase: showcaseResult.count || 0,
         services: servicesData?.length || 0,
-        servicesVisible,
+        servicesVisible: servicesData?.filter(s => s.visible).length || 0,
         comments: commentsData?.length || 0,
-        commentsPending,
-        subscribers: subscribersData?.length || 0,
-        subscribersActive,
+        commentsPending: commentsData?.filter(c => !c.approved).length || 0,
+        subscribers: subscribersData.length,
+        subscribersActive: subscribersData.filter((s: any) => s.status === 'active').length,
       });
 
-      // Fetch recent messages
-      const { data: recentMessagesData, error: recentMsgError } = await supabase
-        .from('contact_messages')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
-      
-      if (recentMsgError) console.error('Recent messages error:', recentMsgError);
-      setRecentMessages(recentMessagesData || []);
-
-      // Fetch recent blogs
-      const { data: recentBlogsData, error: recentBlogsError } = await supabase
-        .from('blogs')
-        .select('id, title, published, created_at, views')
-        .order('created_at', { ascending: false })
-        .limit(3);
-      
-      if (recentBlogsError) console.error('Recent blogs error:', recentBlogsError);
-      setRecentBlogs(recentBlogsData || []);
-
-      // Fetch recent comments
-      const { data: recentCommentsData, error: recentCommentsError } = await supabase
-        .from('blog_comments')
-        .select(`
-          *,
-          blogs(title, slug)
-        `)
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      if (recentCommentsError) console.error('Recent comments error:', recentCommentsError);
-      setRecentComments(recentCommentsData || []);
-
-      // Recent subscribers (already fetched via API above)
+      setRecentMessages(recentMessagesResult.data || []);
+      setRecentBlogs(recentBlogsResult.data || []);
+      setRecentComments(recentCommentsResult.data || []);
       setRecentSubscribers(subscribersData.slice(0, 5));
 
     } catch (error: any) {

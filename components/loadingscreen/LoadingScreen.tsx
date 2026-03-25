@@ -1,5 +1,4 @@
 'use client';
-export const dynamic = 'force-dynamic';
 
 import { motion } from 'framer-motion';
 import styles from './LoadingScreen.module.css';
@@ -77,10 +76,11 @@ export default function LoadingScreen({ name = "Portfolio" }: LoadingScreenProps
         >
           <motion.div
             className={styles.progressBar}
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ 
-              duration: 2,
+            initial={{ x: "-100%" }}
+            animate={{ x: "100%" }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
               ease: "easeInOut"
             }}
           />

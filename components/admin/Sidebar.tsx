@@ -139,7 +139,7 @@ export default function Sidebar({ isOpen, onClose, onCollapsedChange }: SidebarP
   const navigateTo = (href: string) => {
     router.push(href);
     // Close mobile sidebar after navigation
-    if (window.innerWidth < 1024) {
+    if (isOpen) {
       onClose();
     }
   };

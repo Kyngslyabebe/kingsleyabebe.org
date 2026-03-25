@@ -27,7 +27,8 @@ export default function SettingsPage() {
   const [bio, setBio] = useState('');
   const [avatar, setAvatar] = useState('');
   const [summary, setSummary] = useState('');
-  
+  const [aboutQuote, setAboutQuote] = useState('');
+
   // Contact
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -140,7 +141,8 @@ const [contactBgOverlayOpacity, setContactBgOverlayOpacity] = useState(0.7);
         setBio(data.bio || '');
         setAvatar(data.avatar || '');
         setSummary(data.summary || '');
-        
+        setAboutQuote(data.about_quote || '');
+
         // Contact
         setEmail(data.email || '');
         setPhone(data.phone || '');
@@ -252,7 +254,8 @@ setContactBgOverlayOpacity(data.contact_bg_overlay_opacity ?? 0.7);
         bio,
         avatar,
         summary,
-        
+        about_quote: aboutQuote,
+
         // Contact
         email,
         phone,
@@ -483,6 +486,16 @@ contact_bg_overlay_opacity: contactBgOverlayOpacity,
                   onChange={(e) => setSummary(e.target.value)}
                   placeholder="Detailed professional summary for about section..."
                   rows={6}
+                />
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>About Quote</label>
+                <textarea
+                  value={aboutQuote}
+                  onChange={(e) => setAboutQuote(e.target.value)}
+                  placeholder="A personal quote or motto shown in the about section..."
+                  rows={3}
                 />
               </div>
             </div>

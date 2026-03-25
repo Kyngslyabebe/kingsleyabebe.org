@@ -47,6 +47,7 @@ export interface PortfolioSettings {
   google_analytics_id: string;
   brand_color: string;
   accent_color: string;
+  about_quote: string;
   about_title: string;
   projects_title: string;
   skills_title: string;
@@ -123,6 +124,7 @@ const defaultSettings: PortfolioSettings = {
   google_analytics_id: '',
   brand_color: '#4A90E2',
   accent_color: '#667eea',
+  about_quote: '',
   about_title: 'About Me',
   projects_title: 'Projects',
   skills_title: 'Technical Skills',
@@ -157,6 +159,19 @@ const CACHE_KEY = 'portfolio_settings_cache';
 const CACHE_DURATION = 1000 * 60 * 5; // 5 minutes
 
 export function useSettings() {
+  const [hasCacheHit] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          const { timestamp } = JSON.parse(cached);
+          return Date.now() - timestamp < CACHE_DURATION;
+        }
+      } catch { /* ignore */ }
+    }
+    return false;
+  });
+
   const [settings, setSettings] = useState<PortfolioSettings>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -173,8 +188,8 @@ export function useSettings() {
     }
     return defaultSettings;
   });
-  
-  const [loading, setLoading] = useState(true);
+
+  const [loading, setLoading] = useState(!hasCacheHit);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

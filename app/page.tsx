@@ -76,7 +76,6 @@ export default function Portfolio() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedExperience, setExpandedExperience] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const loadStartTime = useRef(Date.now());
 
   // Smooth video loop: darken overlay at loop point to mask the restart
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -164,11 +163,7 @@ export default function Portfolio() {
     } catch (error) {
       console.error('Error loading portfolio data:', error);
     } finally {
-      // Ensure loading screen shows for at least 2s (matches progress bar)
-      const elapsed = Date.now() - loadStartTime.current;
-      const minTime = 2000;
-      const remaining = Math.max(0, minTime - elapsed);
-      setTimeout(() => setLoading(false), remaining);
+      setLoading(false);
     }
   }
 
@@ -508,7 +503,7 @@ export default function Portfolio() {
                 mobileLines={12}
               />
 
-              {settings.summary && (
+              {settings.about_quote && (
                 <motion.blockquote
                   className={styles.aboutQuote}
                   initial={{ opacity: 0, y: 20 }}
@@ -516,7 +511,7 @@ export default function Portfolio() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  &ldquo;I approach every decision with intention. I&rsquo;m building something I&rsquo;d stake my name on.&rdquo;
+                  &ldquo;{settings.about_quote}&rdquo;
                 </motion.blockquote>
               )}
             </div>

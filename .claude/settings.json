@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/kings/OneDrive/Documents/InfinitBooking-Latest/app/\\(dashboard\\)/**)",
+      "Read(//c/Users/kings/OneDrive/Documents/afroamour/client//**)",
+      "Read(//c/Users/kings/OneDrive/Documents/afroamour//**)",
+      "Bash(mkdir -p \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\api\\\\admin\\\\cms\\\\pages\\\\[slug]\")",
+      "Bash(mkdir -p \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\api\\\\admin\\\\cms\\\\testimonials\\\\[id]\")",
+      "Bash(mkdir -p \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\\\(admin\\)\\\\admin\\\\marketing\\\\pages\\\\[slug]\")",
+      "Bash(ls \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\\\(admin\\)\\\\admin\\\\marketing\")",
+      "Bash(ls \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\\\(admin\\)\\\\admin\")",
+      "Bash(ls \"c:\\\\Users\\\\kings\\\\OneDrive\\\\Documents\\\\afroamour\\\\client\\\\src\\\\app\\\\\\(admin\\)\\\\admin\\\\matches\")",
+      "Bash(find c:UserskingsOneDriveDocumentsafroamourclientsrc -type f \\\\\\(-name *carousel* -o -name *Carousel* -o -name *hero* -o -name *Hero* \\\\\\))",
+      "Bash(grep -E \"\\\\.\\(jsx?|tsx?\\)$\")",
+      "Bash(find c:UserskingsOneDriveDocumentsafroamourclientsrc -name *.sql -o -name *schema* -o -name *migration*)",
+      "Bash(grep -r cms_pages c:UserskingsOneDriveDocumentsafroamourclientsrc --include=*.js --include=*.jsx --include=*.ts --include=*.tsx -l)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\kings\\OneDrive\\Documents\\afroamour\\client\\src\\app\\(public)\\safety",
+      "c:\\Users\\kings\\OneDrive\\Documents\\afroamour\\client\\src\\app\\api\\admin\\waivers",
+      "c:\\Users\\kings\\OneDrive\\Documents\\afroamour\\client\\src\\app\\api\\admin\\cms\\subscription-plans"
+    ]
+  }
+}

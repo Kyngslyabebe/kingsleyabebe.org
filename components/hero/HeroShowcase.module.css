@@ -35,6 +35,10 @@
   color: #A0AEC0;
 }
 
+.headerPlaceholder {
+  height: 48px;
+}
+
 [data-theme='light'] .showcaseSubtitle {
   color: #718096;
 }

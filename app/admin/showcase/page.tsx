@@ -22,6 +22,8 @@ interface ShowcaseItem {
   desktop_image: string;
   mobile_image: string;
   title: string;
+  header: string;
+  subheader: string;
   order_index: number;
   active: boolean;
 }
@@ -35,6 +37,8 @@ export default function ShowcasePage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '',
+    header: '',
+    subheader: '',
     desktop_image: '',
     mobile_image: '',
     active: true
@@ -67,6 +71,8 @@ export default function ShowcasePage() {
       setEditingItem(item);
       setFormData({
         title: item.title || '',
+        header: item.header || '',
+        subheader: item.subheader || '',
         desktop_image: item.desktop_image,
         mobile_image: item.mobile_image,
         active: item.active
@@ -75,6 +81,8 @@ export default function ShowcasePage() {
       setEditingItem(null);
       setFormData({
         title: '',
+        header: '',
+        subheader: '',
         desktop_image: '',
         mobile_image: '',
         active: true
@@ -109,6 +117,8 @@ export default function ShowcasePage() {
     try {
       const itemData = {
         title: formData.title,
+        header: formData.header,
+        subheader: formData.subheader,
         desktop_image: formData.desktop_image,
         mobile_image: formData.mobile_image,
         active: formData.active,
@@ -272,6 +282,8 @@ export default function ShowcasePage() {
                 <div className={styles.cardHeader}>
                   <div>
                     <h3 className={styles.cardTitle}>{item.title || 'Untitled'}</h3>
+                    {item.header && <p className={styles.cardSubInfo}>{item.header}</p>}
+                    {item.subheader && <p className={styles.cardSubInfoMuted}>{item.subheader}</p>}
                     <span className={styles.orderBadge}>Order: {index + 1}</span>
                   </div>
                   <div className={styles.cardActions}>
@@ -335,12 +347,32 @@ export default function ShowcasePage() {
 
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.formGroup}>
-                <label>Title (Optional)</label>
+                <label>Title (Optional - internal label)</label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  placeholder="Project name or description"
+                  placeholder="Internal label for this item"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Header (shown on hero section)</label>
+                <input
+                  type="text"
+                  value={formData.header}
+                  onChange={(e) => setFormData({...formData, header: e.target.value})}
+                  placeholder="e.g. Building InfinitBooking Platform"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Subheader (shown below header)</label>
+                <input
+                  type="text"
+                  value={formData.subheader}
+                  onChange={(e) => setFormData({...formData, subheader: e.target.value})}
+                  placeholder="e.g. ...a SaaS Booking Platform for Service-based Businesses"
                 />
               </div>
 

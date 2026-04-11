@@ -75,4 +75,4 @@ kingsleyabebe.org/
 
 ## License
 
-MIT
+MIT License — Kingsley Abebe

@@ -107,8 +107,8 @@ export default function ShowcasePage() {
     }
 
     // Check limit
-    if (!editingItem && items.length >= 10) {
-      showToast('Maximum 10 showcase items allowed', 'warning');
+    if (!editingItem && items.length >= 20) {
+      showToast('Maximum 20 showcase items allowed', 'warning');
       return;
     }
 
@@ -241,12 +241,12 @@ export default function ShowcasePage() {
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.pageTitle}>Hero Showcase</h1>
-          <p className={styles.pageSubtitle}>Manage carousel images (Max 10 items)</p>
+          <p className={styles.pageSubtitle}>Manage carousel images (Max 20 items)</p>
         </div>
         <button 
           onClick={() => openModal()} 
           className={styles.addBtn}
-          disabled={items.length >= 10}
+          disabled={items.length >= 20}
         >
           <HiPlus size={18} />
           <span>Add Showcase</span>

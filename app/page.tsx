@@ -159,7 +159,25 @@ export default function Portfolio() {
 
       setProjects(projectsResult.data || []);
       setSkills(skillsResult.data || []);
-      setExperience(experienceResult.data || []);
+      const expData = experienceResult.data || [];
+      expData.sort((a: any, b: any) => {
+        const endYear = (y: string) => {
+          if (!y) return 0;
+          if (/present|current/i.test(y)) return 9999;
+          const m = y.match(/(\d{4})/g);
+          return m && m.length > 1 ? parseInt(m[1]) : m ? parseInt(m[0]) : 0;
+        };
+        const startYear = (y: string) => {
+          if (!y) return 0;
+          if (/^current$/i.test(y.trim())) return 9999;
+          const m = y.match(/(\d{4})/);
+          return m ? parseInt(m[1]) : 0;
+        };
+        const ae = endYear(a.year), be = endYear(b.year);
+        if (ae !== be) return be - ae;
+        return startYear(b.year) - startYear(a.year);
+      });
+      setExperience(expData);
     } catch (error) {
       console.error('Error loading portfolio data:', error);
     } finally {

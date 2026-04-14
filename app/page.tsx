@@ -355,12 +355,7 @@ export default function Portfolio() {
                 onClick={() => scrollToSection(section)}
                 className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
               >
-                <div className={`${styles.ringContainerDesktop} ${isActive ? styles.ringActive : ''}`}>
-                  <div className={styles.ringGlow} />
-                  <div className={styles.ringClipDesktop}><div className={styles.ringGradient} /></div>
-                  <div className={styles.ringInnerDesktop} />
-                </div>
-                <span className={styles.navLinkText}>{section.charAt(0).toUpperCase() + section.slice(1)}</span>
+                {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             );
           })}
@@ -1044,11 +1039,6 @@ export default function Portfolio() {
                onClick={() => scrollToSection(section)}
                className={`${styles.mobileNavItem} ${isActive ? styles.mobileNavItemActive : ''}`}
              >
-               <div className={`${styles.ringContainer} ${isActive ? styles.ringActive : ''}`}>
-                 <div className={styles.ringGlow} />
-                 <div className={styles.ringClip}><div className={styles.ringGradient} /></div>
-                 <div className={styles.ringInner} />
-               </div>
                <Icon size={22} className={styles.mobileNavIcon} />
              </button>
            </React.Fragment>
